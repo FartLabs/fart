@@ -1,10 +1,10 @@
-export enum FartTarget {
+export enum LanguageTarget {
   TypeScript = "ts",
   Go = "go",
   Basic = "bas",
 }
 
-export enum FartGrammar {
+export enum Lexicon {
   Nester = "{",
   Denester = "}",
   Setter = ":",
@@ -12,12 +12,14 @@ export enum FartGrammar {
   TypeDefiner = "type",
   ImpoDefiner = "impo",
   Commenter = ";",
-  Seperator = ",",
+  Separator = ",",
   Spacer = " ",
   LineBreaker = "\n",
+  StringLiteral = "\`",
+  EOF = "",
 }
 
-export enum FartIndentation {
+export enum IndentationSetting {
   Tab = "\t",
   SingleSpace = " ",
   DoubleSpace = "  ",
@@ -26,18 +28,7 @@ export enum FartIndentation {
 }
 
 export interface FartSettings {
-  target?: FartTarget;
-  indentation?: FartIndentation;
+  target?: LanguageTarget;
+  indentation?: IndentationSetting;
   typemap?: Record<string, string>;
-}
-
-export interface FartLine {
-  content: string;
-  indentationLevel?: number; // Default: 0
-}
-
-export interface FartState {
-  result: FartLine[];
-  warnings: string[];
-  errors: string[];
 }

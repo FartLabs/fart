@@ -9,16 +9,18 @@ export const DenoTypeScriptCodeTemplate: CodeTemplate = {
     return `import type { ${serializedDeps} } from "${targetFilename}";`;
   },
 
-  openStruct(identifier: string): string {
+  openStruct(identifier?: string): string {
+    if (identifier === undefined) return `{`;
     return `export interface ${identifier} {`;
   },
 
   property(
     identifier: string,
-    type: string,
     required: boolean = false,
+    type?: string,
   ): string {
     const assignment = required ? ":" : "?:";
+    if (type === undefined) return `${identifier}${assignment} {`;
     return `${identifier}${assignment} ${type};`;
   },
 
@@ -27,9 +29,12 @@ export const DenoTypeScriptCodeTemplate: CodeTemplate = {
     detail?: MethodDetails,
   ): string {
     if (detail !== undefined) {
-      let output = detail.output ?? "void";
-      if (detail.input === undefined) return `${identifier}: () => ${output};`;
-      return `${identifier}: (input: ${detail.input}) => ${output};`;
+      const output = detail.output ?? "void";
+      const assignment = detail.required ? ":" : "?:";
+      if (detail.input === undefined) {
+        return `${identifier}${assignment} () => ${output};`;
+      }
+      return `${identifier}${assignment} (input: ${detail.input}) => ${output};`;
     }
     return `${identifier}: () => void;`;
   },

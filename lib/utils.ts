@@ -1,5 +1,5 @@
-import type { FartSettings, FartState } from "./types.ts";
-import { FartGrammar, FartIndentation, FartTarget } from "./types.ts";
+import type { FartSettings } from "./types.ts";
+import { IndentationSetting, LanguageTarget, Lexicon } from "./types.ts";
 import { format as formatPath, parse as parsePath } from "../deps/std/path.ts";
 import { typemaps } from "./typemaps.ts";
 
@@ -7,9 +7,12 @@ import { typemaps } from "./typemaps.ts";
 export const validateIdentifier = (candidate: string): boolean =>
   /^[a-zA-Z_$][a-zA-Z_$0-9]*$/g.test(candidate);
 
-const reservedWords = new Set<FartGrammar>([
-  FartGrammar.ImpoDefiner,
-  FartGrammar.TypeDefiner,
+export const validateStringLiteral = (candidate: string): boolean =>
+  /^\`(.*?)\`$/g.test(candidate);
+
+const reservedWords = new Set<Lexicon>([
+  Lexicon.ImpoDefiner,
+  Lexicon.TypeDefiner,
 ]);
 
 export const checkNextToken = (
@@ -30,20 +33,14 @@ export const convertFilenameToTargetFilename = (
   }).replace("\\", "/");
 };
 
-export const createInitialState = (): FartState => ({
-  result: [],
-  warnings: [],
-  errors: [],
-});
-
 /**
  * Infers omitted settings.
  */
-export const initializeSettings = (
+export const validateSettings = (
   settings?: FartSettings,
-): FartSettings => {
-  const target = settings?.target ?? FartTarget.TypeScript;
-  const indentation = settings?.indentation ?? FartIndentation.DoubleSpace;
+): Required<FartSettings> => {
+  const target = settings?.target ?? LanguageTarget.TypeScript;
+  const indentation = settings?.indentation ?? IndentationSetting.DoubleSpace;
   const typemap = { ...typemaps[target], ...settings?.typemap };
   return { target, indentation, typemap };
 };

@@ -1,7 +1,7 @@
-import { FartTarget } from "./types.ts";
+import { LanguageTarget } from "./types.ts";
 
 export const typemaps = {
-  [FartTarget.TypeScript]: Object.entries({
+  [LanguageTarget.TypeScript]: Object.entries({
     number: "number",
     string: "string",
     boolean: "boolean",
@@ -11,6 +11,6 @@ export const typemaps = {
     map[`async_${alias}`] = `Promise<${type}>`;
     return map;
   }, {} as Record<string, string>),
-  [FartTarget.Go]: {},
-  [FartTarget.Basic]: {},
+  [LanguageTarget.Go]: {},
+  [LanguageTarget.Basic]: {},
 };

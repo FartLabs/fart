@@ -1,4 +1,5 @@
 export interface MethodDetails {
+  required?: boolean;
   input?: string;
   output?: string;
 }
@@ -11,7 +12,7 @@ export interface MethodDetails {
 export interface CodeTemplate {
   import: (src: string, dependencies: string[]) => string | null;
   openStruct: (id: string) => string | null;
-  property: (id: string, type: string, required?: boolean) => string | null;
+  property: (id: string, required?: boolean, type?: string) => string | null;
   method: (id: string, detail?: MethodDetails) => string | null;
   closeStruct: () => string | null;
 }

@@ -22,18 +22,17 @@ Deno.test("openStruct: Success", () => {
 });
 
 Deno.test("property: Optional by default", () => {
-  const actual = DenoTypeScriptCodeTemplate.property("count", "number");
+  const actual = DenoTypeScriptCodeTemplate.property(
+    "count",
+    undefined,
+    "number",
+  );
   const expected = `count?: number;`;
   assertEquals(actual, expected);
 });
 
 Deno.test("property: Required when told", () => {
-  const isRequired = true;
-  const actual = DenoTypeScriptCodeTemplate.property(
-    "count",
-    "number",
-    isRequired,
-  );
+  const actual = DenoTypeScriptCodeTemplate.property("count", true, "number");
   const expected = `count: number;`;
   assertEquals(actual, expected);
 });
@@ -46,13 +45,13 @@ Deno.test("method: Resolves successfully without input or output", () => {
 
 Deno.test("method: Resolves successfully without input", () => {
   const actual = DenoTypeScriptCodeTemplate.method("ping", { output: "Pong" });
-  const expected = `ping: () => Pong;`;
+  const expected = `ping?: () => Pong;`;
   assertEquals(actual, expected);
 });
 
 Deno.test("method: Resolves successfully without output", () => {
   const actual = DenoTypeScriptCodeTemplate.method("ping", { input: "Ping" });
-  const expected = `ping: (input: Ping) => void;`;
+  const expected = `ping?: (input: Ping) => void;`;
   assertEquals(actual, expected);
 });
 
@@ -60,6 +59,7 @@ Deno.test("method: Resolves successfully with input and output", () => {
   const actual = DenoTypeScriptCodeTemplate.method("ping", {
     input: "Ping",
     output: "Pong",
+    required: true,
   });
   const expected = `ping: (input: Ping) => Pong;`;
   assertEquals(actual, expected);

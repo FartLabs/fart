@@ -1,5 +1,5 @@
-import { FartIndentation } from "./types.ts";
-import type { CodeTemplate } from "./code-templates/types.ts";
+import { IndentationSetting } from "./types.ts";
+import type { CodeTemplate, MethodDetails } from "./code-templates/types.ts";
 
 interface LoC {
   content: string;
@@ -9,16 +9,12 @@ interface LoC {
 export class CodeDocument {
   lines: LoC[];
   indentationLevel: number;
-  importMode: boolean;
-  structMode: boolean;
   constructor(
     private template: CodeTemplate,
-    private indentation: FartIndentation,
+    private indentation: IndentationSetting,
   ) {
     this.lines = [];
     this.indentationLevel = 0;
-    this.importMode = false;
-    this.structMode = false;
   }
 
   append(line: string = "\n") {
@@ -34,27 +30,44 @@ export class CodeDocument {
     this.indentationLevel--;
   }
 
-  openImport() {
-    this.importMode = true;
+  addImport(source: string, dependencies: string[]) {
+    source = source.replace(/\`/g, ""); // Remove quotes.
+    const code = this.template.import(source, dependencies);
+    if (code !== null) this.append(code);
+  }
+
+  addStruct(identifier: string) {
+    const code = this.template.openStruct(identifier);
+    if (code !== null) this.append(code);
+  }
+
+  closeStruct() {
+    const code = this.template.closeStruct();
+    if (code !== null) this.append(code);
+  }
+
+  addProperty(identifier: string, required?: boolean, type?: string) {
+    const code = this.template.property(identifier, required, type);
+    if (code !== null) this.append(code);
+  }
+
+  addMethod(
+    identifier: string,
+    required?: boolean,
+    inputType?: string,
+    outputType?: string,
+  ) {
+    const code = this.template.method(identifier, {
+      required,
+      input: inputType,
+      output: outputType,
+    });
+    if (code !== null) this.append(code);
   }
 
   nest() {
     this.incrementIndentationLevel();
   }
-
-  denest() {
-    this.decrementIndentationLevel();
-    if (this.importMode) this.importMode = false;
-    else if (this.structMode) this.structMode = false;
-  }
-
-  /*
-  import: (src: string, detail?: ImportDetails) => string | null;
-  openStruct: (id: string) => string | null;
-  property: (id: string, type: string, required?: boolean) => string | null;
-  method: (id: string, detail?: MethodDetails) => string | null;
-  closeStruct: () => string | null;
-  */
 
   compile(): string {
     // TODO: Assert that indentation level is 0 in order to compile.
