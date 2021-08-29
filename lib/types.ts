@@ -7,12 +7,9 @@ export enum FartTarget {
 export enum FartGrammar {
   Nester = "{",
   Denester = "}",
-  Identifier = "",
   Setter = ":",
-  ConstSetter = ":>",
   RequiredSetter = "*:",
   TypeDefiner = "type",
-  DepoDefiner = "depo",
   ImpoDefiner = "impo",
   Commenter = ";",
   Seperator = ",",

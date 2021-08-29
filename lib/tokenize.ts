@@ -9,8 +9,7 @@ export function* tokenize(content: string) {
     let nextToken: string | null = null;
     switch (currentToken) {
       case FartGrammar.TypeDefiner:
-      case FartGrammar.DepoDefiner:
-      case FartGrammar.ConstSetter:
+      case FartGrammar.ImpoDefiner:
       case FartGrammar.RequiredSetter:
         nextToken = currentToken;
         break;

@@ -8,7 +8,7 @@ export const validateIdentifier = (candidate: string): boolean =>
   /^[a-zA-Z_$][a-zA-Z_$0-9]*$/g.test(candidate);
 
 const reservedWords = new Set<FartGrammar>([
-  FartGrammar.DepoDefiner,
+  FartGrammar.ImpoDefiner,
   FartGrammar.TypeDefiner,
 ]);
 
@@ -27,7 +27,7 @@ export const convertFilenameToTargetFilename = (
     dir: info.dir,
     ext: targetExt,
     name: info.name,
-  });
+  }).replace("\\", "/");
 };
 
 export const createInitialState = (): FartState => ({
