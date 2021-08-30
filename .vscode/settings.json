@@ -1,7 +1,10 @@
 {
   "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "deno.importMap": "./examples/import_map.json",
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },

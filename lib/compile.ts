@@ -44,7 +44,6 @@ export function compile(content: string, settings?: FartSettings): string {
     typemap,
     validatedSettings.indentation,
   );
-  console.log("PRECOMPILE", { content }, [...tokenize(content)]);
   const it = tokenize(content);
   let curr: IteratorResult<string, string> = it.next();
   const nextToken = (): string => (curr = it.next()).value;

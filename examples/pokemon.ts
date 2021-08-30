@@ -18,7 +18,7 @@ class UltraBall implements Pokeball {
 
 class Pikachu implements Pokemon {
   name = "Pikachu";
-  ball = undefined;
+  ball: Pokeball | undefined = undefined;
   types = { type1: "Electric" };
   obtain(ball: Pokeball) {
     this.ball = ball;
@@ -34,6 +34,8 @@ const bag = [
 const wildPikachu = new Pikachu();
 
 for (const ball of bag) {
-  ball.catch(wildPikachu.name);
-  if (wildPikachu.ball === ball) break;
+  if (ball.catch(wildPikachu.name)) {
+    wildPikachu.obtain(ball);
+    break;
+  }
 }
