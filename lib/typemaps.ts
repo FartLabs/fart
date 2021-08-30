@@ -1,6 +1,10 @@
 import { LanguageTarget } from "./types.ts";
 
-export const typemaps = {
+export interface TypeMap {
+  [type: string]: string;
+}
+
+export const TYPEMAPS: Record<LanguageTarget, TypeMap> = {
   [LanguageTarget.TypeScript]: Object.entries({
     number: "number",
     string: "string",

@@ -27,6 +27,13 @@ export enum IndentationSetting {
   QuadrupleSpace = "    ",
 }
 
+
+export const TabIndentation = ["", "\t", "\t\t", "\t\t\t", "\t\t\t\t", "\t\t\t\t\t", "\t\t\t\t\t\t", "\t\t\t\t\t\t\t", "\t\t\t\t\t\t\t\t", "\t\t\t\t\t\t\t\t\t", "\t\t\t\t\t\t\t\t\t\t", "\t\t\t\t\t\t\t\t\t\t\t", "\t\t\t\t\t\t\t\t\t\t\t\t", "\t\t\t\t\t\t\t\t\t\t\t\t\t", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t", "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"] as const;
+export const SingleSpaceIndentation = ["", " ", "  ", "   ", "    ", "     ", "      ", "       ", "        ", "         ", "          ", "           ", "            ", "             ", "              ", "               "] as const;
+export const DoubleSpaceIndentation = ["", "  ", "    ", "      ", "        ", "          ", "            ", "              ", "                ", "                  ", "                    ", "                      ", "                        ", "                          ", "                            ", "                              "] as const;
+export const TripleSpaceIndentation = ["", "   ", "      ", "         ", "            ", "               ", "                  ", "                     ", "                        ", "                           ", "                              ", "                                 ", "                                    ", "                                       ", "                                          ", "                                             "] as const;
+export const QuadrupleSpaceIndentation = ["", "    ", "        ", "            ", "                ", "                    ", "                        ", "                            ", "                                ", "                                    ", "                                        ", "                                            ", "                                                ", "                                                    ", "                                                        ", "                                                            "] as const;
+
 export interface FartSettings {
   target?: LanguageTarget;
   indentation?: IndentationSetting;
