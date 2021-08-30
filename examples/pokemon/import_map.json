@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "pokemon.ts": "https://fart.deno.dev/ts/pokemon.ts"
+  }
+}

@@ -7,7 +7,7 @@ enum ContentType {
 }
 
 const EXAMPLES: Record<string, string> = {
-  "pokemon": `
+  "pokemon.ts": `
 type Pokeball {
   id*: string
   used*: boolean
@@ -17,9 +17,11 @@ type Pokeball {
 
 type Pokemon {
   name*: string
-  ball*: Pokeball
+  ball: Pokeball
   types*: { type1*: string
             type2:  string }
+  
+  obtain*: <Pokeball>
 }`,
 };
 
