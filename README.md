@@ -2,6 +2,8 @@
 
 Program that that generates type definitions in multiple languages.
 
+> **Beware of Project Status**: _Work-in-Progress_
+
 ## Development 👨‍💻
 
 > **INFO**: `CONTRIBUTING.md` coming soon!!
