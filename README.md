@@ -2,11 +2,11 @@
 
 Program that that generates type definitions in multiple languages.
 
-> **Beware of Project Status**: _Work-in-Progress_
+> 🚧 **Beware of Project Status**: _Work-in-Progress_
 
 ## Development 👨‍💻
 
-> **INFO**: `CONTRIBUTING.md` coming soon!!
+> ℹ **INFO**: `CONTRIBUTING.md` coming soon!!
 
 To execute the Fart tests, simply run `deno test`. If you have not done so already, please [install Deno](https://github.com/denoland/deno_install).
 
