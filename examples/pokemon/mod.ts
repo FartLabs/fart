@@ -1,4 +1,4 @@
-import type { Pokeball, Pokemon } from "pokemon.ts";
+import type { Pokeball, Pokemon } from "fart/pokemon.ts";
 
 class UltraBall implements Pokeball {
   id = "ultra";

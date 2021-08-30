@@ -75,29 +75,65 @@ Deno.test("Tokenizes a string literal", () => {
   assertEquals(actual, expected);
 });
 
-Deno.test("Tokenizes a Pokemon struct", () => {
-  const actual = [...tokenize(`type Pokemon {
-    name: string
-    types: { type1: string, type2: string }
+Deno.test("Tokenizes Pokemon-themed structs", () => {
+  const actual = [...tokenize(`type Pokeball {
+    id*: string
+    used*: boolean
+  
+    catch*: <string, boolean>
+  }
+  
+  type Pokemon {
+    name*: string
+    ball: Pokeball
+    types*: { type1*: string
+              type2:  string }
+    
+    obtain*: <Pokeball>
   }`)];
   const expected = [
+    Lexicon.TypeDefiner,
+    "Pokeball",
+    Lexicon.Nester,
+    "id",
+    Lexicon.RequiredMarker + Lexicon.Setter,
+    "string",
+    "used",
+    Lexicon.RequiredMarker + Lexicon.Setter,
+    "boolean",
+    "catch",
+    Lexicon.RequiredMarker + Lexicon.Setter,
+    Lexicon.OpeningAngle,
+    "string",
+    Lexicon.Separator,
+    "boolean",
+    Lexicon.ClosingAngle,
+    Lexicon.Denester,
+
     Lexicon.TypeDefiner,
     "Pokemon",
     Lexicon.Nester,
     "name",
-    Lexicon.Setter,
+    Lexicon.RequiredMarker + Lexicon.Setter,
     "string",
-    "types",
+    "ball",
     Lexicon.Setter,
+    "Pokeball",
+    "types",
+    Lexicon.RequiredMarker + Lexicon.Setter,
     Lexicon.Nester,
     "type1",
-    Lexicon.Setter,
+    Lexicon.RequiredMarker + Lexicon.Setter,
     "string",
-    Lexicon.Separator,
     "type2",
     Lexicon.Setter,
     "string",
     Lexicon.Denester,
+    "obtain",
+    Lexicon.RequiredMarker + Lexicon.Setter,
+    Lexicon.OpeningAngle,
+    "Pokeball",
+    Lexicon.ClosingAngle,
     Lexicon.Denester,
   ];
   assertEquals(actual, expected);
