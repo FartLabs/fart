@@ -1,5 +1,6 @@
 import { compile } from "./compile.ts";
 import { assertEquals } from "../devdeps/std/testing.ts";
+import { FartSettings, LanguageTarget } from "./types.ts";
 
 Deno.test("Empty input results in empty output", () => {
   const actual = compile(``);
@@ -35,17 +36,65 @@ Deno.test("Successfully compiles nested `type` statement", () => {
     abc: string
     def: number
     ghi: {
-      uvw: boolean
-      xyz: boolean
+      uvw: {
+        xyz: boolean
+      }
     }
   }`);
   const expected = `export interface Thing {
   abc?: string;
   def?: number;
   ghi?: {
-    uvw?: boolean;
-    xyz?: boolean;
+    uvw?: {
+      xyz?: boolean;
+    }
   }
 }`;
+  assertEquals(actual, expected);
+});
+
+Deno.test("Successfully compiles nested `type` statement with required properties", () => {
+  const actual = compile(`type Thing {
+    abc*: string
+    def*: number
+    ghi*: {
+      uvw*: boolean
+      xyz*: boolean
+    }
+  }`);
+  const expected = `export interface Thing {
+  abc: string;
+  def: number;
+  ghi: {
+    uvw: boolean;
+    xyz: boolean;
+  }
+}`;
+  assertEquals(actual, expected);
+});
+
+Deno.test("Successfully compiles nested `type` statement with methods", () => {
+  const actual = compile(`type Farmer {
+    getApples: <string, number>
+  }`);
+  const expected = `export interface Farmer {
+  getApples?: (input: string) => number;
+}`;
+  assertEquals(actual, expected);
+});
+
+Deno.test("Successfully compiles to QB64", () => {
+  const settings: FartSettings = { target: LanguageTarget.Basic };
+  const actual = compile(
+    `type Calendar {
+      color: string
+      year: number
+    }`,
+    settings,
+  );
+  const expected = `TYPE Calendar
+  color AS STRING
+  year AS DOUBLE
+END TYPE`;
   assertEquals(actual, expected);
 });

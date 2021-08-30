@@ -7,26 +7,30 @@ export function* tokenize(
   let currentToken = "";
   let commentMode = false;
   let stringLiteralMode = false;
-  const closeCurrentToken = (): string | null => {
+  const closeCurrentToken = (
+    currentCharacter: string | null = null,
+  ): string | null => {
     if (currentToken.length === 0 || commentMode) return null;
-    let nextToken: string | null = null;
+    let nextToken: string | null = currentCharacter;
     switch (currentToken) {
       case Lexicon.TypeDefiner:
       case Lexicon.ImpoDefiner:
-      case Lexicon.RequiredSetter:
+      case Lexicon.Setter:
+      case Lexicon.RequiredMarker:
         nextToken = currentToken;
+        if (currentCharacter === Lexicon.Setter) {
+          nextToken += currentCharacter;
+        }
         break;
       case Lexicon.Spacer:
       case Lexicon.LineBreaker:
         break;
       default:
         if (validateIdentifier(currentToken)) nextToken = currentToken;
+        else if (validateStringLiteral(currentToken)) nextToken = currentToken;
         else {
-          console.log("TODO: Throw a syntax error here (expected identifier)");
-        }
-        if (validateStringLiteral(currentToken)) nextToken = currentToken;
-        else {
-          console.log("TODO: Throw a syntax error here (expected identifier)");
+          // TODO: Throw a syntax error here.
+          console.log("expected identifier");
         }
     }
     currentToken = "";
@@ -61,19 +65,30 @@ export function* tokenize(
         stringLiteralMode = true;
         currentToken += character;
         break;
+      case Lexicon.RequiredMarker:
+        nextToken = closeCurrentToken();
+        if (nextToken !== null) yield nextToken;
+        currentToken += character;
+        break;
       case Lexicon.Nester:
       case Lexicon.Denester:
-      case Lexicon.Setter:
+      case Lexicon.OpeningAngle:
+      case Lexicon.ClosingAngle:
       case Lexicon.Separator:
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;
         yield character;
         break;
-      case Lexicon.Spacer:
-        nextToken = closeCurrentToken();
+      case Lexicon.Setter:
+        nextToken = closeCurrentToken(character);
         if (nextToken !== null) yield nextToken;
+        if (nextToken !== Lexicon.RequiredMarker + Lexicon.Setter) {
+          yield character;
+        }
         break;
+      case Lexicon.Spacer:
       case Lexicon.LineBreaker:
+      case Lexicon.LineBreaker2:
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;
         break;

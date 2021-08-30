@@ -1,7 +1,7 @@
 import type { FartSettings } from "./types.ts";
 import { IndentationSetting, LanguageTarget, Lexicon } from "./types.ts";
 import { format as formatPath, parse as parsePath } from "../deps/std/path.ts";
-import { typemaps } from "./typemaps.ts";
+import { TYPEMAPS } from "./typemaps.ts";
 
 // TODO(ethanthatonekid): Allow for inclusive period characters in an "identifier".
 export const validateIdentifier = (candidate: string): boolean =>
@@ -9,16 +9,6 @@ export const validateIdentifier = (candidate: string): boolean =>
 
 export const validateStringLiteral = (candidate: string): boolean =>
   /^\`(.*?)\`$/g.test(candidate);
-
-const reservedWords = new Set<Lexicon>([
-  Lexicon.ImpoDefiner,
-  Lexicon.TypeDefiner,
-]);
-
-export const checkNextToken = (
-  token: string,
-  set: Set<string> = reservedWords,
-) => set.has(token);
 
 export const convertFilenameToTargetFilename = (
   filename: string,
@@ -41,6 +31,6 @@ export const validateSettings = (
 ): Required<FartSettings> => {
   const target = settings?.target ?? LanguageTarget.TypeScript;
   const indentation = settings?.indentation ?? IndentationSetting.DoubleSpace;
-  const typemap = { ...typemaps[target], ...settings?.typemap };
+  const typemap = { ...TYPEMAPS[target], ...settings?.typemap };
   return { target, indentation, typemap };
 };

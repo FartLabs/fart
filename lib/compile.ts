@@ -3,23 +3,45 @@ import { IndentationSetting, Lexicon } from "./types.ts";
 import { CodeDocument } from "./code-document.ts";
 import { validateSettings } from "./utils.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
-import { CodeTemplate } from "./code-templates/types.ts";
-import { DenoTypeScriptCodeTemplate } from "./code-templates/deno-typescript-code-template.ts";
+import type { CodeTemplate } from "./code-templates/types.ts";
 import { validateIdentifier } from "./utils.ts";
+import { TypeMap, TYPEMAPS } from "./typemaps.ts";
 
-const determineCodeTemplate = (target: LanguageTarget) => {
+import { GoCodeTemplate } from "./code-templates/go-code-template.ts";
+import { QB64CodeTemplate } from "./code-templates/qb64-code-template.ts";
+import { DenoTypeScriptCodeTemplate } from "./code-templates/deno-typescript-code-template.ts";
+
+const determineCodeTemplate = (target: LanguageTarget): CodeTemplate => {
   switch (target) {
+    case LanguageTarget.Basic:
+      return QB64CodeTemplate;
+    case LanguageTarget.Go:
+      return GoCodeTemplate;
     case LanguageTarget.TypeScript:
     default:
       return DenoTypeScriptCodeTemplate;
   }
 };
 
+const determineTypeMap = (target: LanguageTarget): TypeMap => {
+  switch (target) {
+    case LanguageTarget.Basic:
+      return TYPEMAPS[LanguageTarget.Basic];
+    case LanguageTarget.Go:
+      return TYPEMAPS[LanguageTarget.Go];
+    case LanguageTarget.TypeScript:
+    default:
+      return TYPEMAPS[LanguageTarget.TypeScript];
+  }
+};
+
 export function compile(content: string, settings?: FartSettings): string {
   const validatedSettings = validateSettings(settings);
   const codeTemplate = determineCodeTemplate(validatedSettings.target);
+  const typemap = determineTypeMap(validatedSettings.target);
   const document = new CodeDocument(
     codeTemplate,
+    typemap,
     validatedSettings.indentation,
   );
   const it = tokenize(content);
@@ -28,12 +50,13 @@ export function compile(content: string, settings?: FartSettings): string {
   const nextList = (
     ateFirstToken: boolean = false,
     maxLength?: number,
+    closingToken: string = Lexicon.Denester,
   ): string[] => {
-    if (!ateFirstToken) nextToken(); // TODO: Assert this token === Lexicon.Nester.
+    if (!ateFirstToken) nextToken(); // TODO: Assert this token === openingToken.
     const list: string[] = [];
     const checkLengthIsOk =
       () => (maxLength === undefined || maxLength >= list.length);
-    while (nextToken() !== Lexicon.Denester && checkLengthIsOk()) {
+    while (nextToken() !== closingToken && checkLengthIsOk()) {
       if (curr.value !== Lexicon.Separator) {
         list.push(curr.value);
       }
@@ -50,7 +73,7 @@ export function compile(content: string, settings?: FartSettings): string {
         case Lexicon.Setter:
           required = false;
           break;
-        case Lexicon.RequiredSetter:
+        case Lexicon.RequiredMarker + Lexicon.Setter:
           required = true;
           break;
         default:
@@ -60,10 +83,13 @@ export function compile(content: string, settings?: FartSettings): string {
       if (token === Lexicon.Nester) {
         document.addProperty(name, required); // Omitting the type sets up for a nest.
         nextStruct();
-        // TODO: Implement method compilation.
-        // } else if (token === Lexicon.OpenAngle) {
-        //   const [inputToken, outputToken] = nextList(true, 2, Lexicon.OpenAngle, Lexicon.CloseAngle);
-        //   document.addMethod(name, required, inputToken, outputToken);
+      } else if (token === Lexicon.OpeningAngle) {
+        const [inputToken, outputToken] = nextList(
+          true,
+          2,
+          Lexicon.ClosingAngle,
+        );
+        document.addMethod(name, required, inputToken, outputToken);
       } else if (validateIdentifier(token)) {
         document.addProperty(name, required, token);
       }
@@ -71,10 +97,11 @@ export function compile(content: string, settings?: FartSettings): string {
     document.decrementIndentationLevel();
     document.closeStruct();
   };
+  const quotePattern = new RegExp(Lexicon.StringLiteral, "g");
   while (!curr.done) {
     switch (curr.value) {
       case Lexicon.ImpoDefiner:
-        const filename = nextToken();
+        const filename = nextToken().replace(quotePattern, ""); // Remove quotes.
         const dependencyList = nextList();
         document.addImport(filename, dependencyList);
         break;

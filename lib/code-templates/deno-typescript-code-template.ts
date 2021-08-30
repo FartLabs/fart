@@ -9,8 +9,7 @@ export const DenoTypeScriptCodeTemplate: CodeTemplate = {
     return `import type { ${serializedDeps} } from "${targetFilename}";`;
   },
 
-  openStruct(identifier?: string): string {
-    if (identifier === undefined) return `{`;
+  openStruct(identifier: string): string {
     return `export interface ${identifier} {`;
   },
 

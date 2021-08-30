@@ -1,10 +1,10 @@
 import { tokenize } from "./tokenize.ts";
 import { Lexicon } from "./types.ts";
-import { assertEquals } from "../devdeps/std/testing.ts";
+import { assert, assertEquals } from "../devdeps/std/testing.ts";
 
 Deno.test("Empty input results in empty output", () => {
-  const actual = [...tokenize("")];
-  assertEquals(actual, []);
+  const { done } = tokenize("").next();
+  assert(done);
 });
 
 Deno.test("Successfully tokenizes given syntax", () => {
@@ -70,6 +70,70 @@ Deno.test("Tokenizes a string literal", () => {
     "Thing1",
     Lexicon.Separator,
     "Thing2",
+    Lexicon.Denester,
+  ];
+  assertEquals(actual, expected);
+});
+
+Deno.test("Tokenizes a Pokemon struct", () => {
+  const actual = [...tokenize(`type Pokemon {
+    name: string
+    types: { type1: string, type2: string }
+  }`)];
+  const expected = [
+    Lexicon.TypeDefiner,
+    "Pokemon",
+    Lexicon.Nester,
+    "name",
+    Lexicon.Setter,
+    "string",
+    "types",
+    Lexicon.Setter,
+    Lexicon.Nester,
+    "type1",
+    Lexicon.Setter,
+    "string",
+    Lexicon.Separator,
+    "type2",
+    Lexicon.Setter,
+    "string",
+    Lexicon.Denester,
+    Lexicon.Denester,
+  ];
+  assertEquals(actual, expected);
+});
+
+Deno.test("Tokenizes a required setter", () => {
+  const actual = [...tokenize(`type Thing {
+    foobar*: number
+  }`)];
+  const expected = [
+    Lexicon.TypeDefiner,
+    "Thing",
+    Lexicon.Nester,
+    "foobar",
+    Lexicon.RequiredMarker + Lexicon.Setter,
+    "number",
+    Lexicon.Denester,
+  ];
+  assertEquals(actual, expected);
+});
+
+Deno.test("Tokenizes a method definition", () => {
+  const actual = [...tokenize(`type Thing {
+    getSomething: <ThingInput, ThingOutput>
+  }`)];
+  const expected = [
+    Lexicon.TypeDefiner,
+    "Thing",
+    Lexicon.Nester,
+    "getSomething",
+    Lexicon.Setter,
+    Lexicon.OpeningAngle,
+    "ThingInput",
+    Lexicon.Separator,
+    "ThingOutput",
+    Lexicon.ClosingAngle,
     Lexicon.Denester,
   ];
   assertEquals(actual, expected);
