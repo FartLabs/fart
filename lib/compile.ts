@@ -1,5 +1,5 @@
 import { tokenize } from "./tokenize.ts";
-import { IndentationSetting, Lexicon } from "./types.ts";
+import { Lexicon } from "./types.ts";
 import { CodeDocument } from "./code-document.ts";
 import { validateSettings } from "./utils.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
@@ -48,7 +48,7 @@ export function compile(content: string, settings?: FartSettings): string {
   let curr: IteratorResult<string, string> = it.next();
   const nextToken = (): string => (curr = it.next()).value;
   const nextList = (
-    ateFirstToken: boolean = false,
+    ateFirstToken = false,
     maxLength?: number,
     closingToken: string = Lexicon.Denester,
   ): string[] => {
@@ -68,7 +68,7 @@ export function compile(content: string, settings?: FartSettings): string {
     while (nextToken() !== Lexicon.Denester) {
       const name = curr.value;
       const setter = nextToken();
-      let required: boolean = false;
+      let required = false;
       switch (setter) {
         case Lexicon.Setter:
           required = false;
@@ -100,19 +100,23 @@ export function compile(content: string, settings?: FartSettings): string {
   const quotePattern = new RegExp(Lexicon.StringLiteral, "g");
   while (!curr.done) {
     switch (curr.value) {
-      case Lexicon.ImpoDefiner:
+      case Lexicon.ImpoDefiner: {
         const filename = nextToken().replace(quotePattern, ""); // Remove quotes.
         const dependencyList = nextList();
         document.addImport(filename, dependencyList);
         break;
-      case Lexicon.TypeDefiner:
+      }
+      case Lexicon.TypeDefiner: {
         const identifier = nextToken(); // TODO: Assert is valid identifier.
         document.addStruct(identifier);
         nextToken(); // TODO: Assert this token === Lexicon.Nester.
         nextStruct();
-      default:
+        break;
+      }
+      default: {
         const unexpectedToken = nextToken();
         console.error({ unexpectedToken }); // TODO: Throw error for unexpected token.
+      }
     }
   }
   return document.compile();

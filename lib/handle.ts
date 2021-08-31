@@ -25,7 +25,7 @@ type Pokemon {
 }`,
 };
 
-const makeError = (message: string, status: number = 400): Response =>
+const makeError = (message: string, status = 400): Response =>
   new Response(JSON.stringify({ error: message }), {
     status,
     headers: { "Content-Type": ContentType.JSON },
@@ -43,11 +43,11 @@ const makeIndex = (): Response =>
     },
   );
 
-const makeFart = async (
+const makeFart = (
   languageTarget: string,
   content: string,
   indentation?: string,
-): Promise<Response> => {
+): Response => {
   if (
     !Object.values(LanguageTarget).includes(languageTarget as LanguageTarget)
   ) {

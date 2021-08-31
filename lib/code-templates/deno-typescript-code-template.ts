@@ -15,7 +15,7 @@ export const DenoTypeScriptCodeTemplate: CodeTemplate = {
 
   property(
     identifier: string,
-    required: boolean = false,
+    required = false,
     type?: string,
   ): string {
     const assignment = required ? ":" : "?:";

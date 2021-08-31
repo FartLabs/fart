@@ -12,7 +12,7 @@ export const validateStringLiteral = (candidate: string): boolean =>
 
 export const convertFilenameToTargetFilename = (
   filename: string,
-  targetExt: string = ".ts",
+  targetExt = ".ts",
 ) => {
   const info = parsePath(filename);
   return formatPath({
