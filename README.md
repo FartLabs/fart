@@ -1,6 +1,6 @@
 # Fart 🌫
 
-Program that that generates type definitions in multiple languages.
+Program that generates type definitions in multiple languages.
 
 > 🚧 **Beware of Project Status**: _Work-in-Progress_
 
