@@ -1,4 +1,4 @@
-# Devops 👨‍💻
+# DevOps 👨‍💻
 
 ## Upgrade Dependencies 🔼
 
