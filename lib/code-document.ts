@@ -46,7 +46,10 @@ export class CodeDocument {
 
   addImport(source: string, dependencies: string[]) {
     const code = this.template.import(source, dependencies);
-    if (code !== null) this.append(code);
+    if (code !== null) {
+      for (const depId of dependencies) this.typemap[depId] = depId;
+      this.append(code);
+    }
   }
 
   addStruct(identifier: string) {
