@@ -1,5 +1,5 @@
 import { compile } from "./compile.ts";
-import { assertEquals } from "../devdeps/std/testing.ts";
+import { assertEquals } from "../deps/std/testing.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
 
 Deno.test("Empty input results in empty output", () => {

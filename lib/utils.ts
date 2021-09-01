@@ -1,5 +1,5 @@
 import type { FartSettings } from "./types.ts";
-import { IndentationSetting, LanguageTarget, Lexicon } from "./types.ts";
+import { IndentationSetting, LanguageTarget } from "./types.ts";
 import { format as formatPath, parse as parsePath } from "../deps/std/path.ts";
 import { TYPEMAPS } from "./typemaps.ts";
 

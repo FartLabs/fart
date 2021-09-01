@@ -1,5 +1,5 @@
 import { DenoTypeScriptCodeTemplate } from "./deno-typescript-code-template.ts";
-import { assertEquals } from "../../devdeps/std/testing.ts";
+import { assertEquals } from "../../deps/std/testing.ts";
 
 Deno.test("import: Passes dependencies", () => {
   const actual = DenoTypeScriptCodeTemplate.import("./types", [

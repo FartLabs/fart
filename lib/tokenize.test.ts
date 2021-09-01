@@ -1,6 +1,6 @@
 import { tokenize } from "./tokenize.ts";
 import { Lexicon } from "./types.ts";
-import { assert, assertEquals } from "../devdeps/std/testing.ts";
+import { assert, assertEquals } from "../deps/std/testing.ts";
 
 Deno.test("Empty input results in empty output", () => {
   const { done } = tokenize("").next();

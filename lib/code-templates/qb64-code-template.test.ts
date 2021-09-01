@@ -1,5 +1,5 @@
 import { QB64CodeTemplate } from "./qb64-code-template.ts";
-import { assertEquals } from "../../devdeps/std/testing.ts";
+import { assertEquals } from "../../deps/std/testing.ts";
 
 Deno.test("openStruct: Success", () => {
   const actual = QB64CodeTemplate.openStruct("Thing");
