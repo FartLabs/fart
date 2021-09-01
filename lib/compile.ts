@@ -114,8 +114,7 @@ export function compile(content: string, settings?: FartSettings): string {
         break;
       }
       default: {
-        const unexpectedToken = nextToken();
-        console.error({ unexpectedToken }); // TODO: Throw error for unexpected token.
+        nextToken(); // TODO: Throw error for unexpected token.
       }
     }
   }
