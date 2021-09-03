@@ -1,5 +1,5 @@
 import { tokenize, Token } from "./tokenize.ts";
-import { Lexicon } from "./constants/lexicon.ts";
+import { Lexicon, LEXICON } from "./constants/lexicon.ts";
 import { CodeDocument } from "./code-document.ts";
 import { validateSettings } from "./utils.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
@@ -55,8 +55,8 @@ export function compile(content: string, settings?: FartSettings): string {
     if (!ateFirstToken) nextToken(); // TODO: Assert this token === openingToken.
     const list: string[] = [];
     const isLengthValid = maxLength === undefined || maxLength >= list.length;
-    while (nextToken() !== closingToken && isLengthValid) {
-      if (curr.value !== Lexicon.Separator) {
+    while (!nextToken().is(closingToken) && isLengthValid) {
+      if (!curr.value.is(Lexicon.Separator)) {
         list.push(curr.value);
       }
     }
@@ -64,35 +64,36 @@ export function compile(content: string, settings?: FartSettings): string {
   };
   const nextStruct = (depoMode: boolean = false) => {
     document.incrementIndentationLevel();
-    while (nextToken() !== Lexicon.Denester) {
-      const name = curr.value;
-      const setter = nextToken();
+    while (!nextToken().is(Lexicon.Denester)) {
+      const name = curr.value; // TODO: Assert this is identifier.
+      const setter = nextToken(); // TODO: Assert this is setter or required_setter.
       let required = depoMode; // All methods of a `depo` are required by default.
       switch (setter) {
-        case Lexicon.Setter:
-          break;
-        case Lexicon.RequiredMarker + Lexicon.Setter:
+        case Lexicon.Setter: break;
+        case Lexicon.RequiredSetter: {
           required = true;
           break;
-        default:
+        }
+        default: {
           console.error(`Expected a setter, but got ${setter} instead.`); // TODO: Throw error.
+        }
       }
       const token = nextToken();
-      if (token === Lexicon.Nester) {
+      if (token.is(Lexicon.Nester)) {
         if (depoMode) {
           // TODO: Throw warning (depos only register methods).
           continue;
         }
         document.addProperty(name, required); // Omitting the type sets up for a nest.
         nextStruct();
-      } else if (token === Lexicon.OpeningAngle) {
+      } else if (token.is(Lexicon.OpeningAngle)) {
         const [inputToken, outputToken] = nextList(
           true,
           2,
           Lexicon.ClosingAngle,
         );
         document.addMethod(name, required, inputToken, outputToken);
-      } else if (validateIdentifier(token)) {
+      } else if (validateIdentifier(token.raw)) {
         if (depoMode) {
           // TODO: Throw warning (depos only register methods).
           continue;

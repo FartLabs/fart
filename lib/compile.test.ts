@@ -2,6 +2,7 @@ import { compile } from "./compile.ts";
 import { assertEquals } from "../deps/std/testing.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
 
+/*
 Deno.test("Empty input results in empty output", () => {
   const actual = compile(``);
   const expected = ``;
@@ -158,3 +159,4 @@ Deno.test("Successfully compiles to QB64", () => {
 END TYPE`;
   assertEquals(actual, expected);
 });
+*/
