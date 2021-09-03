@@ -103,7 +103,7 @@ export function compile(content: string, settings?: FartSettings): string {
     document.decrementIndentationLevel();
     document.closeStruct();
   };
-  const quotePattern = new RegExp(Lexicon.StringLiteral, "g");
+  const quotePattern = new RegExp(Lexicon.StringMarker, "g");
   while (!curr.done) {
     switch (curr.value) {
       case Lexicon.ImpoDefiner: {
