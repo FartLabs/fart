@@ -1,5 +1,5 @@
-import { tokenize } from "./tokenize.ts";
-import { Lexicon } from "./types.ts";
+import { tokenize, Token } from "./tokenize.ts";
+import { Lexicon, LEXICON } from "./constants/lexicon.ts";
 import { assert, assertEquals } from "../deps/std/testing.ts";
 
 Deno.test("Empty input results in empty output", () => {

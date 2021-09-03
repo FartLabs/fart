@@ -34,6 +34,6 @@ export const LEXICON = {
   [Lexicon.Spacer]: " ",
   [Lexicon.LineBreaker]: "\n",
   [Lexicon.LineBreaker2]: "\r",
-  [Lexicon.StringLiteral]: "\`",
+  [Lexicon.StringMarker]: "\`",
   [Lexicon.EOF]: "",
-}
+} as const;

@@ -1,5 +1,5 @@
-import { tokenize } from "./tokenize.ts";
-import { Lexicon } from "./types.ts";
+import { tokenize, Token } from "./tokenize.ts";
+import { Lexicon } from "./constants/lexicon.ts";
 import { CodeDocument } from "./code-document.ts";
 import { validateSettings } from "./utils.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
@@ -45,8 +45,8 @@ export function compile(content: string, settings?: FartSettings): string {
     validatedSettings.indentation,
   );
   const it = tokenize(content);
-  let curr: IteratorResult<string, string> = it.next();
-  const nextToken = (): string => (curr = it.next()).value;
+  let curr: IteratorResult<Token, Token> = it.next();
+  const nextToken = (): Token => (curr = it.next()).value;
   const nextList = (
     ateFirstToken = false,
     maxLength?: number,

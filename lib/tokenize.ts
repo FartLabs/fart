@@ -13,6 +13,7 @@ export class Token {
 
   get value() {
     switch (this.kind) {
+      case Lexicon.Identifier: return this.raw;
       case Lexicon.StringLiteral: {
         const clean = (stringLiteral: string) =>{
           const marker = LEXICON[Lexicon.StringMarker];
@@ -21,14 +22,18 @@ export class Token {
         };
         return clean(this.raw);
       }
-      case Lexicon.Identifier: return this.raw;
-      default: return LEXICON[this.kind];
+      default: {
+        if (this.kind !== null && LEXICON[this.kind] !== undefined) {
+          return LEXICON[this.kind];
+        }
+        return null;
+      }
     }
   }
   
   static getKindOf(raw: string): Lexicon | null {
     switch (raw) {
-      case LEXICON[Lexicon.Nester]: return Lexicon.Neser;
+      case LEXICON[Lexicon.Nester]: return Lexicon.Nester;
       case LEXICON[Lexicon.Denester]: return Lexicon.Denester;
       case LEXICON[Lexicon.OpeningAngle]: return Lexicon.OpeningAngle;
       case LEXICON[Lexicon.ClosingAngle]: return Lexicon.ClosingAngle;
@@ -38,7 +43,7 @@ export class Token {
       case LEXICON[Lexicon.DepoDefiner]: return Lexicon.DepoDefiner;
       case LEXICON[Lexicon.ImpoDefiner]: return Lexicon.ImpoDefiner;
       case LEXICON[Lexicon.Commenter]: return Lexicon.Commenter;
-      case LEXICON[Lexicon.Seperator]: return Lexicon.Seperator;
+      case LEXICON[Lexicon.Separator]: return Lexicon.Separator;
       case LEXICON[Lexicon.Spacer]: return Lexicon.Spacer;
       case LEXICON[Lexicon.LineBreaker]: return Lexicon.LineBreaker;
       case LEXICON[Lexicon.LineBreaker2]: return Lexicon.LineBreaker2;
@@ -61,38 +66,38 @@ export function* tokenize(
   let lineCount = 1;
   let columnCount = 0;
   const makeToken = (raw: string) => new Token(raw, lineCount, columnCount);
-  const breakLine = (breaker: LEXICON[Lexicon.LineBreaker] | LEXICON[Lexicon.LineBreaker2]) => {
+  const breakLine = (breaker: typeof LEXICON[Lexicon.LineBreaker] | typeof LEXICON[Lexicon.LineBreaker2]) => {
     if (breaker === LEXICON[Lexicon.LineBreaker]) {
       lineCount++;
       columnCount = 0;
       commentMode = false;
     }
   };
-  const closeCurrentToken = (
-    currentCharacter: string | null = null,
-  ): Token | null => {
+  const closeCurrentToken = (currentCharacter: string | null = null): Token | null => {
     if (currentToken.length === 0 || commentMode) return null;
     let nextToken: string | null = currentCharacter;
     switch (currentToken) {
-      case Lexicon.TypeDefiner:
-      case Lexicon.ImpoDefiner:
-      case Lexicon.Setter:
-      case Lexicon.RequiredMarker:
+      case LEXICON[Lexicon.Spacer]:
+      case LEXICON[Lexicon.LineBreaker]:
+      case LEXICON[Lexicon.LineBreaker2]: break;
+      case LEXICON[Lexicon.TypeDefiner]:
+      case LEXICON[Lexicon.ImpoDefiner]:
+      case LEXICON[Lexicon.Setter]:
+      case LEXICON[Lexicon.RequiredMarker]: {
         nextToken = currentToken;
-        if (currentCharacter === Lexicon.Setter) {
+        if (currentCharacter === LEXICON[Lexicon.Setter]) {
           nextToken += currentCharacter;
         }
         break;
-      case Lexicon.Spacer:
-      case Lexicon.LineBreaker:
-        break;
-      default:
-        if (validateIdentifier(currentToken)) nextToken = currentToken;
-        else if (validateStringLiteral(currentToken)) nextToken = currentToken;
-        else {
+      }
+      default: {
+        if (validateIdentifier(currentToken) || validateStringLiteral(currentToken)) {
+          nextToken = currentToken;
+        } else {
           // TODO: Throw a syntax error here.
           console.log("expected identifier");
         }
+      }
     }
     currentToken = "";
     if (nextToken !== null) {
@@ -105,60 +110,70 @@ export function* tokenize(
     let nextToken: Token | null;
     if (stringLiteralMode) {
       currentToken += character;
-      if (character === Lexicon.StringLiteral) {
+      if (character === LEXICON[Lexicon.StringMarker]) {
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;
         stringLiteralMode = false;
       }
       continue;
     }
-    if (character === Lexicon.LineBreaker || character.LineBreaker2) {
+    if (
+      character === LEXICON[Lexicon.LineBreaker] ||
+      character === LEXICON[Lexicon.LineBreaker2]
+    ) {
       breakLine(character);
       continue;
     }
     switch (character) {
-      case Lexicon.Commenter:
+      case LEXICON[Lexicon.Commenter]: {
         nextToken = closeCurrentToken();
-        if (nextToken !== null) yield makeToken(nextToken);
+        if (nextToken !== null) yield nextToken;
         commentMode = true;
         break;
-      case Lexicon.StringLiteral:
+      }
+      case LEXICON[Lexicon.StringMarker]: {
         nextToken = closeCurrentToken();
-        if (nextToken !== null) yield makeToken(nextToken);
+        if (nextToken !== null) yield nextToken;
         stringLiteralMode = true;
         currentToken += character;
         break;
-      case Lexicon.RequiredMarker:
+      }
+      case LEXICON[Lexicon.RequiredMarker]: {
         nextToken = closeCurrentToken();
-        if (nextToken !== null) yield makeToken(nextToken);
+        if (nextToken !== null) yield nextToken;
         currentToken += character;
         break;
-      case Lexicon.Nester:
-      case Lexicon.Denester:
-      case Lexicon.OpeningAngle:
-      case Lexicon.ClosingAngle:
-      case Lexicon.Separator:
+      }
+      case LEXICON[Lexicon.Nester]:
+      case LEXICON[Lexicon.Denester]:
+      case LEXICON[Lexicon.OpeningAngle]:
+      case LEXICON[Lexicon.ClosingAngle]:
+      case LEXICON[Lexicon.Separator]: {
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;
-        yield character;
+        yield makeToken(character);
         break;
-      case Lexicon.Setter:
+      }
+      case LEXICON[Lexicon.Setter]: {
         nextToken = closeCurrentToken(character);
         if (nextToken !== null) yield nextToken;
-        if (nextToken !== Lexicon.RequiredMarker + Lexicon.Setter) {
+        if (nextToken !== LEXICON[Lexicon.RequiredMarker] + LEXICON[Lexicon.Setter]) {
           yield character;
         }
         break;
-      case Lexicon.Spacer:
-      case Lexicon.LineBreaker:
-      case Lexicon.LineBreaker2:
+      }
+      case LEXICON[Lexicon.Spacer]:
+      case LEXICON[Lexicon.LineBreaker]:
+      case LEXICON[Lexicon.LineBreaker2]: {
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;
         break;
-      default:
+      }
+      default: {
         if (!commentMode) currentToken += character;
         break;
+      }
     }
   }
-  return Lexicon.EOF;
+  return makeToken(LEXICON[Lexicon.EOF]);
 }
