@@ -11,10 +11,10 @@ Deno.test("Empty input results in empty output", () => {
 });
 
 Deno.test("Successfully tokenizes given syntax", () => {
-  const actual = [...tokenize(`type Thing {
+  const actual = tokenize(`type Thing {
   foo: number
   bar: string
-}`)];
+}`);
   const expected = [
     T.type_definer(1, 1),
     T.id("Thing", 1, 6),
@@ -27,7 +27,7 @@ Deno.test("Successfully tokenizes given syntax", () => {
     T.id("string", 2, 8),
     T.denester(4, 1),
   ];
-  assertEquals(actual, expected);
+  assertTokensEqual(actual, expected);
 });
 
 /*

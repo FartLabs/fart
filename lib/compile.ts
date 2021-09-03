@@ -50,10 +50,10 @@ export function compile(content: string, settings?: FartSettings): string {
   const nextList = (
     ateFirstToken = false,
     maxLength?: number,
-    closingToken: string = Lexicon.Denester,
-  ): string[] => {
+    closingToken: Lexicon = Lexicon.Denester,
+  ): Token[] => {
     if (!ateFirstToken) nextToken(); // TODO: Assert this token === openingToken.
-    const list: string[] = [];
+    const list: Token[] = [];
     const isLengthValid = maxLength === undefined || maxLength >= list.length;
     while (!nextToken().is(closingToken) && isLengthValid) {
       if (!curr.value.is(Lexicon.Separator)) {
@@ -68,7 +68,7 @@ export function compile(content: string, settings?: FartSettings): string {
       const name = curr.value; // TODO: Assert this is identifier.
       const setter = nextToken(); // TODO: Assert this is setter or required_setter.
       let required = depoMode; // All methods of a `depo` are required by default.
-      switch (setter) {
+      switch (setter.kind) {
         case Lexicon.Setter: break;
         case Lexicon.RequiredSetter: {
           required = true;
@@ -84,7 +84,7 @@ export function compile(content: string, settings?: FartSettings): string {
           // TODO: Throw warning (depos only register methods).
           continue;
         }
-        document.addProperty(name, required); // Omitting the type sets up for a nest.
+        document.addProperty(name.value, required); // Omitting the type sets up for a nest.
         nextStruct();
       } else if (token.is(Lexicon.OpeningAngle)) {
         const [inputToken, outputToken] = nextList(
@@ -92,44 +92,48 @@ export function compile(content: string, settings?: FartSettings): string {
           2,
           Lexicon.ClosingAngle,
         );
-        document.addMethod(name, required, inputToken, outputToken);
-      } else if (validateIdentifier(token.raw)) {
-        if (depoMode) {
-          // TODO: Throw warning (depos only register methods).
-          continue;
-        }
-        document.addProperty(name, required, token);
+        document.addMethod(
+          name.value,
+          required,
+          inputToken.value,
+          outputToken.value
+        );
       }
+      if (depoMode) {
+        // TODO: Throw warning (depos only register methods).
+        continue;
+      }
+      document.addProperty(name.value, required, token.value);
     }
     document.decrementIndentationLevel();
     document.closeStruct();
   };
-  const quotePattern = new RegExp(Lexicon.StringMarker, "g");
+  const quotePattern = new RegExp(LEXICON[Lexicon.StringMarker], "g");
   while (!curr.done) {
-    switch (curr.value) {
+    switch (curr.value.kind) {
       case Lexicon.ImpoDefiner: {
-        const filename = nextToken().replace(quotePattern, ""); // Remove quotes.
+        const { value: filename } = nextToken();
         const dependencyList = nextList();
-        document.addImport(filename, dependencyList);
+        document.addImport(filename, dependencyList.map(({ value }) => value));
         break;
       }
       case Lexicon.TypeDefiner: {
         const identifier = nextToken(); // TODO: Assert is valid identifier.
-        document.addStruct(identifier);
-        nextToken(); // TODO: Assert this token === Lexicon.Nester.
+        document.addStruct(identifier.value);
+        nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
         nextStruct();
         break;
       }
       case Lexicon.DepoDefiner: {
         const identifier = nextToken(); // TODO: Assert is valid identifier.
-        document.addStruct(identifier);
-        nextToken(); // TODO: Assert this token === Lexicon.Nester.
+        document.addStruct(identifier.value);
+        nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
         const depoMode = true;
         nextStruct(depoMode);
         break;
       }
       default: {
-        nextToken(); // TODO: Throw error for unexpected token.
+        nextToken(); // TODO: Throw error (unexpected token).
       }
     }
   }

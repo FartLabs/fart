@@ -11,14 +11,14 @@ export class Token {
     this.kind = Token.getKindOf(raw);
   }
 
-  get value() {
+  get value(): string {
     switch (this.kind) {
       case Lexicon.Identifier: return this.raw;
       case Lexicon.StringLiteral: {
-        const clean = (stringLiteral: string) =>{
+        const clean = (stringLiteral: string): string =>{
           const marker = LEXICON[Lexicon.StringMarker];
           const pattern = new RegExp(`^\\${marker}|\\${marker}$`, 'g')
-          stringLiteral.replace(pattern, "");
+          return stringLiteral.replace(pattern, "");
         };
         return clean(this.raw);
       }
@@ -26,13 +26,17 @@ export class Token {
         if (this.kind !== null && LEXICON[this.kind] !== undefined) {
           return LEXICON[this.kind];
         }
-        return null;
+        throw new Error(`Invalid token`);
       }
     }
   }
 
   is(kind: Lexicon | null): boolean {
     return this.kind === kind;
+  }
+
+  toString() {
+    return this.value;
   }
   
   static getKindOf(raw: string): Lexicon | null {
@@ -110,7 +114,10 @@ export function* tokenize(
   let lineCount = 1;
   let columnCount = 0;
   const makeToken = (raw: string) => new Token(raw, lineCount, columnCount);
-  const breakLine = (breaker: typeof LEXICON[Lexicon.LineBreaker] | typeof LEXICON[Lexicon.LineBreaker2]) => {
+  const breakLine = (
+    breaker:
+      (typeof LEXICON[Lexicon.LineBreaker] | typeof LEXICON[Lexicon.LineBreaker2])
+    ) => {
     if (breaker === LEXICON[Lexicon.LineBreaker]) {
       lineCount++;
       columnCount = 0;
@@ -138,8 +145,7 @@ export function* tokenize(
         if (validateIdentifier(currentToken) || validateStringLiteral(currentToken)) {
           nextToken = currentToken;
         } else {
-          // TODO: Throw a syntax error here.
-          console.log("expected identifier");
+          // TODO: Throw a syntax error here (expected identifier).
         }
       }
     }
@@ -201,7 +207,7 @@ export function* tokenize(
       case LEXICON[Lexicon.Setter]: {
         nextToken = closeCurrentToken(character);
         if (nextToken !== null) yield nextToken;
-        else yield makeToken(character);
+        yield makeToken(character);
         break;
       }
       case LEXICON[Lexicon.Spacer]:
