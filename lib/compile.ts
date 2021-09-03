@@ -54,24 +54,22 @@ export function compile(content: string, settings?: FartSettings): string {
   ): string[] => {
     if (!ateFirstToken) nextToken(); // TODO: Assert this token === openingToken.
     const list: string[] = [];
-    const checkLengthIsOk =
-      () => (maxLength === undefined || maxLength >= list.length);
-    while (nextToken() !== closingToken && checkLengthIsOk()) {
+    const isLengthValid = maxLength === undefined || maxLength >= list.length;
+    while (nextToken() !== closingToken && isLengthValid) {
       if (curr.value !== Lexicon.Separator) {
         list.push(curr.value);
       }
     }
     return list;
   };
-  const nextStruct = () => {
+  const nextStruct = (depoMode: boolean = false) => {
     document.incrementIndentationLevel();
     while (nextToken() !== Lexicon.Denester) {
       const name = curr.value;
       const setter = nextToken();
-      let required = false;
+      let required = depoMode; // All methods of a `depo` are required by default.
       switch (setter) {
         case Lexicon.Setter:
-          required = false;
           break;
         case Lexicon.RequiredMarker + Lexicon.Setter:
           required = true;
@@ -81,6 +79,10 @@ export function compile(content: string, settings?: FartSettings): string {
       }
       const token = nextToken();
       if (token === Lexicon.Nester) {
+        if (depoMode) {
+          // TODO: Throw warning (depos only register methods).
+          continue;
+        }
         document.addProperty(name, required); // Omitting the type sets up for a nest.
         nextStruct();
       } else if (token === Lexicon.OpeningAngle) {
@@ -91,6 +93,10 @@ export function compile(content: string, settings?: FartSettings): string {
         );
         document.addMethod(name, required, inputToken, outputToken);
       } else if (validateIdentifier(token)) {
+        if (depoMode) {
+          // TODO: Throw warning (depos only register methods).
+          continue;
+        }
         document.addProperty(name, required, token);
       }
     }
@@ -111,6 +117,14 @@ export function compile(content: string, settings?: FartSettings): string {
         document.addStruct(identifier);
         nextToken(); // TODO: Assert this token === Lexicon.Nester.
         nextStruct();
+        break;
+      }
+      case Lexicon.DepoDefiner: {
+        const identifier = nextToken(); // TODO: Assert is valid identifier.
+        document.addStruct(identifier);
+        nextToken(); // TODO: Assert this token === Lexicon.Nester.
+        const depoMode = true;
+        nextStruct(depoMode);
         break;
       }
       default: {

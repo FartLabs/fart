@@ -15,6 +15,7 @@ export enum Lexicon {
   Setter = ":",
   RequiredMarker = "*",
   TypeDefiner = "type",
+  DepoDefiner = "depo",
   ImpoDefiner = "impo",
   Commenter = ";",
   Separator = ",",
