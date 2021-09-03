@@ -53,21 +53,81 @@ Deno.test("Successfully compiles nested `type` statement", () => {
   assertEquals(actual, expected);
 });
 
+Deno.test("Successfully compiles `depo` statement", () => {
+  const actual = compile(`depo ThingService {
+    doThis: <number, string>
+    doThat: <string, boolean>
+  }`);
+  const expected = `export interface ThingService {
+  doThis: (input: number) => string;
+  doThat: (input: string) => boolean;
+}`;
+  assertEquals(actual, expected);
+});
+
+Deno.test("Omits property assignments from `depo` statement", () => {
+  const actual = compile(`depo ThingService {
+    doThis: <number>
+    doThat: <string>
+    abc: string
+    def: { ghi: boolean }
+  }`);
+  const expected = `export interface ThingService {
+  doThis: (input: number) => void;
+  doThat: (input: string) => void;
+}`;
+  assertEquals(actual, expected);
+});
+
+Deno.test("Successfully compiles entire service definition", () => {
+  const actual = compile(`type Apple {
+    weight*: number
+  }
+  type AppleRequest {
+    filters: {
+      minWeight: number
+      maxWeight: number
+    }
+  }
+  type AppleResponse {
+    value: Apple
+  }
+  depo AppleService {
+    pickBestApple: <AppleRequest, AppleResponse>
+  }`);
+  const expected = `export interface Apple {
+  weight: number;
+}
+export interface AppleRequest {
+  filters?: {
+    minWeight?: number;
+    maxWeight?: number;
+  }
+}
+export interface AppleResponse {
+  value?: Apple;
+}
+export interface AppleService {
+  pickBestApple: (input: AppleRequest) => AppleResponse;
+}`;
+  assertEquals(actual, expected);
+});
+
 Deno.test("Successfully compiles nested `type` statement with required properties", () => {
   const actual = compile(`type Thing {
     abc*: string
     def*: number
     ghi*: {
-      uvw*: boolean
-      xyz*: boolean
+      jkl*: boolean
+      mno*: boolean
     }
   }`);
   const expected = `export interface Thing {
   abc: string;
   def: number;
   ghi: {
-    uvw: boolean;
-    xyz: boolean;
+    jkl: boolean;
+    mno: boolean;
   }
 }`;
   assertEquals(actual, expected);
