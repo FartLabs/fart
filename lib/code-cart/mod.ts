@@ -32,27 +32,29 @@ export interface CodeCartHandlerMap {
     id: string,
     detail?: MethodDetails,
   ) => string | null;
-  [CodeCartEvent.StructClose]: () => string | null;
+  [CodeCartEvent.StructClose]: (depo?: boolean) => string | null;
 }
 
 export class CodeCart {
-  private handlers = {
-    [CodeCartEvent.Import]: undefined as
-      | CodeCartHandlerMap[CodeCartEvent.Import]
-      | undefined,
-    [CodeCartEvent.StructOpen]: undefined as
-      | CodeCartHandlerMap[CodeCartEvent.StructOpen]
-      | undefined,
-    [CodeCartEvent.SetProperty]: undefined as
-      | CodeCartHandlerMap[CodeCartEvent.SetProperty]
-      | undefined,
-    [CodeCartEvent.SetMethod]: undefined as
-      | CodeCartHandlerMap[CodeCartEvent.SetMethod]
-      | undefined,
-    [CodeCartEvent.StructClose]: undefined as
-      | CodeCartHandlerMap[CodeCartEvent.StructClose]
-      | undefined,
-  };
+  constructor(
+    private handlers = {
+      [CodeCartEvent.Import]: undefined as
+        | CodeCartHandlerMap[CodeCartEvent.Import]
+        | undefined,
+      [CodeCartEvent.StructOpen]: undefined as
+        | CodeCartHandlerMap[CodeCartEvent.StructOpen]
+        | undefined,
+      [CodeCartEvent.SetProperty]: undefined as
+        | CodeCartHandlerMap[CodeCartEvent.SetProperty]
+        | undefined,
+      [CodeCartEvent.SetMethod]: undefined as
+        | CodeCartHandlerMap[CodeCartEvent.SetMethod]
+        | undefined,
+      [CodeCartEvent.StructClose]: undefined as
+        | CodeCartHandlerMap[CodeCartEvent.StructClose]
+        | undefined,
+    },
+  ) {}
 
   addEventListener(
     event: CodeCartEvent.Import,
@@ -166,7 +168,8 @@ export class CodeCart {
       }
       case CodeCartEvent.StructClose: {
         const handler = this.handlers[CodeCartEvent.StructClose];
-        if (handler !== undefined) return handler();
+        const [depo] = args;
+        if (handler !== undefined) return handler(depo as boolean);
         return null;
       }
     }
