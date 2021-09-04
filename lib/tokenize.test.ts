@@ -1,10 +1,36 @@
 import { T, Token, tokenize } from "./tokenize.ts";
 import { assert, assertEquals } from "../deps/std/testing.ts";
+import { Lexicon } from "./constants/lexicon.ts";
 
 const assertTokensEqual = (
   actual: Generator<Token, Token>,
   expected: Token[],
 ) => assertEquals([...actual], expected);
+
+Deno.test("Successfully creates identifier token", () => {
+  const {
+    kind: actualKind,
+    value: actualValue,
+  } = new Token("abc123ABC", 0, 0);
+  const expectedKind = Lexicon.Identifier;
+  const expectedValue = "abc123ABC";
+  assertEquals(actualKind, expectedKind);
+  assertEquals(actualValue, expectedValue);
+});
+
+Deno.test("Successfully creates string literal token", () => {
+  const { kind: actualKind, value: actualValue } = new Token("\`abc\`", 0, 0);
+  const expectedKind = Lexicon.StringLiteral;
+  const expectedValue = "abc";
+  assertEquals(actualKind, expectedKind);
+  assertEquals(actualValue, expectedValue);
+});
+
+Deno.test("An empty raw value has a kind of EOF", () => {
+  const { kind: actualKind } = new Token("", 0, 0);
+  const expectedKind = Lexicon.EOF;
+  assertEquals(actualKind, expectedKind);
+});
 
 Deno.test("Empty input results in empty output", () => {
   const { done } = tokenize("").next();
