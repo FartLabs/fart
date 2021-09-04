@@ -1,10 +1,9 @@
-import { tokenize } from "./tokenize.ts";
-import { Lexicon } from "./types.ts";
+import { Token, tokenize } from "./tokenize.ts";
+import { Lexicon } from "./constants/lexicon.ts";
 import { CodeDocument } from "./code-document.ts";
 import { validateSettings } from "./utils.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
 import type { CodeTemplate } from "./code-templates/types.ts";
-import { validateIdentifier } from "./utils.ts";
 import { TypeMap, TYPEMAPS } from "./typemaps.ts";
 
 import { GoCodeTemplate } from "./code-templates/go-code-template.ts";
@@ -45,90 +44,96 @@ export function compile(content: string, settings?: FartSettings): string {
     validatedSettings.indentation,
   );
   const it = tokenize(content);
-  let curr: IteratorResult<string, string> = it.next();
-  const nextToken = (): string => (curr = it.next()).value;
+  let curr: IteratorResult<Token, Token> = it.next();
+  const nextToken = (): Token => (curr = it.next()).value;
   const nextList = (
     ateFirstToken = false,
     maxLength?: number,
-    closingToken: string = Lexicon.Denester,
-  ): string[] => {
+    closingToken: Lexicon = Lexicon.Denester,
+  ): Token[] => {
     if (!ateFirstToken) nextToken(); // TODO: Assert this token === openingToken.
-    const list: string[] = [];
+    const list: Token[] = [];
     const isLengthValid = maxLength === undefined || maxLength >= list.length;
-    while (nextToken() !== closingToken && isLengthValid) {
-      if (curr.value !== Lexicon.Separator) {
+    while (!nextToken().is(closingToken) && isLengthValid) {
+      if (!curr.value.is(Lexicon.Separator)) {
         list.push(curr.value);
       }
     }
     return list;
   };
-  const nextStruct = (depoMode: boolean = false) => {
+  const nextStruct = (depoMode = false) => {
     document.incrementIndentationLevel();
-    while (nextToken() !== Lexicon.Denester) {
-      const name = curr.value;
-      const setter = nextToken();
+    while (!nextToken().is(Lexicon.Denester)) {
+      const name = curr.value; // TODO: Assert this is identifier.
+      const setter = nextToken(); // TODO: Assert this is setter or required_setter.
       let required = depoMode; // All methods of a `depo` are required by default.
-      switch (setter) {
+      switch (setter.kind) {
         case Lexicon.Setter:
           break;
-        case Lexicon.RequiredMarker + Lexicon.Setter:
+        case Lexicon.RequiredSetter: {
           required = true;
           break;
-        default:
+        }
+        default: {
           console.error(`Expected a setter, but got ${setter} instead.`); // TODO: Throw error.
+        }
       }
       const token = nextToken();
-      if (token === Lexicon.Nester) {
+      if (token.is(Lexicon.Nester)) {
         if (depoMode) {
           // TODO: Throw warning (depos only register methods).
           continue;
         }
-        document.addProperty(name, required); // Omitting the type sets up for a nest.
+        document.addProperty(name.value, required); // Omitting the type sets up for a nest.
         nextStruct();
-      } else if (token === Lexicon.OpeningAngle) {
+      } else if (token.is(Lexicon.OpeningAngle)) {
         const [inputToken, outputToken] = nextList(
           true,
           2,
           Lexicon.ClosingAngle,
         );
-        document.addMethod(name, required, inputToken, outputToken);
-      } else if (validateIdentifier(token)) {
+        document.addMethod(
+          name.value,
+          required,
+          inputToken?.value,
+          outputToken?.value,
+        );
+      } else {
         if (depoMode) {
           // TODO: Throw warning (depos only register methods).
           continue;
         }
-        document.addProperty(name, required, token);
+        document.addProperty(name.value, required, token.value);
       }
     }
     document.decrementIndentationLevel();
     document.closeStruct();
   };
-  const quotePattern = new RegExp(Lexicon.StringLiteral, "g");
   while (!curr.done) {
-    switch (curr.value) {
+    switch (curr.value.kind) {
       case Lexicon.ImpoDefiner: {
-        const filename = nextToken().replace(quotePattern, ""); // Remove quotes.
+        const { value: filename } = nextToken();
         const dependencyList = nextList();
-        document.addImport(filename, dependencyList);
+        document.addImport(filename, dependencyList.map(({ value }) => value));
         break;
       }
       case Lexicon.TypeDefiner: {
         const identifier = nextToken(); // TODO: Assert is valid identifier.
-        document.addStruct(identifier);
-        nextToken(); // TODO: Assert this token === Lexicon.Nester.
+        document.addStruct(identifier.value);
+        nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
         nextStruct();
         break;
       }
       case Lexicon.DepoDefiner: {
         const identifier = nextToken(); // TODO: Assert is valid identifier.
-        document.addStruct(identifier);
-        nextToken(); // TODO: Assert this token === Lexicon.Nester.
+        document.addStruct(identifier.value);
+        nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
         const depoMode = true;
         nextStruct(depoMode);
         break;
       }
       default: {
-        nextToken(); // TODO: Throw error for unexpected token.
+        nextToken(); // TODO: Throw error (unexpected token).
       }
     }
   }

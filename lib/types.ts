@@ -7,24 +7,7 @@ export enum LanguageTarget {
   CPP = "cpp",
 }
 
-export enum Lexicon {
-  Nester = "{",
-  Denester = "}",
-  OpeningAngle = "<",
-  ClosingAngle = ">",
-  Setter = ":",
-  RequiredMarker = "*",
-  TypeDefiner = "type",
-  DepoDefiner = "depo",
-  ImpoDefiner = "impo",
-  Commenter = ";",
-  Separator = ",",
-  Spacer = " ",
-  LineBreaker = "\n",
-  LineBreaker2 = "\r",
-  StringLiteral = "\`",
-  EOF = "",
-}
+
 
 export enum IndentationSetting {
   Tab = "\t",
