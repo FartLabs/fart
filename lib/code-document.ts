@@ -6,8 +6,9 @@ import {
   TabIndentation,
   TripleSpaceIndentation,
 } from "./types.ts";
-import type { CodeTemplate } from "./code-templates/types.ts";
+import { CodeCart } from "./code-cart/mod.ts";
 import { TypeMap } from "./typemaps.ts";
+import { CodeCartEvent } from "./code-cart/mod.ts";
 
 interface LoC {
   content: string;
@@ -18,7 +19,7 @@ export class CodeDocument {
   lines: LoC[];
   indentationLevel: number;
   constructor(
-    private template: CodeTemplate,
+    private codeCartridge: CodeCart,
     private typemap: TypeMap,
     private indentation: string,
   ) {
@@ -45,7 +46,11 @@ export class CodeDocument {
   }
 
   addImport(source: string, dependencies: string[]) {
-    const code = this.template.import(source, dependencies);
+    const code = this.codeCartridge.dispatch(
+      CodeCartEvent.Import,
+      source,
+      dependencies,
+    );
     if (code !== null) {
       for (const depId of dependencies) this.typemap[depId] = depId;
       this.append(code);
@@ -53,7 +58,10 @@ export class CodeDocument {
   }
 
   addStruct(identifier: string) {
-    const code = this.template.openStruct(identifier);
+    const code = this.codeCartridge.dispatch(
+      CodeCartEvent.StructOpen,
+      identifier,
+    );
     if (code !== null) {
       this.typemap[identifier] = identifier;
       this.append(code);
@@ -61,12 +69,13 @@ export class CodeDocument {
   }
 
   closeStruct() {
-    const code = this.template.closeStruct();
+    const code = this.codeCartridge.dispatch(CodeCartEvent.StructClose);
     if (code !== null) this.append(code);
   }
 
   addProperty(identifier: string, required?: boolean, type?: string) {
-    const code = this.template.property(
+    const code = this.codeCartridge.dispatch(
+      CodeCartEvent.SetProperty,
       identifier,
       required,
       this.getType(type),
@@ -80,22 +89,26 @@ export class CodeDocument {
     inputType?: string,
     outputType?: string,
   ) {
-    const code = this.template.method(identifier, {
-      required,
-      input: this.getType(inputType),
-      output: this.getType(outputType),
-    });
+    const code = this.codeCartridge.dispatch(
+      CodeCartEvent.SetMethod,
+      identifier,
+      {
+        required,
+        input: this.getType(inputType),
+        output: this.getType(outputType),
+      },
+    );
     if (code !== null) this.append(code);
   }
 
-  compile(): string {
+  public compile(): string {
     // TODO: Assert that indentation level is 0 in order to compile.
     return this.lines.map(({ content, indentationLevel = 0 }) =>
       CodeDocument.getIndentation(this.indentation, indentationLevel) + content
     ).join("\n");
   }
 
-  getType(typeAlias?: string): string | undefined {
+  private getType(typeAlias?: string): string | undefined {
     if (typeAlias === undefined) return undefined;
     if (this.typemap[typeAlias] !== undefined) {
       return this.typemap[typeAlias];
