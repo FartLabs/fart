@@ -1,10 +1,9 @@
-import { tokenize, Token } from "./tokenize.ts";
-import { Lexicon, LEXICON } from "./constants/lexicon.ts";
+import { Token, tokenize } from "./tokenize.ts";
+import { Lexicon } from "./constants/lexicon.ts";
 import { CodeDocument } from "./code-document.ts";
 import { validateSettings } from "./utils.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
 import type { CodeTemplate } from "./code-templates/types.ts";
-import { validateIdentifier } from "./utils.ts";
 import { TypeMap, TYPEMAPS } from "./typemaps.ts";
 
 import { GoCodeTemplate } from "./code-templates/go-code-template.ts";
@@ -62,14 +61,15 @@ export function compile(content: string, settings?: FartSettings): string {
     }
     return list;
   };
-  const nextStruct = (depoMode: boolean = false) => {
+  const nextStruct = (depoMode = false) => {
     document.incrementIndentationLevel();
     while (!nextToken().is(Lexicon.Denester)) {
       const name = curr.value; // TODO: Assert this is identifier.
       const setter = nextToken(); // TODO: Assert this is setter or required_setter.
       let required = depoMode; // All methods of a `depo` are required by default.
       switch (setter.kind) {
-        case Lexicon.Setter: break;
+        case Lexicon.Setter:
+          break;
         case Lexicon.RequiredSetter: {
           required = true;
           break;
@@ -95,20 +95,20 @@ export function compile(content: string, settings?: FartSettings): string {
         document.addMethod(
           name.value,
           required,
-          inputToken.value,
-          outputToken.value
+          inputToken?.value,
+          outputToken?.value,
         );
+      } else {
+        if (depoMode) {
+          // TODO: Throw warning (depos only register methods).
+          continue;
+        }
+        document.addProperty(name.value, required, token.value);
       }
-      if (depoMode) {
-        // TODO: Throw warning (depos only register methods).
-        continue;
-      }
-      document.addProperty(name.value, required, token.value);
     }
     document.decrementIndentationLevel();
     document.closeStruct();
   };
-  const quotePattern = new RegExp(LEXICON[Lexicon.StringMarker], "g");
   while (!curr.done) {
     switch (curr.value.kind) {
       case Lexicon.ImpoDefiner: {

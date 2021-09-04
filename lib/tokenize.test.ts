@@ -31,6 +31,34 @@ Deno.test("Successfully tokenizes given syntax", () => {
   assertTokensEqual(actual, expected);
 });
 
+Deno.test("Successfully tokenizes nested syntax", () => {
+  const actual = tokenize(`type Thing {
+  abc: {
+    def: {
+      ghi: number
+    }
+  }
+}`);
+  const expected = [
+    T.type_definer(1, 1),
+    T.id("Thing", 1, 6),
+    T.nester(1, 12),
+    T.id("abc", 2, 3),
+    T.setter(2, 6),
+    T.nester(2, 8),
+    T.id("def", 3, 5),
+    T.setter(3, 8),
+    T.nester(3, 10),
+    T.id("ghi", 4, 7),
+    T.setter(4, 10),
+    T.id("number", 4, 12),
+    T.denester(5, 5),
+    T.denester(6, 3),
+    T.denester(7, 1),
+  ];
+  assertTokensEqual(actual, expected);
+});
+
 Deno.test("Omits comments from results", () => {
   const actual = tokenize(`type Thing {
   foo: number; This is a comment
