@@ -22,7 +22,7 @@ export interface CodeCartHandlerMap {
     src: string,
     dependencies: string[],
   ) => string | null;
-  [CodeCartEvent.StructOpen]: (id: string) => string | null;
+  [CodeCartEvent.StructOpen]: (id: string, depo?: boolean) => string | null;
   [CodeCartEvent.SetProperty]: (
     id: string,
     required?: boolean,
@@ -143,8 +143,8 @@ export class CodeCart {
       case CodeCartEvent.StructOpen: {
         const handler = this.handlers[CodeCartEvent.StructOpen];
         if (handler !== undefined) {
-          const [id] = args;
-          return handler(id as string);
+          const [id, depo] = args;
+          return handler(id as string, depo as boolean | undefined);
         }
         return null;
       }
