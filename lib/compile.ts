@@ -5,9 +5,6 @@ import { validateSettings } from "./utils.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
 import type { CodeCart } from "./code-cart/mod.ts";
 import { TypeMap, TYPEMAPS } from "./typemaps.ts";
-
-// import { GoCodeTemplate } from "./code-templates/go-code-template.ts";
-// import { QB64CodeTemplate } from "./code-templates/qb64-code-template.ts";
 import DenoCart from "./code-cart/carts/deno.cart.ts";
 
 const determineCodeCartridge = (target: LanguageTarget): CodeCart => {
