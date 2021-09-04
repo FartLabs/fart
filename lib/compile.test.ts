@@ -143,6 +143,7 @@ Deno.test("Successfully compiles nested `type` statement with methods", () => {
   assertEquals(actual, expected);
 });
 
+/* TODO: Compile using QB64 cartridge.
 Deno.test("Successfully compiles to QB64", () => {
   const settings: FartSettings = { target: LanguageTarget.Basic };
   const actual = compile(
@@ -158,3 +159,4 @@ Deno.test("Successfully compiles to QB64", () => {
 END TYPE`;
   assertEquals(actual, expected);
 });
+*/

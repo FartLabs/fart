@@ -3,22 +3,15 @@ import { Lexicon } from "./constants/lexicon.ts";
 import { CodeDocument } from "./code-document.ts";
 import { validateSettings } from "./utils.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
-import type { CodeTemplate } from "./code-templates/types.ts";
+import type { CodeCart } from "./code-cart/mod.ts";
 import { TypeMap, TYPEMAPS } from "./typemaps.ts";
+import DenoCart from "./code-cart/carts/deno.cart.ts";
 
-import { GoCodeTemplate } from "./code-templates/go-code-template.ts";
-import { QB64CodeTemplate } from "./code-templates/qb64-code-template.ts";
-import { DenoTypeScriptCodeTemplate } from "./code-templates/deno-typescript-code-template.ts";
-
-const determineCodeTemplate = (target: LanguageTarget): CodeTemplate => {
+const determineCodeCartridge = (target: LanguageTarget): CodeCart => {
   switch (target) {
-    case LanguageTarget.Basic:
-      return QB64CodeTemplate;
-    case LanguageTarget.Go:
-      return GoCodeTemplate;
     case LanguageTarget.TypeScript:
     default:
-      return DenoTypeScriptCodeTemplate;
+      return DenoCart;
   }
 };
 
@@ -36,10 +29,10 @@ const determineTypeMap = (target: LanguageTarget): TypeMap => {
 
 export function compile(content: string, settings?: FartSettings): string {
   const validatedSettings = validateSettings(settings);
-  const codeTemplate = determineCodeTemplate(validatedSettings.target);
+  const codeCartridge = determineCodeCartridge(validatedSettings.target);
   const typemap = determineTypeMap(validatedSettings.target);
   const document = new CodeDocument(
-    codeTemplate,
+    codeCartridge,
     typemap,
     validatedSettings.indentation,
   );

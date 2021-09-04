@@ -1,32 +1,36 @@
-import { convertFilenameToTargetFilename } from "../utils.ts";
-import type { CodeTemplate, MethodDetails } from "./types.ts";
+import type { MethodDetails } from "../mod.ts";
+import { CodeCart, CodeCartEvent } from "../mod.ts";
+import { convertFilenameToTargetFilename } from "../../utils.ts";
 
-export const DenoTypeScriptCodeTemplate: CodeTemplate = {
-  import(source: string, dependencies: string[]): string | null {
+const denoCart = new CodeCart();
+
+denoCart.addEventListener(
+  CodeCartEvent.Import,
+  (source: string, dependencies: string[]) => {
     if (dependencies.length === 0) return null;
     const targetFilename = convertFilenameToTargetFilename(source);
     const serializedDeps = dependencies.join(", ");
     return `import type { ${serializedDeps} } from "${targetFilename}";`;
   },
+);
 
-  openStruct(identifier: string): string {
-    return `export interface ${identifier} {`;
-  },
+denoCart.addEventListener(
+  CodeCartEvent.StructOpen,
+  (identifier: string) => `export interface ${identifier} {`,
+);
 
-  property(
-    identifier: string,
-    required = false,
-    type?: string,
-  ): string {
+denoCart.addEventListener(
+  CodeCartEvent.SetProperty,
+  (identifier: string, required = false, type?: string) => {
     const assignment = required ? ":" : "?:";
     if (type === undefined) return `${identifier}${assignment} {`;
     return `${identifier}${assignment} ${type};`;
   },
+);
 
-  method(
-    identifier: string,
-    detail?: MethodDetails,
-  ): string {
+denoCart.addEventListener(
+  CodeCartEvent.SetMethod,
+  (identifier: string, detail?: MethodDetails) => {
     if (detail !== undefined) {
       const output = detail.output ?? "void";
       const assignment = detail.required ? ":" : "?:";
@@ -37,8 +41,8 @@ export const DenoTypeScriptCodeTemplate: CodeTemplate = {
     }
     return `${identifier}: () => void;`;
   },
+);
 
-  closeStruct(): string {
-    return `}`;
-  },
-};
+denoCart.addEventListener(CodeCartEvent.StructClose, () => `}`);
+
+export default denoCart;
