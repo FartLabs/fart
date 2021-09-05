@@ -1,5 +1,5 @@
-import type { MethodDetails } from "../cart.ts";
-import { CodeCart, CodeCartEvent } from "../cart.ts";
+import type { MethodDetails } from "../mod.ts";
+import { CodeCart, CodeCartEvent } from "../mod.ts";
 import { convertFilenameToTargetFilename } from "../../utils.ts";
 
 const denoCart = new CodeCart();
