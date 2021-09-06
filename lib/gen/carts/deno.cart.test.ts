@@ -1,10 +1,10 @@
 import { assertEquals } from "../../../deps/std/testing.ts";
-import { CodeCartEvent } from "../cart.ts";
+import { CartEvent } from "../cart.ts";
 import DenoCart from "./deno.cart.ts";
 
 Deno.test("Passes dependencies to import event", () => {
   const actual = DenoCart.dispatch(
-    CodeCartEvent.Import,
+    CartEvent.Import,
     "./types",
     ["Thing1", "Thing2"],
   );
@@ -13,19 +13,19 @@ Deno.test("Passes dependencies to import event", () => {
 });
 
 Deno.test("Import handler returns null without dependencies", () => {
-  const actual = DenoCart.dispatch(CodeCartEvent.Import, "./types", []);
+  const actual = DenoCart.dispatch(CartEvent.Import, "./types", []);
   assertEquals(actual, null);
 });
 
 Deno.test("Successfully handles struct open event", () => {
-  const actual = DenoCart.dispatch(CodeCartEvent.StructOpen, "Thing");
+  const actual = DenoCart.dispatch(CartEvent.StructOpen, "Thing");
   const expected = `export interface Thing {`;
   assertEquals(actual, expected);
 });
 
 Deno.test("Property is assumed to be optional by default", () => {
   const actual = DenoCart.dispatch(
-    CodeCartEvent.SetProperty,
+    CartEvent.SetProperty,
     "count",
     undefined,
     "number",
@@ -36,7 +36,7 @@ Deno.test("Property is assumed to be optional by default", () => {
 
 Deno.test("Property is required when told", () => {
   const actual = DenoCart.dispatch(
-    CodeCartEvent.SetProperty,
+    CartEvent.SetProperty,
     "count",
     true,
     "number",
@@ -46,14 +46,14 @@ Deno.test("Property is required when told", () => {
 });
 
 Deno.test("Method resolves successfully without input or output", () => {
-  const actual = DenoCart.dispatch(CodeCartEvent.SetMethod, "ping");
+  const actual = DenoCart.dispatch(CartEvent.SetMethod, "ping");
   const expected = `ping: () => void;`;
   assertEquals(actual, expected);
 });
 
 Deno.test("Method resolves successfully without input", () => {
   const actual = DenoCart.dispatch(
-    CodeCartEvent.SetMethod,
+    CartEvent.SetMethod,
     "ping",
     { output: "Pong" },
   );
@@ -63,7 +63,7 @@ Deno.test("Method resolves successfully without input", () => {
 
 Deno.test("Method resolves successfully without output", () => {
   const actual = DenoCart.dispatch(
-    CodeCartEvent.SetMethod,
+    CartEvent.SetMethod,
     "ping",
     { input: "Ping" },
   );
@@ -72,7 +72,7 @@ Deno.test("Method resolves successfully without output", () => {
 });
 
 Deno.test("Method resolves successfully with input and output", () => {
-  const actual = DenoCart.dispatch(CodeCartEvent.SetMethod, "ping", {
+  const actual = DenoCart.dispatch(CartEvent.SetMethod, "ping", {
     input: "Ping",
     output: "Pong",
     required: true,
@@ -82,6 +82,6 @@ Deno.test("Method resolves successfully with input and output", () => {
 });
 
 Deno.test("Successfully handles struct close event", () => {
-  const actual = DenoCart.dispatch(CodeCartEvent.StructClose);
+  const actual = DenoCart.dispatch(CartEvent.StructClose);
   assertEquals(actual, `}`);
 });

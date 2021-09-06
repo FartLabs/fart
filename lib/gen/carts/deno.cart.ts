@@ -1,11 +1,10 @@
-import type { MethodDetails } from "../cart.ts";
-import { CodeCart, CodeCartEvent } from "../cart.ts";
+import { Cart, CartEvent, MethodDetails } from "../cart.ts";
 import { convertFilenameToTargetFilename } from "../../utils.ts";
 
-const denoCart = new CodeCart();
+const denoCart = new Cart();
 
 denoCart.addEventListener(
-  CodeCartEvent.Import,
+  CartEvent.Import,
   (source: string, dependencies: string[]) => {
     if (dependencies.length === 0) return null;
     const targetFilename = convertFilenameToTargetFilename(source);
@@ -15,12 +14,12 @@ denoCart.addEventListener(
 );
 
 denoCart.addEventListener(
-  CodeCartEvent.StructOpen,
+  CartEvent.StructOpen,
   (identifier: string) => `export interface ${identifier} {`,
 );
 
 denoCart.addEventListener(
-  CodeCartEvent.SetProperty,
+  CartEvent.SetProperty,
   (identifier: string, required = false, type?: string) => {
     const assignment = required ? ":" : "?:";
     if (type === undefined) return `${identifier}${assignment} {`;
@@ -29,7 +28,7 @@ denoCart.addEventListener(
 );
 
 denoCart.addEventListener(
-  CodeCartEvent.SetMethod,
+  CartEvent.SetMethod,
   (identifier: string, detail?: MethodDetails) => {
     if (detail !== undefined) {
       const output = detail.output ?? "void";
@@ -43,6 +42,6 @@ denoCart.addEventListener(
   },
 );
 
-denoCart.addEventListener(CodeCartEvent.StructClose, () => `}`);
+denoCart.addEventListener(CartEvent.StructClose, () => `}`);
 
 export default denoCart;
