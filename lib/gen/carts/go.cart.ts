@@ -1,11 +1,10 @@
-import type { MethodDetails } from "../mod.ts";
-import { CodeCart, CodeCartEvent } from "../mod.ts";
+import { Cart, CartEvent, MethodDetails } from "../cart.ts";
 import { convertFilenameToTargetFilename } from "../../utils.ts";
 
-const goCart = new CodeCart();
+const goCart = new Cart();
 
 goCart.addEventListener(
-  CodeCartEvent.Import,
+  CartEvent.Import,
   (source: string, dependencies: string[]) => {
     if (dependencies.length > 0) return null;
     const targetFilename = convertFilenameToTargetFilename(source, "");
@@ -14,13 +13,13 @@ goCart.addEventListener(
 );
 
 goCart.addEventListener(
-  CodeCartEvent.StructOpen,
+  CartEvent.StructOpen,
   (identifier: string, depo = true) =>
     `type ${identifier} ${depo ? "interface" : "struct"} {`,
 );
 
 goCart.addEventListener(
-  CodeCartEvent.SetProperty,
+  CartEvent.SetProperty,
   (identifier: string, _, type?: string) => {
     if (type !== undefined) return `${identifier} ${type}`;
     return `${identifier} interface {`;
@@ -28,7 +27,7 @@ goCart.addEventListener(
 );
 
 goCart.addEventListener(
-  CodeCartEvent.SetMethod,
+  CartEvent.SetMethod,
   (identifier: string, detail?: MethodDetails) => {
     if (detail !== undefined) {
       if (detail.input !== undefined && detail.output !== undefined) {
@@ -45,6 +44,6 @@ goCart.addEventListener(
   },
 );
 
-goCart.addEventListener(CodeCartEvent.StructClose, () => `}`);
+goCart.addEventListener(CartEvent.StructClose, () => `}`);
 
 export default goCart;

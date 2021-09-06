@@ -1,13 +1,13 @@
 import { Token, tokenize } from "./tokenize.ts";
 import { Lexicon } from "./constants/lexicon.ts";
-import { CodeDocument } from "./code-document.ts";
+import { Builder } from "./gen/builder.ts";
 import { validateSettings } from "./utils.ts";
 import { FartSettings, LanguageTarget } from "./types.ts";
-import type { CodeCart } from "./code-cart/mod.ts";
+import type { Cart } from "./gen/cart.ts";
 import { TypeMap, TYPEMAPS } from "./typemaps.ts";
-import DenoCart from "./code-cart/carts/deno.cart.ts";
+import DenoCart from "./gen/carts/deno.cart.ts";
 
-const determineCodeCartridge = (target: LanguageTarget): CodeCart => {
+const determineCodeCartridge = (target: LanguageTarget): Cart => {
   switch (target) {
     case LanguageTarget.TypeScript:
     default:
@@ -31,7 +31,7 @@ export function compile(content: string, settings?: FartSettings): string {
   const validatedSettings = validateSettings(settings);
   const codeCartridge = determineCodeCartridge(validatedSettings.target);
   const typemap = determineTypeMap(validatedSettings.target);
-  const document = new CodeDocument(
+  const builder = new Builder(
     codeCartridge,
     typemap,
     validatedSettings.indentation,
@@ -55,7 +55,7 @@ export function compile(content: string, settings?: FartSettings): string {
     return list;
   };
   const nextStruct = (depoMode = false) => {
-    document.incrementIndentationLevel();
+    builder.incrementIndentLevel();
     while (!nextToken().is(Lexicon.Denester)) {
       const name = curr.value; // TODO: Assert this is identifier.
       const setter = nextToken(); // TODO: Assert this is setter or required_setter.
@@ -77,7 +77,7 @@ export function compile(content: string, settings?: FartSettings): string {
           // TODO: Throw warning (depos only register methods).
           continue;
         }
-        document.addProperty(name.value, required); // Omitting the type sets up for a nest.
+        builder.appendProperty(name.value, required); // Omitting the type sets up for a nest.
         nextStruct();
       } else if (token.is(Lexicon.OpeningAngle)) {
         const [inputToken, outputToken] = nextList(
@@ -85,41 +85,44 @@ export function compile(content: string, settings?: FartSettings): string {
           2,
           Lexicon.ClosingAngle,
         );
-        document.addMethod(
+        builder.appendMethod(
           name.value,
-          required,
-          inputToken?.value,
-          outputToken?.value,
+          {
+            required,
+            input: inputToken?.value,
+            output: outputToken?.value,
+          },
         );
       } else {
         if (depoMode) {
           // TODO: Throw warning (depos only register methods).
           continue;
         }
-        document.addProperty(name.value, required, token.value);
+        builder.appendProperty(name.value, required, token.value);
       }
     }
-    document.decrementIndentationLevel();
-    document.closeStruct();
+    builder.decrementIndentLevel();
+    builder.appendClosingStruct(depoMode);
   };
   while (!curr.done) {
     switch (curr.value.kind) {
       case Lexicon.ImpoDefiner: {
         const { value: filename } = nextToken();
-        const dependencyList = nextList();
-        document.addImport(filename, dependencyList.map(({ value }) => value));
+        const dependencyTokens = nextList();
+        const dependencies = dependencyTokens.map(({ value }) => value);
+        builder.appendImport(filename, dependencies);
         break;
       }
       case Lexicon.TypeDefiner: {
         const identifier = nextToken(); // TODO: Assert is valid identifier.
-        document.addStruct(identifier.value);
+        builder.appendOpeningStruct(identifier.value);
         nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
         nextStruct();
         break;
       }
       case Lexicon.DepoDefiner: {
         const identifier = nextToken(); // TODO: Assert is valid identifier.
-        document.addStruct(identifier.value);
+        builder.appendOpeningStruct(identifier.value);
         nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
         const depoMode = true;
         nextStruct(depoMode);
@@ -130,5 +133,5 @@ export function compile(content: string, settings?: FartSettings): string {
       }
     }
   }
-  return document.compile();
+  return builder.export();
 }
