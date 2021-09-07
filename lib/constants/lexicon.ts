@@ -1,3 +1,12 @@
+export enum ReservedType {
+  Number = "number",
+  AsyncNumber = "async_number",
+  String = "string",
+  AsyncString = "async_string",
+  Boolean = "boolean",
+  AsyncBoolean = "async_boolean",
+}
+
 export enum Lexicon {
   Identifier,
   Nester,
