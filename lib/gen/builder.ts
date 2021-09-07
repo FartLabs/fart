@@ -24,12 +24,28 @@ export class Builder {
     this.currentIndentLevel = 0;
   }
 
-  private append(line?: string) {
-    if (line !== undefined) {
-      this.lines.push({
-        content: line,
-        indentLevel: this.currentIndentLevel,
-      });
+  private append(content?: string | string[] | string[][]) {
+    if (content !== undefined) {
+      if (typeof content === "string") {
+        return this.lines.push({
+          content,
+          indentLevel: this.currentIndentLevel,
+        });
+      }
+      for (const line of content) {
+        if (typeof line === "string") {
+          this.lines.push({
+            content: line,
+            indentLevel: this.currentIndentLevel,
+          });
+          continue;
+        }
+        const indentLevelOffset = line.findIndex(({ length }) => length > 0);
+        this.lines.push({
+          content: line[indentLevelOffset],
+          indentLevel: this.currentIndentLevel + indentLevelOffset,
+        });
+      }
     }
   }
 
@@ -113,9 +129,10 @@ export class Builder {
 
   public export(): string {
     // TODO: Assert that indentation level is 0 in order to compile.
-    return this.lines.map(({ content, indentLevel = 0 }) =>
-      Builder.getIndent(this.indent, indentLevel) + content
-    ).join("\n");
+    return this.lines.map(({ content, indentLevel = 0 }) => {
+      const indent = Builder.getIndent(this.indent, indentLevel);
+      return content.split("\n").map((line) => indent + line);
+    }).join("\n");
   }
 
   private getType(typeAlias?: string): string | undefined {

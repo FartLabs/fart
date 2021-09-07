@@ -21,18 +21,23 @@ export interface CartHandlerMap {
   [CartEvent.Import]: (
     src: string,
     dependencies: string[],
-  ) => string | null;
-  [CartEvent.StructOpen]: (id: string, depo?: boolean) => string | null;
+  ) => string | string[] | string[][] | null;
+  [CartEvent.StructOpen]: (
+    id: string,
+    depo?: boolean,
+  ) => string | string[] | string[][] | null;
   [CartEvent.SetProperty]: (
     id: string,
     required?: boolean,
     type?: string,
-  ) => string | null;
+  ) => string | string[] | string[][] | null;
   [CartEvent.SetMethod]: (
     id: string,
     detail?: MethodDetails,
-  ) => string | null;
-  [CartEvent.StructClose]: (depo?: boolean) => string | null;
+  ) => string | string[] | string[][] | null;
+  [CartEvent.StructClose]: (
+    depo?: boolean,
+  ) => string | string[] | string[][] | null;
 }
 
 export class Cart {
@@ -129,7 +134,7 @@ export class Cart {
   dispatch(
     event: CartEvent,
     ...args: Parameters<CartHandlerMap[CartEvent]>
-  ): string | null {
+  ): string | string[] | string[][] | null {
     switch (event) {
       case CartEvent.Import: {
         const handler = this.handlers[CartEvent.Import];
