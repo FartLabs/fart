@@ -1,3 +1,9 @@
+export enum ReservedType {
+  Number = "number",
+  String = "string",
+  Boolean = "boolean",
+}
+
 export enum Lexicon {
   Identifier,
   Nester,
