@@ -50,8 +50,8 @@ export class TypeMap extends Map<string, string> {
     return this.modifiers.length - 1;
   }
 
-  removeModifier(modifierId: number): boolean {
-    return delete this.modifiers[modifierId];
+  removeModifier(modifierId: number) {
+    delete this.modifiers[modifierId];
   }
 
   static modifyKey(key: string, modifier: Modifier): string {
