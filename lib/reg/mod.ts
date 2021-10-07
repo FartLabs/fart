@@ -1,1 +1,1 @@
-export { Registry } from "./registry.ts";
+export * from "./registry.ts";

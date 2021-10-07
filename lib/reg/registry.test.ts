@@ -67,3 +67,20 @@ Deno.test("Vendors successfully from sample registry", () => {
   const expected = targetDummy;
   assertEquals(actual, expected);
 });
+
+Deno.test("Successfully vendors 4 sample registries", () => {
+  const dummy = new Dummy();
+  const dummyA = new Dummy("A");
+  const dummyB = new Dummy("B");
+  const dummyC = new Dummy("C");
+  const baseRegistry = new Registry<Dummy>("_");
+  const tsRegistry = new Registry<Dummy>("ts", dummy);
+  tsRegistry.set("deno", dummy);
+  tsRegistry.set("deno.api", dummyA);
+  tsRegistry.set("deno.cli", dummyB);
+  tsRegistry.set("deno.web", dummyC);
+  baseRegistry.include(tsRegistry);
+  assertEquals(baseRegistry.vendor("ts.deno.api"), dummyA);
+  assertEquals(baseRegistry.vendor("ts.deno.cli"), dummyB);
+  assertEquals(baseRegistry.vendor("ts.deno.web"), dummyC);
+});

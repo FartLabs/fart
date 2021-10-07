@@ -3,8 +3,8 @@ import {
   Indent,
   IndentCacheIndex,
   IndentOption,
-} from "../constants/indent.ts";
-import { TypeMap } from "../typemaps.ts";
+} from "../consts/indent.ts";
+import { ReservedType, TypeMap } from "../typemap/mod.ts";
 import { Cart, CartEvent, CartHandlerMap } from "./cart.ts";
 
 export interface LoC {
@@ -13,16 +13,15 @@ export interface LoC {
 }
 
 export class Builder {
-  lines: LoC[];
-  currentIndentLevel: number;
+  lines: LoC[] = [];
+  currentIndentLevel = 0;
+  localTypes: Set<string> = new Set();
+
   constructor(
     private cartridge: Cart,
     private typemap: TypeMap,
     private indent: IndentOption | string,
-  ) {
-    this.lines = [];
-    this.currentIndentLevel = 0;
-  }
+  ) {}
 
   private append(content?: string | string[] | string[][]) {
     if (content !== undefined) {
@@ -70,7 +69,9 @@ export class Builder {
       dependencies,
     );
     if (code !== null) {
-      for (const depId of dependencies) this.typemap[depId] = depId;
+      for (const depId of dependencies) {
+        this.localTypes.add(depId);
+      }
       this.append(code);
     }
   }
@@ -85,7 +86,7 @@ export class Builder {
       depo,
     );
     if (code !== null) {
-      this.typemap[identifier] = identifier;
+      this.localTypes.add(identifier);
       this.append(code);
     }
   }
@@ -135,14 +136,22 @@ export class Builder {
     }).join("\n");
   }
 
-  private getType(typeAlias?: string): string | undefined {
+  private getType(
+    typeAlias?: string,
+  ): string | undefined {
     if (typeAlias === undefined) return undefined;
-    if (this.typemap[typeAlias] !== undefined) {
-      return this.typemap[typeAlias];
+    switch (typeAlias) {
+      case ReservedType.Number:
+        return this.typemap[ReservedType.Number];
+      case ReservedType.String:
+        return this.typemap[ReservedType.String];
+      case ReservedType.Boolean:
+        return this.typemap[ReservedType.Boolean];
+      case ReservedType.Default:
+        return this.typemap[ReservedType.Default];
+      default:
+        return typeAlias;
     }
-    // TODO: Throw error.
-    console.log(`no such type ${typeAlias}`);
-    return this.typemap._;
   }
 
   static getIndentOption(

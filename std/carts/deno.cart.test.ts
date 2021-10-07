@@ -1,5 +1,5 @@
-import { assertEquals } from "../../../deps/std/testing.ts";
-import { CartEvent } from "../cart.ts";
+import { assertEquals } from "../../deps/std/testing.ts";
+import { CartEvent } from "../../lib/gen/cart.ts";
 import DenoCart from "./deno.cart.ts";
 
 Deno.test("Passes dependencies to import event", () => {

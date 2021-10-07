@@ -1,3 +1,7 @@
+export const INDEX = "default";
+
+export type RegistryKey = string | string[];
+
 export class Registry<T> {
   private registries: Map<string, Registry<T>> = new Map([]);
 
@@ -6,7 +10,7 @@ export class Registry<T> {
     public value?: T,
   ) {}
 
-  set(id: string | string[], value: T) {
+  set(id: RegistryKey, value: T) {
     const [currentId, ...segments] = Registry.parseId(id);
     if (currentId !== undefined) {
       const nextRegistry = this.registries.get(currentId) ??
@@ -16,10 +20,10 @@ export class Registry<T> {
     }
   }
 
-  get(id: string | string[]): Registry<T> | undefined {
+  get(id: RegistryKey = INDEX): Registry<T> | undefined {
     const [currentId, ...segments] = Registry.parseId(id);
     if (currentId === undefined) return;
-    if (currentId === "default") return this;
+    if (currentId === INDEX) return this;
     const currentRegistry = this.registries.get(currentId);
     if (currentRegistry === undefined) return;
     if (segments.length > 0) {
@@ -28,21 +32,29 @@ export class Registry<T> {
     return currentRegistry;
   }
 
-  vendor(id?: string | string[]): T | undefined {
+  vendor(id?: RegistryKey): T | undefined {
     if (id === undefined) return this.value;
     return this.get(id)?.value;
+  }
+
+  has(id: RegistryKey): boolean {
+    return this.vendor(id) !== undefined;
   }
 
   include(registry: Registry<T>) {
     return this.registries.set(registry.id, registry);
   }
 
-  static parseId(id: string | string[]): string[] {
+  static parseId(id: RegistryKey): string[] {
     if (Array.isArray(id)) {
       return id;
     }
-    return id.split(".").map((segment) =>
+    const segments = id.split(".").map((segment) =>
       segment.toLowerCase().replace(/[^a-z0-9]/g, "")
     );
+    while (segments[segments.length - 1] === INDEX) {
+      segments.pop();
+    }
+    return segments;
   }
 }

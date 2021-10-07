@@ -1,9 +1,3 @@
-export enum ReservedType {
-  Number = "number",
-  String = "string",
-  Boolean = "boolean",
-}
-
 export enum Lexicon {
   Identifier,
   Nester,
@@ -23,6 +17,7 @@ export enum Lexicon {
   LineBreaker2,
   StringMarker,
   StringLiteral,
+  Modifier,
   EOF,
 }
 
@@ -43,5 +38,6 @@ export const LEXICON = {
   [Lexicon.LineBreaker]: "\n",
   [Lexicon.LineBreaker2]: "\r",
   [Lexicon.StringMarker]: "\`",
+  [Lexicon.Modifier]: "%",
   [Lexicon.EOF]: "",
 } as const;

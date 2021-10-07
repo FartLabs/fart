@@ -1,1 +1,0 @@
-export * from "./lib/fart.ts";

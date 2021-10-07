@@ -1,45 +1,44 @@
-import { Token, tokenize } from "./tokenize.ts";
-import { Lexicon } from "./constants/lexicon.ts";
-import { Builder } from "./gen/builder.ts";
-import { validateSettings } from "./utils.ts";
-import { FartSettings, LanguageTarget } from "./types.ts";
-import type { Cart } from "./gen/cart.ts";
-import { TypeMap, TYPEMAPS } from "./typemaps.ts";
-import DenoCart from "./gen/carts/deno.cart.ts";
+import { Token, tokenize } from "../tokenize/mod.ts";
+import { Lexicon } from "../consts/lexicon.ts";
+import { INDENT, Indent } from "../consts/indent.ts";
+import { Builder } from "../gen/builder.ts";
+import type { Cart } from "../gen/cart.ts";
+import type { TypeMap } from "../typemap/mod.ts";
 
-const determineCodeCartridge = (target: LanguageTarget): Cart => {
-  switch (target) {
-    case LanguageTarget.TypeScript:
-    default:
-      return DenoCart;
-  }
-};
+export interface CompilationSettings {
+  cartridge: Cart;
+  typemap: TypeMap;
+  indentation?: string;
+}
 
-const determineTypeMap = (target: LanguageTarget): TypeMap => {
-  switch (target) {
-    case LanguageTarget.Basic:
-      return TYPEMAPS[LanguageTarget.Basic];
-    case LanguageTarget.Go:
-      return TYPEMAPS[LanguageTarget.Go];
-    case LanguageTarget.TypeScript:
-    default:
-      return TYPEMAPS[LanguageTarget.TypeScript];
-  }
-};
+/**
+ * Side-Effect: Infers omitted settings.
+ */
+export function validateCompilationSettings(
+  settings: CompilationSettings,
+): Required<CompilationSettings> {
+  return {
+    cartridge: settings.cartridge,
+    typemap: settings.typemap,
+    indentation: settings.indentation ?? INDENT[Indent.Space2],
+  };
+}
 
-export function compile(content: string, settings?: FartSettings): string {
-  const validatedSettings = validateSettings(settings);
-  const codeCartridge = determineCodeCartridge(validatedSettings.target);
-  const typemap = determineTypeMap(validatedSettings.target);
-  const builder = new Builder(
-    codeCartridge,
-    typemap,
-    validatedSettings.indentation,
+export function compile(
+  content: string,
+  settings: CompilationSettings,
+): string {
+  const { cartridge, typemap, indentation } = validateCompilationSettings(
+    settings,
   );
+  const builder = new Builder(cartridge, typemap, indentation);
+
   const it = tokenize(content);
   let curr: IteratorResult<Token, Token> = it.next();
+
   const nextToken = (): Token => (curr = it.next()).value;
-  const nextList = (
+
+  const nextTuple = (
     ateFirstToken = false,
     maxLength?: number,
     closingToken: Lexicon = Lexicon.Denester,
@@ -54,6 +53,7 @@ export function compile(content: string, settings?: FartSettings): string {
     }
     return list;
   };
+
   const nextStruct = (depoMode = false) => {
     builder.incrementIndentLevel();
     while (!nextToken().is(Lexicon.Denester)) {
@@ -80,7 +80,7 @@ export function compile(content: string, settings?: FartSettings): string {
         builder.appendProperty(name.value, required); // Omitting the type sets up for a nest.
         nextStruct();
       } else if (token.is(Lexicon.OpeningAngle)) {
-        const [inputToken, outputToken] = nextList(
+        const [inputToken, outputToken] = nextTuple(
           true,
           2,
           Lexicon.ClosingAngle,
@@ -104,11 +104,12 @@ export function compile(content: string, settings?: FartSettings): string {
     builder.decrementIndentLevel();
     builder.appendClosingStruct(depoMode);
   };
+
   while (!curr.done) {
     switch (curr.value.kind) {
       case Lexicon.ImpoDefiner: {
         const { value: filename } = nextToken();
-        const dependencyTokens = nextList();
+        const dependencyTokens = nextTuple();
         const dependencies = dependencyTokens.map(({ value }) => value);
         builder.appendImport(filename, dependencies);
         break;

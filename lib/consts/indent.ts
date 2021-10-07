@@ -1,3 +1,7 @@
+/**
+ * Enum containing all possible combinations of tabbed, single-spaced,
+ * double-spaced, triple-spaced, and quadruple-spaced indentations.
+ */
 export enum Indent {
   Tab1 = -1,
   Tab2 = -2,

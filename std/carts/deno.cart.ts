@@ -1,5 +1,5 @@
-import { Cart, CartEvent, MethodDetails } from "../cart.ts";
-import { convertFilenameToTargetFilename } from "../../utils.ts";
+import { Cart, CartEvent, MethodDetails } from "../../lib/gen/cart.ts";
+import { convertFilenameToTargetFilename } from "../common.ts";
 
 const denoCart = new Cart();
 

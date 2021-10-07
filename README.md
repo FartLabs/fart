@@ -10,7 +10,47 @@ Program that generates type definitions in multiple languages.
 
 To execute the Fart tests, simply run `deno test`. If you have not done so already, please [install Deno](https://github.com/denoland/deno_install).
 
+## Architecture
+
+### `/deps/`
+
+Handles third party dependencies.
+
+### `/devops/`
+
+Stores scripts.
+
+### `/ex/`
+
+Stores example data and code.
+
+### `/lib/`
+
+Stores the source code of the library.
+
+### `/std/`
+
+A place to keep all of the official stuff that people can use alongside Fart.
+
+### Fart CLI
+
+Clone the repository and then try this command:
+
+```bash
+deno run --allow-read --allow-write std/cli.ts ./ex/pokemon.fart --reg=ts.deno --output=./ex/pokemon.ts
+```
+
 ### Fart Server 📡
+
+#### How to spin up a Fart Server
+
+Clone the repository and then try this command:
+
+```bash
+deno run --allow-net std/server/serve-http.ts
+```
+
+#### Simulating a Deno Deploy Environment
 
 If you haven't already, [install `deployctl`](https://deno.com/deploy/docs/running-scripts-locally), a runtime that simulates [Deno Deploy](https://deno.com/deploy).
 
@@ -21,7 +61,7 @@ deno install --allow-read --allow-write --allow-env --allow-net --allow-run --no
 To run the development server, enter the below command into your terminal.
 
 ```bash
-deployctl run --watch ./server.ts
+deployctl run --watch std/server/worker.ts
 ```
 
 ---

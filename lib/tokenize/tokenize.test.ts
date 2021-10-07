@@ -1,6 +1,8 @@
-import { T, Token, tokenize } from "./tokenize.ts";
-import { assert, assertEquals } from "../deps/std/testing.ts";
-import { Lexicon } from "./constants/lexicon.ts";
+import { Token } from "./token.ts";
+import { tokenize } from "./tokenize.ts";
+import { T } from "./alias.ts";
+import { assert, assertEquals } from "../../deps/std/testing.ts";
+import { Lexicon } from "../consts/lexicon.ts";
 
 const assertTokensEqual = (
   actual: Generator<Token, Token>,
