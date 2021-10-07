@@ -1,3 +1,4 @@
+// Source Fart: <https://github.com/EthanThatOneKid/fart/blob/main/ex/pokemon.fart>
 import { Pokeball } from "https://fart.deno.dev/ts/EthanThatOneKid/fart/main/ex/pokemon.ts";
 
 const great_ball: Pokeball = {
