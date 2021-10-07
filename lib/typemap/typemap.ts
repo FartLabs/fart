@@ -12,7 +12,7 @@ export enum ModifierType {
   Function = "func", // Modifies length-2 tuples.
 }
 
-export type TypeModifer = (...inner: string[]) => string;
+export type TypeModifier = (...inner: string[]) => string;
 
 export interface TypeMap {
   [ReservedType.Default]: string;
@@ -21,8 +21,8 @@ export interface TypeMap {
   [ReservedType.Boolean]: string;
 
   // Modifiers are not required for all languages.
-  [ModifierType.Array]?: TypeModifer;
-  [ModifierType.Async]?: TypeModifer;
-  [ModifierType.Dictionary]?: TypeModifer;
-  [ModifierType.Function]?: TypeModifer;
+  [ModifierType.Array]?: TypeModifier;
+  [ModifierType.Async]?: TypeModifier;
+  [ModifierType.Dictionary]?: TypeModifier;
+  [ModifierType.Function]?: TypeModifier;
 }

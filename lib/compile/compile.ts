@@ -3,7 +3,7 @@ import { Lexicon } from "../consts/lexicon.ts";
 import { INDENT, Indent } from "../consts/indent.ts";
 import { Builder } from "../gen/builder.ts";
 import type { Cart } from "../gen/cart.ts";
-import type { TypeMap } from "../typemap/mod.ts";
+import { ModifierType, TypeMap, TypeModifier } from "../typemap/mod.ts";
 
 export interface CompilationSettings {
   cartridge: Cart;
@@ -35,6 +35,14 @@ export function compile(
 
   const it = tokenize(content);
   let curr: IteratorResult<Token, Token> = it.next();
+
+  const applyMods = (identifier: string, ...mods: ModifierType[]): string =>
+    mods.reduceRight((result, mod) => {
+      if (typemap !== undefined && typemap[mod] !== undefined) {
+        return (typemap[mod] as TypeModifier)(result);
+      }
+      return result;
+    }, identifier);
 
   const nextToken = (): Token => (curr = it.next()).value;
 
@@ -71,7 +79,7 @@ export function compile(
           console.error(`Expected a setter, but got ${setter} instead.`); // TODO: Throw error.
         }
       }
-      const token = nextToken();
+      let token = nextToken();
       if (token.is(Lexicon.Nester)) {
         if (depoMode) {
           // TODO: Throw warning (depos only register methods).
@@ -98,7 +106,17 @@ export function compile(
           // TODO: Throw warning (depos only register methods).
           continue;
         }
-        builder.appendProperty(name.value, required, token.value);
+        const mods: ModifierType[] = [];
+        while (token.value in ModifierType) {
+          mods.push(token.value as ModifierType);
+          nextToken(); // TODO: Assert this is modifier (%)
+          token = nextToken();
+        }
+        builder.appendProperty(
+          name.value,
+          required,
+          mods.length > 0 ? applyMods(token.value, ...mods) : token.value,
+        );
       }
     }
     builder.decrementIndentLevel();
