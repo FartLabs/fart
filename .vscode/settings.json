@@ -9,7 +9,8 @@
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
   "deno.suggest.imports.hosts": {
-    "https://deno.land": false
+    "https://deno.land": false,
+    "https://fart.deno.dev": false
   },
   "cSpell.words": ["typemap", "typemaps"]
 }
