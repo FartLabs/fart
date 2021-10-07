@@ -10,6 +10,17 @@ Program that generates type definitions in multiple languages.
 
 To execute the Fart tests, simply run `deno test`. If you have not done so already, please [install Deno](https://github.com/denoland/deno_install).
 
+### Commands
+
+- **Upgrade a Dependency**: `deno run --unstable --allow-read --allow-write devops/upgrade_dep.ts -y --verbose --dep=std --v=0.110.0`
+- **Run the CLI**: `deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon.fart --reg=ts.deno --output=./ex/pokemon.ts`
+- **Spin up Server**: `deno run --allow-net std/server/serve_http.ts`
+- **Develop the Server**: `deployctl run --watch std/server/worker.ts`
+
+#### Public Commands
+
+- **Upgrade a Dependency**: `deno run --unstable --allow-read --allow-write https://etok.codes/fart/raw/main/devops/upgrade_dep.ts -y --verbose --dep=std --v=0.110.0`
+
 ## Architecture
 
 ### `/deps/`

@@ -10,5 +10,6 @@
   },
   "deno.suggest.imports.hosts": {
     "https://deno.land": false
-  }
+  },
+  "cSpell.words": ["typemap", "typemaps"]
 }
