@@ -10,6 +10,14 @@ Program that generates type definitions in multiple languages.
 
 To execute the Fart tests, simply run `deno test`. If you have not done so already, please [install Deno](https://github.com/denoland/deno_install).
 
+### Give it a Spin
+
+You can give Fart a spin on your machine in one command (assuming Deno is installed).
+
+```bash
+deno run --reload ex/pokemon/run.ts
+```
+
 ### Commands
 
 - **Upgrade a Dependency**: `deno run --unstable --allow-read --allow-write devops/upgrade_dep.ts -y --verbose --dep=std --v=0.110.0`

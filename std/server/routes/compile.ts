@@ -35,7 +35,7 @@ export default async (request: Request): Promise<Response> => {
   }
   let code: string;
   try {
-    code = compile(content, { cartridge, typemap });
+    code = await compile(content, { cartridge, typemap });
   } catch (error) {
     return makeError(error.message, 500);
   }
