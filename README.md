@@ -15,7 +15,7 @@ To execute the Fart tests, simply run `deno test`. If you have not done so alrea
 You can give Fart a spin on your machine in one command (assuming Deno is installed).
 
 ```bash
-deno run --reload https://etok.codes/fart/blob/main/ex/pokemon/run.ts
+deno run --reload https://etok.codes/fart/raw/main/ex/pokemon/run.ts
 ```
 
 ### Commands
