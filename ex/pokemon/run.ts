@@ -1,10 +1,10 @@
-// Source Fart: <https://etok.codes/fart/blob/main/ex/pokemon.fart>
+// Source Fart: <https://etok.codes/fart/blob/main/ex/pokemon/mod.fart>
 import {
   Bag,
   PC,
   Pokeball,
   Pokemon,
-} from "https://fart.deno.dev/ts/EthanThatOneKid/fart/main/ex/pokemon.ts";
+} from "https://fart.deno.dev/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
 
 const great_ball: Pokeball = {
   id: "great",
@@ -50,6 +50,7 @@ const pikachu: Pokemon = {
       pc.mons.push(this);
       console.log(`Moved ${this.name} to the PC.`);
     }
+    return caught;
   },
 };
 
