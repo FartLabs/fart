@@ -11,9 +11,10 @@ export class Pokeball implements iPokeball {
 
   async throw(name: string): Promise<boolean> {
     if (this.used) return false;
-    const caught = Math.random() > (1 - this.odds);
+    this.used = true;
     console.log("wiggle");
     await sleep(1e3);
+    const caught = Math.random() > (1 - this.odds);
     console.log("wiggle");
     await sleep(1e3);
     if (caught) {
