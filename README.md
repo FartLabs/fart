@@ -13,7 +13,7 @@ To execute the Fart tests, simply run `deno test`. If you have not done so alrea
 ### Commands
 
 - **Upgrade a Dependency**: `deno run --unstable --allow-read --allow-write devops/upgrade_dep.ts -y --verbose --dep=std --v=0.110.0`
-- **Run the CLI**: `deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon.fart --reg=ts.deno --output=./ex/pokemon.ts`
+- **Run the CLI**: `deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon/pokemon.fart --reg=ts.deno --output=./ex/pokemon/pokemon.ts`
 - **Spin up Server**: `deno run --allow-net std/server/serve_http.ts`
 - **Develop the Server**: `deployctl run --watch std/server/worker.ts`
 

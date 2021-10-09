@@ -1,4 +1,4 @@
-import { ModifierType, ReservedType, TypeMap } from "../../lib/typemap/mod.ts";
+import { ModifierType, ReservedType, TypeMap } from "../../lib/gen/typemap.ts";
 
 const typescript: TypeMap = {
   [ReservedType.Default]: "any",
@@ -6,10 +6,11 @@ const typescript: TypeMap = {
   [ReservedType.String]: "string",
   [ReservedType.Boolean]: "boolean",
 
-  [ModifierType.Array]: (t) => `Array<${t}>`, // foos: array % Foo
-  [ModifierType.Async]: (t) => `Promise<${t}>`, // bar: async % Bar
-  [ModifierType.Dictionary]: (t1, t2) => `Record<${t1}, ${t2}>`, // dex: dict % <number, Pokemon>
-  [ModifierType.Function]: (t1, t2) => `(input: ${t1}) => ${t2}`, // catch: func % <PokeBall, async % CatchStatus>
+  [ModifierType.Array]: (t: string) => `Array<${t}>`, // foos: array % Foo
+  [ModifierType.Async]: (t: string) => `Promise<${t}>`, // bar: async % Bar
+  [ModifierType.Dictionary]: (t1: string, t2: string) => `Record<${t1}, ${t2}>`, // dex: dict % <number, Pokemon>
+  [ModifierType.Function]: (t1: string, t2: string) =>
+    `(input: ${t1}) => ${t2}`, // catch: func % <PokeBall, async % CatchStatus>
 };
 
 export default typescript;

@@ -233,3 +233,25 @@ type Pokemon {
   ];
   assertTokensEqual(actual, expected);
 });
+
+Deno.test("Tokenizes a modified definition", () => {
+  const actual = tokenize(`type Thing {
+  getSomething: fn % <ThingInput, ThingOutput>
+}`);
+  const expected = [
+    T.type_definer(1, 1),
+    T.id("Thing", 1, 6),
+    T.nester(1, 12),
+    T.id("getSomething", 2, 3),
+    T.setter(2, 15),
+    T.id("fn", 2, 17),
+    T.modifier(2, 20),
+    T.opening_angle(2, 22),
+    T.id("ThingInput", 2, 23),
+    T.separator(2, 33),
+    T.id("ThingOutput", 2, 35),
+    T.closing_angle(2, 46),
+    T.denester(3, 1),
+  ];
+  assertTokensEqual(actual, expected);
+});

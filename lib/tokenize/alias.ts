@@ -18,6 +18,7 @@ interface LexiconUtil {
   "spacer": (line: number, column: number) => Token;
   "line_breaker": (line: number, column: number) => Token;
   "line_breaker2": (line: number, column: number) => Token;
+  "modifier": (line: number, column: number) => Token;
   "eof": (line: number, column: number) => Token;
 }
 
@@ -49,5 +50,7 @@ export const T: LexiconUtil = {
     new Token(LEXICON[Lexicon.LineBreaker], line, column),
   "line_breaker2": (line, column) =>
     new Token(LEXICON[Lexicon.LineBreaker2], line, column),
+  "modifier": (line, column) =>
+    new Token(LEXICON[Lexicon.Modifier], line, column),
   "eof": (line, column) => new Token(LEXICON[Lexicon.EOF], line, column),
 };

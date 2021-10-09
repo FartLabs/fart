@@ -109,6 +109,7 @@ export function* tokenize(
       case LEXICON[Lexicon.Denester]:
       case LEXICON[Lexicon.OpeningAngle]:
       case LEXICON[Lexicon.ClosingAngle]:
+      case LEXICON[Lexicon.Modifier]:
       case LEXICON[Lexicon.Separator]: {
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;

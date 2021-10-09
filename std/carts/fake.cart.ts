@@ -1,22 +1,39 @@
-import { Cart, CartEvent } from "../../lib/gen/cart.ts";
+import { Cart, CartEventName } from "../../lib/gen/cart.ts";
 
 const fake = new Cart();
 
 export const RESULTS = {
-  [CartEvent.FileStart]: "A",
-  [CartEvent.Import]: "B",
-  [CartEvent.StructOpen]: "C",
-  [CartEvent.SetProperty]: "D",
-  [CartEvent.SetMethod]: "E",
-  [CartEvent.StructClose]: "F",
-  [CartEvent.FileEnd]: "G",
+  [CartEventName.FileStart]: "// Hello World",
+  [CartEventName.Import]: "import Something from './path/to/something.ts'",
+  [CartEventName.StructOpen]: "interface Thing {",
+  [CartEventName.SetProperty]: "foo: string;",
+  [CartEventName.StructClose]: "}",
+  [CartEventName.FileEnd]: "// End of File",
 };
 
-fake.on(CartEvent.FileStart, () => RESULTS[CartEvent.FileStart]);
-fake.on(CartEvent.Import, () => RESULTS[CartEvent.Import]);
-fake.on(CartEvent.StructOpen, () => RESULTS[CartEvent.StructOpen]);
-fake.on(CartEvent.SetProperty, () => RESULTS[CartEvent.SetProperty]);
-fake.on(CartEvent.SetMethod, () => RESULTS[CartEvent.SetMethod]);
-fake.on(CartEvent.StructClose, () => RESULTS[CartEvent.StructClose]);
+fake.on(
+  CartEventName.FileStart,
+  (event) => event.code.append(RESULTS.file_start),
+);
+
+fake.on(
+  CartEventName.Import,
+  (event) => event.code.append(RESULTS.import),
+);
+
+fake.on(
+  CartEventName.StructOpen,
+  (event) => event.code.append(RESULTS.struct_open),
+);
+
+fake.on(
+  CartEventName.SetProperty,
+  (event) => event.code.append(RESULTS.set_property),
+);
+
+fake.on(
+  CartEventName.StructClose,
+  (event) => event.code.append(RESULTS.struct_close),
+);
 
 export default fake;

@@ -7,8 +7,9 @@ export class Token {
     private raw: string,
     public line: number,
     public column: number,
+    noCheck = false,
   ) {
-    this.kind = Token.getKindOf(raw);
+    this.kind = noCheck ? Lexicon.Identifier : Token.getKindOf(raw);
   }
 
   // deno-lint-ignore getter-return

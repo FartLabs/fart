@@ -17,9 +17,10 @@ export const cli = async (args: string[]) => {
   const content = await Deno.readTextFile(source);
   const cartridge = cartridges.vendor(target);
   if (cartridge === undefined) Deno.exit(1);
-  const typemap = typemaps.vendor(target?.split(".").shift());
+  const targetLang = target?.split(".").shift();
+  const typemap = typemaps.vendor(targetLang);
   if (typemap === undefined) Deno.exit(1);
-  const code = compile(content, {
+  const code = await compile(content, {
     cartridge,
     typemap,
     indentation,

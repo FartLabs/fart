@@ -1,227 +1,211 @@
-export enum CartEvent {
+import { BoC } from "./common.ts";
+
+export enum CartEventName {
   FileStart = "file_start",
   Import = "import",
   StructOpen = "struct_open",
   SetProperty = "set_property",
-  SetMethod = "set_method",
   StructClose = "struct_close",
   FileEnd = "file_end",
 }
 
-export interface MethodDetails {
-  required?: boolean;
-  input?: string;
-  output?: string;
+interface FileStartDetail {
+  type: CartEventName.FileStart;
+  code: BoC;
 }
 
-export type CartHandlerReturnType = string | string[] | string[][] | null;
+interface StructCloseDetail {
+  type: CartEventName.StructClose;
+  code: BoC;
+}
+
+interface FileEndDetail {
+  type: CartEventName.FileEnd;
+  code: BoC;
+}
+
+interface ImportDetail {
+  type: CartEventName.Import;
+  code: BoC;
+  source: string;
+  dependencies: string[];
+}
+
+interface StructOpenDetail {
+  type: CartEventName.StructOpen;
+  code: BoC;
+  identifier: string;
+  department: boolean;
+}
+
+interface SetPropertyDetail {
+  type: CartEventName.SetProperty;
+  code: BoC;
+  identifier: string;
+  department: boolean;
+  value?: string;
+  required: boolean;
+  method: boolean;
+}
+
+export type CartDispatch = {
+  type: CartEventName.FileStart;
+} | {
+  type: CartEventName.StructClose;
+} | {
+  type: CartEventName.FileEnd;
+} | {
+  type: CartEventName.Import;
+  source: string;
+  dependencies: string[];
+} | {
+  type: CartEventName.StructOpen;
+  identifier: string;
+  department: boolean;
+} | {
+  type: CartEventName.SetProperty;
+  identifier: string;
+  department: boolean;
+  value?: string;
+  required: boolean;
+  method: boolean;
+};
+
+export type CartEvent =
+  | FileStartDetail
+  | StructCloseDetail
+  | FileEndDetail
+  | ImportDetail
+  | StructOpenDetail
+  | SetPropertyDetail;
 
 /**
  * If a code generation function returns null, that means that the
  * target language omits the requested generated code. A null return
  * value will prevent the requested line from being appended to the result.
  */
-export interface CartHandlerMap {
-  [CartEvent.FileStart]: () => CartHandlerReturnType;
-  [CartEvent.Import]: (
-    src: string,
-    dependencies: string[],
-  ) => CartHandlerReturnType;
-  [CartEvent.StructOpen]: (id: string, depo?: boolean) => CartHandlerReturnType;
-  [CartEvent.SetProperty]: (
-    id: string,
-    required?: boolean,
-    type?: string,
-  ) => CartHandlerReturnType;
-  [CartEvent.SetMethod]: (
-    id: string,
-    detail?: MethodDetails,
-  ) => CartHandlerReturnType;
-  [CartEvent.StructClose]: (depo?: boolean) => CartHandlerReturnType;
-  [CartEvent.FileEnd]: () => CartHandlerReturnType;
-}
+export type CartHandler<T extends CartEventName> = (
+  event: T extends CartEventName.FileStart ? FileStartDetail
+    : T extends CartEventName.Import ? ImportDetail
+    : T extends CartEventName.StructOpen ? StructOpenDetail
+    : T extends CartEventName.SetProperty ? SetPropertyDetail
+    : T extends CartEventName.StructClose ? StructCloseDetail
+    : FileEndDetail,
+) => void | Promise<void>;
 
 export class Cart {
   constructor(
     private handlers = {
-      [CartEvent.FileStart]: undefined as
-        | CartHandlerMap[CartEvent.FileStart]
+      [CartEventName.FileStart]: undefined as
+        | CartHandler<CartEventName.FileStart>
         | undefined,
-      [CartEvent.Import]: undefined as
-        | CartHandlerMap[CartEvent.Import]
+      [CartEventName.Import]: undefined as
+        | CartHandler<CartEventName.Import>
         | undefined,
-      [CartEvent.StructOpen]: undefined as
-        | CartHandlerMap[CartEvent.StructOpen]
+      [CartEventName.StructOpen]: undefined as
+        | CartHandler<CartEventName.StructOpen>
         | undefined,
-      [CartEvent.SetProperty]: undefined as
-        | CartHandlerMap[CartEvent.SetProperty]
+      [CartEventName.SetProperty]: undefined as
+        | CartHandler<CartEventName.SetProperty>
         | undefined,
-      [CartEvent.SetMethod]: undefined as
-        | CartHandlerMap[CartEvent.SetMethod]
+      [CartEventName.StructClose]: undefined as
+        | CartHandler<CartEventName.StructClose>
         | undefined,
-      [CartEvent.StructClose]: undefined as
-        | CartHandlerMap[CartEvent.StructClose]
-        | undefined,
-      [CartEvent.FileEnd]: undefined as
-        | CartHandlerMap[CartEvent.FileEnd]
+      [CartEventName.FileEnd]: undefined as
+        | CartHandler<CartEventName.FileEnd>
         | undefined,
     },
   ) {}
 
-  addEventListener(
-    event: CartEvent.FileStart,
-    callback: CartHandlerMap[CartEvent.FileStart],
-  ): void;
-  addEventListener(
-    event: CartEvent.Import,
-    callback: CartHandlerMap[CartEvent.Import],
-  ): void;
-  addEventListener(
-    event: CartEvent.StructOpen,
-    callback: CartHandlerMap[CartEvent.StructOpen],
-  ): void;
-  addEventListener(
-    event: CartEvent.SetProperty,
-    callback: CartHandlerMap[CartEvent.SetProperty],
-  ): void;
-  addEventListener(
-    event: CartEvent.SetMethod,
-    callback: CartHandlerMap[CartEvent.SetMethod],
-  ): void;
-  addEventListener(
-    event: CartEvent.StructClose,
-    callback: CartHandlerMap[CartEvent.StructClose],
-  ): void;
-  addEventListener(
-    event: CartEvent.FileEnd,
-    callback: CartHandlerMap[CartEvent.FileEnd],
-  ): void;
-  addEventListener(
-    event: CartEvent,
-    callback: CartHandlerMap[CartEvent],
-  ): void {
-    switch (event) {
-      case CartEvent.FileStart: {
-        this.handlers[event] = callback as CartHandlerMap[CartEvent.FileStart];
+  async dispatch(event: CartDispatch): Promise<BoC | null> {
+    const handler = this.handlers[event.type];
+    if (handler === undefined) return null;
+    const code = new BoC();
+    let result: void | Promise<void>;
+    switch (event.type) {
+      case CartEventName.FileStart: {
+        result = (handler as CartHandler<CartEventName.FileStart>)({
+          code,
+          ...event,
+        });
         break;
       }
-      case CartEvent.Import: {
-        this.handlers[event] = callback as CartHandlerMap[CartEvent.Import];
+      case CartEventName.Import: {
+        result = (handler as CartHandler<CartEventName.Import>)({
+          code,
+          ...event,
+        });
         break;
       }
-      case CartEvent.StructOpen: {
-        this.handlers[event] = callback as CartHandlerMap[CartEvent.StructOpen];
+      case CartEventName.StructOpen: {
+        result = (handler as CartHandler<CartEventName.StructOpen>)({
+          code,
+          ...event,
+        });
         break;
       }
-      case CartEvent.SetProperty: {
-        this.handlers[event] =
-          callback as CartHandlerMap[CartEvent.SetProperty];
+      case CartEventName.SetProperty: {
+        result = (handler as CartHandler<CartEventName.SetProperty>)({
+          code,
+          ...event,
+        });
         break;
       }
-      case CartEvent.SetMethod: {
-        this.handlers[event] = callback as CartHandlerMap[CartEvent.SetMethod];
+      case CartEventName.StructClose: {
+        result = (handler as CartHandler<CartEventName.StructClose>)({
+          code,
+          ...event,
+        });
         break;
       }
-      case CartEvent.StructClose: {
-        this.handlers[event] =
-          callback as CartHandlerMap[CartEvent.StructClose];
-        break;
-      }
-      case CartEvent.FileEnd: {
-        this.handlers[event] = callback as CartHandlerMap[CartEvent.FileEnd];
+      case CartEventName.FileEnd: {
+        result = (handler as CartHandler<CartEventName.FileEnd>)({
+          code,
+          ...event,
+        });
         break;
       }
     }
+    if (result instanceof Promise) await result;
+    return code;
   }
 
-  dispatch(
-    event: CartEvent.FileStart,
-    ...args: Parameters<CartHandlerMap[CartEvent.FileStart]>
-  ): ReturnType<CartHandlerMap[CartEvent.FileStart]>;
-  dispatch(
-    event: CartEvent.Import,
-    ...args: Parameters<CartHandlerMap[CartEvent.Import]>
-  ): ReturnType<CartHandlerMap[CartEvent.Import]>;
-  dispatch(
-    event: CartEvent.StructOpen,
-    ...args: Parameters<CartHandlerMap[CartEvent.StructOpen]>
-  ): ReturnType<CartHandlerMap[CartEvent.StructOpen]>;
-  dispatch(
-    event: CartEvent.SetProperty,
-    ...args: Parameters<CartHandlerMap[CartEvent.SetProperty]>
-  ): ReturnType<CartHandlerMap[CartEvent.SetProperty]>;
-  dispatch(
-    event: CartEvent.SetMethod,
-    ...args: Parameters<CartHandlerMap[CartEvent.SetMethod]>
-  ): ReturnType<CartHandlerMap[CartEvent.SetMethod]>;
-  dispatch(
-    event: CartEvent.StructClose,
-    ...args: Parameters<CartHandlerMap[CartEvent.StructClose]>
-  ): ReturnType<CartHandlerMap[CartEvent.StructClose]>;
-  dispatch(
-    event: CartEvent.FileEnd,
-    ...args: Parameters<CartHandlerMap[CartEvent.FileEnd]>
-  ): ReturnType<CartHandlerMap[CartEvent.FileEnd]>;
-  dispatch(
-    event: CartEvent,
-    ...args: Parameters<CartHandlerMap[CartEvent]>
-  ): CartHandlerReturnType {
-    switch (event) {
-      case CartEvent.FileStart: {
-        const handler = this.handlers[CartEvent.FileStart];
-        if (handler !== undefined) return handler();
-        return null;
-      }
-      case CartEvent.Import: {
-        const handler = this.handlers[CartEvent.Import];
-        if (handler !== undefined) {
-          const [source, dependencies] = args;
-          return handler(source as string, dependencies as string[]);
-        }
-        return null;
-      }
-      case CartEvent.StructOpen: {
-        const handler = this.handlers[CartEvent.StructOpen];
-        if (handler !== undefined) {
-          const [id, depo] = args;
-          return handler(id as string, depo as boolean | undefined);
-        }
-        return null;
-      }
-      case CartEvent.SetProperty: {
-        const handler = this.handlers[CartEvent.SetProperty];
-        if (handler !== undefined) {
-          const [id, required, type] = args;
-          return handler(id as string, required as boolean | undefined, type);
-        }
-        return null;
-      }
-      case CartEvent.SetMethod: {
-        const handler = this.handlers[CartEvent.SetMethod];
-        if (handler !== undefined) {
-          const [source, detail] = args;
-          return handler(source as string, detail as MethodDetails | undefined);
-        }
-        return null;
-      }
-      case CartEvent.StructClose: {
-        const handler = this.handlers[CartEvent.StructClose];
-        const [depo] = args;
-        if (handler !== undefined) return handler(depo as boolean);
-        return null;
-      }
-      case CartEvent.FileEnd: {
-        const handler = this.handlers[CartEvent.FileEnd];
-        if (handler !== undefined) return handler();
-        return null;
-      }
-    }
+  addEventListener(
+    name: CartEventName.FileStart,
+    handler: CartHandler<CartEventName.FileStart>,
+  ): void;
+  addEventListener(
+    name: CartEventName.Import,
+    handler: CartHandler<CartEventName.Import>,
+  ): void;
+  addEventListener(
+    name: CartEventName.StructOpen,
+    handler: CartHandler<CartEventName.StructOpen>,
+  ): void;
+  addEventListener(
+    name: CartEventName.SetProperty,
+    handler: CartHandler<CartEventName.SetProperty>,
+  ): void;
+  addEventListener(
+    name: CartEventName.StructClose,
+    handler: CartHandler<CartEventName.StructClose>,
+  ): void;
+  addEventListener(
+    name: CartEventName.FileEnd,
+    handler: CartHandler<CartEventName.FileEnd>,
+  ): void;
+  addEventListener(
+    name: CartEventName,
+    // deno-lint-ignore no-explicit-any
+    handler: any,
+  ): void {
+    this.handlers[name] = handler;
   }
 
   // `on` serves as an alias for `addEventListener`.
   on = this.addEventListener.bind(this);
 
-  removeEventListener(event: CartEvent) {
-    delete this.handlers[event];
+  removeEventListener(name: CartEventName) {
+    delete this.handlers[name];
   }
 }

@@ -2,7 +2,7 @@ type Pokeball {
   id*: string
   used*: boolean
 
-  catch*: <string, boolean>
+  throw*: fn % <string, async % boolean>
 }
 
 type Pokemon {
@@ -11,5 +11,13 @@ type Pokemon {
   types*: { type1*: string
             type2:  string }
   
-  obtain*: <Pokeball>
+  obtain*: fn % <Pokeball, async % boolean>
+}
+
+type Bag {
+  balls*: array % Pokeball
+}
+
+type PC {
+  mons*: array % Pokemon
 }
