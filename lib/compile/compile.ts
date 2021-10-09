@@ -110,7 +110,7 @@ export async function compile(
         const [inputToken //, outputToken
         ] = nextTuple(
           true,
-          2,
+          16,
           Lexicon.ClosingAngle,
         );
         await builder.appendProperty(
