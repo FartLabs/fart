@@ -11,7 +11,7 @@ type Pokemon {
   types*: { type1*: string
             type2:  string }
   
-  obtain*: fn % <Pokeball, async % boolean>
+  catch*: fn % <Pokeball, async % boolean>
 }
 
 type Bag {
@@ -21,3 +21,8 @@ type Bag {
 type PC {
   mons*: array % Pokemon
 }
+
+; TODO: Add Pokedex functionality.
+; type Dex {
+;   national: dict % <number, Pokemon>
+; }

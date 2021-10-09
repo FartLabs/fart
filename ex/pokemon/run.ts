@@ -1,49 +1,20 @@
 // Source Fart: <https://etok.codes/fart/blob/main/ex/pokemon/mod.fart>
-import {
+import type {
   Bag,
   PC,
-  Pokeball,
-  Pokemon,
 } from "https://fart.deno.dev/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
+import { Pokeball } from "./pokeball.ts";
+import { Pokemon } from "./pokemon.ts";
 
-const great_ball: Pokeball = {
-  id: "great",
-  used: false,
-  async throw(p: string): Promise<boolean> {
-    if (this.used) return false;
-    this.used = true;
-    const caught = Math.random() > 0.5;
-    if (caught) {
-      console.log(`Caught ${p}!`);
-      return true;
-    }
-    return false;
-  },
-};
-
-const ultra_ball: Pokeball = {
-  id: "ultra",
-  used: false,
-  async throw(p: string): Promise<boolean> {
-    if (this.used) return false;
-    this.used = true;
-    const caught = Math.random() > 0.2;
-    if (caught) {
-      console.log(`Caught ${p}!`);
-      return true;
-    }
-    return false;
-  },
-};
-
+const great_ball = new Pokeball("great", 0.5);
+const ultra_ball = new Pokeball("ultra", 0.8);
 const bag: Bag = { balls: [great_ball, ultra_ball] };
-
 const pc: PC = { mons: [] };
 
 const pikachu: Pokemon = {
   name: "Pikachu",
   types: { type1: "Electric" },
-  async obtain(ball: Pokeball): Promise<boolean> {
+  async catch(ball: Pokeball) {
     const caught = await ball.throw(this.name);
     if (caught) {
       this.ball = ball;
@@ -55,7 +26,7 @@ const pikachu: Pokemon = {
 };
 
 for (const ball of bag.balls) {
-  const caught = await pikachu.obtain(ball);
+  const caught = await pikachu.catch(ball);
   if (caught) break;
 }
 
