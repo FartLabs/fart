@@ -1,5 +1,6 @@
 type Pokeball {
   id*: string
+  odds*: number
   used*: boolean
 
   throw*: fn % <string, async % boolean>

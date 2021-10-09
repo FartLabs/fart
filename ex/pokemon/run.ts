@@ -2,15 +2,19 @@
 import type {
   Bag,
   PC,
+  Pokemon,
 } from "https://fart.deno.dev/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
-import { Pokeball } from "./pokeball.ts";
-import { Pokemon } from "./pokemon.ts";
 
+// Extended Pokeball class
+import { Pokeball } from "./pokeball.ts";
+
+// Your stuff
 const great_ball = new Pokeball("great", 0.5);
 const ultra_ball = new Pokeball("ultra", 0.8);
 const bag: Bag = { balls: [great_ball, ultra_ball] };
 const pc: PC = { mons: [] };
 
+// A wild Pikachu
 const pikachu: Pokemon = {
   name: "Pikachu",
   types: { type1: "Electric" },
@@ -25,9 +29,11 @@ const pikachu: Pokemon = {
   },
 };
 
+// Try to catch it
 for (const ball of bag.balls) {
   const caught = await pikachu.catch(ball);
   if (caught) break;
 }
 
+// Check the PC
 console.log("PC: ", pc);
