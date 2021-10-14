@@ -1,3 +1,7 @@
+---
+self_link: https://fart.tools/scripts
+---
+
 # Project Scripts
 
 - **Upgrade a Dependency**: `deno run --unstable --allow-read --allow-write devops/upgrade_dep.ts -y --verbose --dep=std --v=0.110.0`

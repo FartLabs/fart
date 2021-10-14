@@ -1,3 +1,7 @@
+---
+self_link: https://fart.tools/pokemon-example
+---
+
 # Pokemon Fart Example
 
 This example runs on two files: a type declaration file, [`mod.fart`](mod.fart), and an implementation file, [`run.ts`](run.ts).

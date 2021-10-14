@@ -50,7 +50,7 @@ Please refer to [docs/server-architecture.md](docs/server-architecture.md) to le
 
 ## Architecture
 
-Please refer to [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) to learn about the structure of this repository.
+Please refer to [docs/architecture.md](docs/ARCHITECTURE.md) to learn about the structure of this repository.
 
 ---
 

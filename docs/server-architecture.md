@@ -1,3 +1,7 @@
+---
+self_link: https://fart.tools/server-architecture
+---
+
 # Fart Server 📡
 
 ## How to spin up a Fart Server

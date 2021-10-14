@@ -1,3 +1,7 @@
+---
+self_link: https://fart.tools/getting-started
+---
+
 # Getting Started
 
 > TODO: Write the getting started docs!

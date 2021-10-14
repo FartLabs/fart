@@ -1,26 +1,30 @@
+---
+self_link: https://fart.tools/architecture
+---
+
 # Architecture
 
-### `/deps/`
+### [`/deps/`](https://etok.codes/fart/tree/main/deps)
 
 Handles third party dependencies.
 
-### `/devops/`
+### [`/devops/`](https://etok.codes/fart/tree/main/devops)
 
 Stores scripts.
 
-### `/ex/`
+### [`/ex/`](https://etok.codes/fart/tree/main/ex)
 
 Stores example data and code.
 
-### `/lib/`
+### [`/lib/`](https://etok.codes/fart/tree/main/lib)
 
 Stores the source code of the library.
 
-### `/std/`
+### [`/std/`](https://etok.codes/fart/tree/main/std)
 
 A place to keep all of the official stuff that people can use alongside Fart.
 
-### `/docs`
+### [`/docs`](https://etok.codes/fart/tree/main/docs)
 
 A directory for all Fart-related text-based documentation.
 The contents of this directory get rendered and served by the Fart Server.
