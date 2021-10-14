@@ -9,8 +9,17 @@ self_link: https://fart.tools/server-architecture
 Clone the repository and then try this command:
 
 ```bash
-deno run --allow-net --allow-read --allow-env std/server/serve_http.ts
+deno run --allow-net --allow-read --allow-env --unstable https://etok.codes/fart/raw/std/server/serve_http.ts
 ```
+
+<details>
+  <summary>Local Variation</summary>
+
+```bash
+deno run --allow-net --allow-read --allow-env --unstable std/server/serve_http.ts
+```
+
+</details>
 
 ## Simulating a Deno Deploy Environment
 
