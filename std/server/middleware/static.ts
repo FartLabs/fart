@@ -6,10 +6,18 @@ import {
   normalize,
 } from "../../../deps/std/path.ts";
 
-const processPathname = (pathname: string): string =>
-  fromFileUrl(normalize(
-    join(dirname(import.meta.url), "../static/", pathname),
-  ));
+const processPathname = (pathname: string): string => {
+  // TODO: Do not check if --allow-env is unspecified.
+  const deployed = Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined;
+  return fromFileUrl(
+    normalize(join(
+      (deployed
+        ? "./std/server/static/"
+        : join(dirname(import.meta.url), "../static/")),
+      pathname,
+    )),
+  );
+};
 
 export default async (pathname: string): Promise<Response | undefined> => {
   try {

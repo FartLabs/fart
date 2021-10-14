@@ -976,6 +976,12 @@ sub {
   color: #a31515;
 }
 
+body {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 33vh;
+}
+
 body.dark #wrapper {
   background: transparent !important;
   box-shadow: none !important;

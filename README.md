@@ -1,5 +1,3 @@
-<img src="std/server/static/fart-logo.png" alt="Fart Logo" style="float: right; width: 144px;">
-
 # Fart 🌫
 
 Program that generates type definitions in multiple languages.

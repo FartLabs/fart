@@ -18,7 +18,7 @@ export default async (): Promise<Response> =>
   </head>
   <body>
     <main id="wrapper">
-      <img src="fart-logo.png" alt="Fart Logo" style="float: right; width: 200px; height: 200px;" />
+      <img src="fart-logo.png" alt="Fart Logo" style="float: right; width: 144px;" />
       ${await fetchPageBody()}
     </main>
   </body>
