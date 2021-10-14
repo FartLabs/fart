@@ -6,7 +6,7 @@ self_link: https://fart.tools/server-architecture
 
 ## How to spin up a Fart Server
 
-Clone the repository and then try this command:
+You can spin up the Fart Serer on your machine in one command (assuming Deno is installed). 
 
 ```bash
 deno run --allow-net --allow-read --allow-env --unstable https://etok.codes/fart/raw/main/std/server/serve_http.ts
@@ -49,6 +49,12 @@ This page renders and serves the README.md of <https://etok.codes/fart/>.
 
 This middleware serves static files located under [`/std/server/static/`](/static).
 
+### GitHub Docs (`/[...path]`)
+
+> [/middleware/gh_docs.ts](middleware/gh_docs.ts)
+
+Any markdown files located under [`/docs](../../docs) are rendered and served.
+
 ### Compile Farts (`GET /[registry]/[...path].*`)
 
 > [/middleware/compile.ts](middleware/compile.ts)
@@ -69,9 +75,3 @@ Examples:
 /ts.deno/EthanThatOneKid/fart/main/ex/pokemon/mod.ts
 /ts.deno.api/EthanThatOneKid/fart/main/ex/pokemon/mod.ts
 ```
-
-### GitHub Docs (`/[...path]`)
-
-> [/middleware/gh_docs.ts](middleware/gh_docs.ts)
-
-Any markdown files located under [`/docs](../../docs) are rendered and served.
