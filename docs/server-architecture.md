@@ -1,9 +1,25 @@
-# Fart Server 🛰
+# Fart Server 📡
 
-To run the server, try
+## How to spin up a Fart Server
+
+Clone the repository and then try this command:
 
 ```bash
-deno run --allow-net --allow-read --allow-env --unstable std/server/serve_http.ts
+deno run --allow-net --allow-read --allow-env std/server/serve_http.ts
+```
+
+## Simulating a Deno Deploy Environment
+
+If you haven't already, [install `deployctl`](https://deno.com/deploy/docs/running-scripts-locally), a runtime that simulates [Deno Deploy](https://deno.com/deploy).
+
+```bash
+deno install --allow-read --allow-write --allow-env --allow-net --allow-run --no-check -f https://deno.land/x/deploy/deployctl.ts
+```
+
+To run the development server, enter the below command into your terminal.
+
+```bash
+deployctl run --watch std/server/worker.ts
 ```
 
 ## Features

@@ -18,70 +18,39 @@ You can give Fart a spin on your machine in one command (assuming Deno is instal
 deno run --reload https://etok.codes/fart/raw/main/ex/pokemon/run.ts
 ```
 
-### Commands
+<details>
+  <summary>Local Variation</summary>
 
-- **Upgrade a Dependency**: `deno run --unstable --allow-read --allow-write devops/upgrade_dep.ts -y --verbose --dep=std --v=0.110.0`
-- **Run the CLI**: `deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon/mod.fart --reg=ts --output=./ex/pokemon/mod.out.ts`
-- **Spin up Server**: `deno run --allow-net --allow-read --allow-env --unstable std/server/serve_http.ts`
-- **Develop the Server**: `deployctl run --watch std/server/worker.ts`
+```bash
+deno run --reload ex/pokemon/run.ts
+```
 
-#### Public Commands
-
-- **Upgrade a Dependency**: `deno run --unstable --allow-read --allow-write https://etok.codes/fart/raw/main/devops/upgrade_dep.ts -y --verbose --dep=std --v=0.110.0`
-
-## Architecture
-
-### `/deps/`
-
-Handles third party dependencies.
-
-### `/devops/`
-
-Stores scripts.
-
-### `/ex/`
-
-Stores example data and code.
-
-### `/lib/`
-
-Stores the source code of the library.
-
-### `/std/`
-
-A place to keep all of the official stuff that people can use alongside Fart.
+</details>
 
 ### Fart CLI
 
-Clone the repository and then try this command:
+Try running the command below after cloning the repository.
+
+```bash
+deno run --reload --allow-read --allow-write https://etok.codes/fart/raw/main/std/cli/run.ts ./ex/pokemon/mod.fart --reg=ts --output=./ex/pokemon/mod.out.ts
+```
+
+<details>
+  <summary>Local Variation</summary>
 
 ```bash
 deno run --allow-read --allow-write std/cli.ts ./ex/pokemon.fart --reg=ts.deno --output=./ex/pokemon.ts
 ```
 
+</details>
+
 ### Fart Server 📡
 
-#### How to spin up a Fart Server
+Please refer to [docs/server-architecture.md](docs/server-architecture.md) to learn about how the server code is organized.
 
-Clone the repository and then try this command:
+## Architecture
 
-```bash
-deno run --allow-net --allow-read --allow-env std/server/serve_http.ts
-```
-
-#### Simulating a Deno Deploy Environment
-
-If you haven't already, [install `deployctl`](https://deno.com/deploy/docs/running-scripts-locally), a runtime that simulates [Deno Deploy](https://deno.com/deploy).
-
-```bash
-deno install --allow-read --allow-write --allow-env --allow-net --allow-run --no-check -f https://deno.land/x/deploy/deployctl.ts
-```
-
-To run the development server, enter the below command into your terminal.
-
-```bash
-deployctl run --watch std/server/worker.ts
-```
+Please refer to [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) to learn about the structure of this repository.
 
 ---
 
