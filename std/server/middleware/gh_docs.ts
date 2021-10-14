@@ -9,7 +9,7 @@ import { convertFilenameToTargetFilename } from "../../common.ts";
 import { Mime } from "../../common.ts";
 
 const removeFrontmatter = (md: string) =>
-  md.replace(/^\-\-\-\n(.*?)\n\-\-\-/, "");
+  md.replace(/^\-\-\-[\r\n]*(.*?)[\r\n]*\-\-\-/g, "");
 
 const fetchDoc = async (pathname: string): Promise<string | undefined> => {
   // TODO: Do not check if --allow-env is unspecified.

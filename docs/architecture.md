@@ -24,7 +24,7 @@ Stores the source code of the library.
 
 A place to keep all of the official stuff that people can use alongside Fart.
 
-### [`/docs`](https://etok.codes/fart/tree/main/docs)
+### [`/docs/`](https://etok.codes/fart/tree/main/docs)
 
 A directory for all Fart-related text-based documentation.
 The contents of this directory get rendered and served by the Fart Server.

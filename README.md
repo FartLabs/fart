@@ -46,12 +46,12 @@ deno run --allow-read --allow-write std/cli.ts ./ex/pokemon.fart --reg=ts.deno -
 
 ### Fart Server 📡
 
-Please refer to [docs/server-architecture.md](docs/server-architecture.md) to learn about how the server code is organized.
+Please refer to [docs/server-architecture.md](https://etok.codes/fart/blob/main/docs/server-architecture.md) to learn about how the server code is organized.
 
 ## Architecture
 
-Please refer to [docs/architecture.md](docs/ARCHITECTURE.md) to learn about the structure of this repository.
+Please refer to [docs/architecture.md](https://etok.codes/fart/blob/main/docs/architecture.md) to learn about the structure of this repository.
 
 ---
 
-Created with 💖 by [**@EthanThatOneKid**](https://github.com/EthanThatOneKid/)
+Created with 💖 by [**@EthanThatOneKid**](https://etok.codes/)
