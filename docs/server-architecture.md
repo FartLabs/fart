@@ -9,7 +9,7 @@ self_link: https://fart.tools/server-architecture
 Clone the repository and then try this command:
 
 ```bash
-deno run --allow-net --allow-read --allow-env --unstable https://etok.codes/fart/raw/std/server/serve_http.ts
+deno run --allow-net --allow-read --allow-env --unstable https://etok.codes/fart/raw/main/std/server/serve_http.ts
 ```
 
 <details>
