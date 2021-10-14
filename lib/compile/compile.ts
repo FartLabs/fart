@@ -161,7 +161,7 @@ export async function compile(
 
   while (!curr.done) {
     switch (curr.value.kind) {
-      case Lexicon.ImpoDefiner: {
+      case Lexicon.LoadDefiner: {
         const { value: filename } = nextToken();
         const dependencyTokens = nextTuple();
         const dependencies = dependencyTokens.map(({ value }) => value);

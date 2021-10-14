@@ -7,7 +7,11 @@ export function* tokenize(
 ): Generator<Token, Token, undefined> {
   let currentToken = "";
   let commentMode = false;
-  let stringLiteralMode = false;
+  let stringLiteralMode:
+    | Lexicon.StringMarker
+    | Lexicon.StringMarker2
+    | Lexicon.StringMarker3
+    | null = null;
   let lineCount = 1;
   let columnCount = 0;
   const makeToken = (
@@ -46,7 +50,7 @@ export function* tokenize(
       }
       case LEXICON[Lexicon.TypeDefiner]:
       case LEXICON[Lexicon.DepoDefiner]:
-      case LEXICON[Lexicon.ImpoDefiner]:
+      case LEXICON[Lexicon.LoadDefiner]:
       case LEXICON[Lexicon.RequiredMarker]:
       case LEXICON[Lexicon.Setter]: {
         nextToken = currentToken;
@@ -82,12 +86,12 @@ export function* tokenize(
       continue;
     }
     if (commentMode) continue;
-    if (stringLiteralMode) {
+    if (stringLiteralMode !== null) {
       currentToken += character;
-      if (character === LEXICON[Lexicon.StringMarker]) {
+      if (character === LEXICON[stringLiteralMode]) {
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;
-        stringLiteralMode = false;
+        stringLiteralMode = null;
       }
       continue;
     }
@@ -101,7 +105,21 @@ export function* tokenize(
       case LEXICON[Lexicon.StringMarker]: {
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;
-        stringLiteralMode = true;
+        stringLiteralMode = Lexicon.StringMarker;
+        currentToken += character;
+        break;
+      }
+      case LEXICON[Lexicon.StringMarker2]: {
+        nextToken = closeCurrentToken();
+        if (nextToken !== null) yield nextToken;
+        stringLiteralMode = Lexicon.StringMarker2;
+        currentToken += character;
+        break;
+      }
+      case LEXICON[Lexicon.StringMarker3]: {
+        nextToken = closeCurrentToken();
+        if (nextToken !== null) yield nextToken;
+        stringLiteralMode = Lexicon.StringMarker3;
         currentToken += character;
         break;
       }

@@ -6,11 +6,14 @@ import {
   normalize,
 } from "../../../deps/std/path.ts";
 
+const processPathname = (pathname: string): string =>
+  fromFileUrl(normalize(
+    join(dirname(import.meta.url), "../static/", pathname),
+  ));
+
 export default async (pathname: string): Promise<Response | undefined> => {
   try {
-    const filename = fromFileUrl(normalize(
-      join(dirname(import.meta.url), "../static/", pathname),
-    ));
+    const filename = processPathname(pathname);
     const file = await Deno.readFile(filename);
     return new Response(file, {
       headers: {
@@ -18,7 +21,5 @@ export default async (pathname: string): Promise<Response | undefined> => {
       },
     });
     // deno-lint-ignore no-empty
-  } catch (e) {
-    console.log({ e });
-  }
+  } catch {}
 };
