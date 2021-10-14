@@ -120,12 +120,12 @@ Deno.test("Omits valid code comments from results", () => {
 });
 
 Deno.test("Tokenizes a string literal", () => {
-  const actual = tokenize(`impo \`./path/to/types\` {
+  const actual = tokenize(`load './path/to/types' {
   Thing1, Thing2
 }`);
   const expected = [
-    T.impo_definer(1, 1),
-    T.string_literal("\`./path/to/types\`", 1, 5),
+    T.load_definer(1, 1),
+    T.string_literal("'./path/to/types'", 1, 5),
     T.nester(1, 24),
     T.id("Thing1", 2, 3),
     T.separator(2, 9),

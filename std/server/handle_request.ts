@@ -1,11 +1,13 @@
+import * as middleware from "./middleware/mod.ts";
 import { makeError } from "./common.ts";
-import * as routes from "./routes/mod.ts";
 
 export const handleRequest = async (request: Request): Promise<Response> => {
   const { pathname } = new URL(request.url);
-  if (pathname === "/") return routes.home();
+  if (pathname === "/") return await middleware.home();
   if (request.method === "GET") {
-    return await routes.compile(request);
+    const staticFile = await middleware.static(pathname);
+    if (staticFile !== undefined) return staticFile;
+    return await middleware.compile(request);
   }
   return makeError("Requested an unknown resource.", 404);
 };

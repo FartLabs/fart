@@ -21,8 +21,8 @@ deno run --reload https://etok.codes/fart/raw/main/ex/pokemon/run.ts
 ### Commands
 
 - **Upgrade a Dependency**: `deno run --unstable --allow-read --allow-write devops/upgrade_dep.ts -y --verbose --dep=std --v=0.110.0`
-- **Run the CLI**: `deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon/pokemon.fart --reg=ts.deno --output=./ex/pokemon/pokemon.ts`
-- **Spin up Server**: `deno run --allow-net std/server/serve_http.ts`
+- **Run the CLI**: `deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon/mod.fart --reg=ts --output=./ex/pokemon/mod.out.ts`
+- **Spin up Server**: `deno run --allow-net --allow-read --allow-env std/server/serve_http.ts`
 - **Develop the Server**: `deployctl run --watch std/server/worker.ts`
 
 #### Public Commands
@@ -66,7 +66,7 @@ deno run --allow-read --allow-write std/cli.ts ./ex/pokemon.fart --reg=ts.deno -
 Clone the repository and then try this command:
 
 ```bash
-deno run --allow-net std/server/serve-http.ts
+deno run --allow-net --allow-read --allow-env std/server/serve_http.ts
 ```
 
 #### Simulating a Deno Deploy Environment

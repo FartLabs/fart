@@ -18,6 +18,8 @@ export class Token {
       case Lexicon.Identifier:
         return this.raw;
       case Lexicon.StringMarker:
+      case Lexicon.StringMarker2:
+      case Lexicon.StringMarker3:
       case Lexicon.StringLiteral: {
         const clean = (stringLiteral: string): string => {
           const marker = LEXICON[Lexicon.StringMarker];
@@ -63,8 +65,8 @@ export class Token {
         return Lexicon.TypeDefiner;
       case LEXICON[Lexicon.DepoDefiner]:
         return Lexicon.DepoDefiner;
-      case LEXICON[Lexicon.ImpoDefiner]:
-        return Lexicon.ImpoDefiner;
+      case LEXICON[Lexicon.LoadDefiner]:
+        return Lexicon.LoadDefiner;
       case LEXICON[Lexicon.Commenter]:
         return Lexicon.Commenter;
       case LEXICON[Lexicon.Separator]:

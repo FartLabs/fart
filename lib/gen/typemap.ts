@@ -12,8 +12,16 @@ export enum ModifierType {
   Function = "fn", // Modifies length-2 tuples.
 }
 
+/**
+ * Returns a type composed into plain text (e.g. `number`,
+ * `Array<string>`, `(a: number, b: number) => number`, etc.).
+ */
 export type TypeModifier = (...inner: string[]) => string;
 
+/**
+ * The TypeMap API is designed to delegate the generation of
+ * syntax for various programming languages.
+ */
 export interface TypeMap {
   [ReservedType.Default]: string;
   [ReservedType.Number]: string;
@@ -24,5 +32,5 @@ export interface TypeMap {
   [ModifierType.Array]?: TypeModifier;
   [ModifierType.Async]?: TypeModifier;
   [ModifierType.Dictionary]?: TypeModifier;
-  [ModifierType.Function]?: TypeModifier; // TODO: All tokens in tuple are arguments; last token in tuple is return type.
+  [ModifierType.Function]?: TypeModifier;
 }
