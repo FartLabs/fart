@@ -27,7 +27,5 @@ export default async (pathname: string): Promise<Response | undefined> => {
       },
     });
     // deno-lint-ignore no-empty
-  } catch (e) {
-    console.log({ e });
-  }
+  } catch {}
 };
