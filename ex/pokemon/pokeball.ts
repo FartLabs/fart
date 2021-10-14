@@ -1,4 +1,4 @@
-import type { Pokeball as iPokeball } from "https://fart.deno.dev/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
+import type { Pokeball as iPokeball } from "https://fart.tools/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

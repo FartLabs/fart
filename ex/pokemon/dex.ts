@@ -1,4 +1,4 @@
-import type { Dex as iDex } from "https://fart.deno.dev/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
+import type { Dex as iDex } from "https://fart.tools/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
 
 export class Dex implements iDex {
   constructor(
