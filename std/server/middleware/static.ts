@@ -9,13 +9,11 @@ import {
 const processPathname = (pathname: string): string => {
   // TODO: Do not check if --allow-env is unspecified.
   const deployed = Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined;
+  if (deployed) {
+    return join("./std/server/static/", pathname);
+  }
   return fromFileUrl(
-    normalize(join(
-      (deployed
-        ? "./std/server/static/"
-        : join(dirname(import.meta.url), "../static/")),
-      pathname,
-    )),
+    normalize(join(dirname(import.meta.url), "../static/", pathname)),
   );
 };
 
@@ -29,5 +27,7 @@ export default async (pathname: string): Promise<Response | undefined> => {
       },
     });
     // deno-lint-ignore no-empty
-  } catch {}
+  } catch (e) {
+    console.log({ e });
+  }
 };

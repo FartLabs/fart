@@ -979,7 +979,11 @@ sub {
 body {
   display: flex;
   justify-content: center;
+}
+
+body #wrapper {
   padding-bottom: 33vh;
+  height: max-content !important;
 }
 
 body.dark #wrapper {
