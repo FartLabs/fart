@@ -1,9 +1,10 @@
-import type { Cart, Registry } from "../../lib/fart.ts";
+import type { Registry } from "../../lib/fart.ts";
 
 const getTarget = (
   // deno-lint-ignore no-explicit-any
   flags: any,
-  registry: Registry<Cart>,
+  // deno-lint-ignore no-explicit-any
+  registry: Registry<any>,
 ): string | undefined => {
   const target = flags.target ?? flags.lang ?? flags.reg;
   const exists = registry.has(target);
@@ -36,7 +37,7 @@ const getOutput = (flags: any) => {
 };
 
 // deno-lint-ignore no-explicit-any
-export const getFlags = (flags: any, registry: Registry<Cart>) => ({
+export const getFlags = (flags: any, registry: Registry<any>) => ({
   source: getSource(flags),
   target: getTarget(flags, registry),
   indentation: getIndentation(flags),

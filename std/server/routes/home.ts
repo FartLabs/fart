@@ -1,4 +1,5 @@
-import { fetchGitHubFile, Mime } from "../common.ts";
+import { fetchGitHubFile } from "../common.ts";
+import { Mime } from "../../common.ts";
 import { marked as parse } from "../../../deps/third_party/marked.ts";
 
 const fetchPageBody = async (): Promise<string> => {

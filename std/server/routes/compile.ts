@@ -1,6 +1,5 @@
-import { fetchGitHubFile, makeError, Mime } from "../common.ts";
+import { fetchGitHubFile, makeError } from "../common.ts";
 import cartridges from "../../carts/mod.ts";
-import typemaps from "../../typemaps/mod.ts";
 import { compile } from "../../../lib/fart.ts";
 
 const processRequest = async (request: Request) => {
@@ -13,15 +12,11 @@ const processRequest = async (request: Request) => {
 
 export default async (request: Request): Promise<Response> => {
   const { id: cartridgeId, content } = await processRequest(request);
-  const cartridge = cartridges.vendor(cartridgeId);
-  if (cartridgeId === undefined || cartridge === undefined) {
+  const item = cartridges.vendor(cartridgeId);
+  if (cartridgeId === undefined || item === undefined) {
     return makeError(`No such language target ${cartridgeId}.`);
   }
-  const typemapId = cartridgeId.split(".").shift();
-  const typemap = typemaps.vendor(typemapId);
-  if (typemap === undefined) {
-    return makeError(`No such typemap.`);
-  }
+  const { cartridge, typemap, mimetype } = item;
   let code: string;
   try {
     code = await compile(content, { cartridge, typemap });
@@ -30,6 +25,6 @@ export default async (request: Request): Promise<Response> => {
   }
   return new Response(code, {
     status: 200,
-    headers: { "Content-Type": Mime.TypeScript },
+    headers: { "Content-Type": mimetype },
   });
 };

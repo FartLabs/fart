@@ -1,4 +1,4 @@
-import { getMimeType } from "../common.ts";
+import { getMimeType } from "../../common.ts";
 import {
   dirname,
   fromFileUrl,
