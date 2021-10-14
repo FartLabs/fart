@@ -20,18 +20,17 @@ const fetchDoc = async (pathname: string): Promise<string | undefined> => {
     ),
   );
   try {
-    await Deno.stat(docPath);
+    await Deno.readFile(docPath);
     return docPath;
     // deno-lint-ignore no-empty
   } catch {}
 };
 
 const processUrl = (pathname: string, hash?: string): string => {
-  console.log({ hash });
-  hash = hash !== undefined && hash.length > 0 ? hash : "#readme";
   const BASE_URL = "https://etok.codes/fart/blob/main/docs/";
-  return join(BASE_URL + convertFilenameToTargetFilename(pathname, ".md")) +
-    hash;
+  const targetName = convertFilenameToTargetFilename(pathname, ".md");
+  hash = hash !== undefined && hash.length > 0 ? hash : "#readme";
+  return join(BASE_URL + targetName) + hash;
 };
 
 export default async (
