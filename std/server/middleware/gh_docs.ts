@@ -8,6 +8,9 @@ import { marked as parse } from "../../../deps/third_party/marked.ts";
 import { convertFilenameToTargetFilename } from "../../common.ts";
 import { Mime } from "../../common.ts";
 
+const removeFrontmatter = (md: string) =>
+  md.replace(/^\-\-\-\n(.*?)\n\-\-\-/, "");
+
 const fetchDoc = async (pathname: string): Promise<string | undefined> => {
   // TODO: Do not check if --allow-env is unspecified.
   const deployed = Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined;
@@ -24,7 +27,7 @@ const fetchDoc = async (pathname: string): Promise<string | undefined> => {
   try {
     const decoder = new TextDecoder("utf-8");
     const docFile = await Deno.readFile(docPath);
-    return decoder.decode(docFile);
+    return removeFrontmatter(decoder.decode(docFile));
     // deno-lint-ignore no-empty
   } catch {}
 };
