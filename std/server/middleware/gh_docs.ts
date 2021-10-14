@@ -4,25 +4,26 @@ import {
   join,
   normalize,
 } from "../../../deps/std/path.ts";
-import { exists } from "../../../deps/std/fs.ts";
 import { convertFilenameToTargetFilename } from "../../common.ts";
 
 const fetchDoc = async (pathname: string): Promise<string | undefined> => {
   // TODO: Do not check if --allow-env is unspecified.
   const deployed = Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined;
-  const docPath = deployed
-    ? join("./docs/", convertFilenameToTargetFilename(pathname, ".md"))
-    : fromFileUrl(
-      normalize(
-        join(
-          dirname(import.meta.url),
-          "../../../docs/",
-          convertFilenameToTargetFilename(pathname, ".md"),
-        ),
+  const targetName = convertFilenameToTargetFilename(pathname, ".md");
+  const docPath = deployed ? join("./docs/", targetName) : fromFileUrl(
+    normalize(
+      join(
+        dirname(import.meta.url),
+        "../../../docs/",
+        targetName,
       ),
-    );
-  const docExists = await exists(docPath);
-  if (docExists) return docPath;
+    ),
+  );
+  try {
+    await Deno.stat(docPath);
+    return docPath;
+    // deno-lint-ignore no-empty
+  } catch {}
 };
 
 const processUrl = (pathname: string, hash?: string): string => {
