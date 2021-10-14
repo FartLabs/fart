@@ -1,23 +1,12 @@
-import { makeError, Mime } from "../common.ts";
+import { fetchGitHubFile, makeError, Mime } from "../common.ts";
 import cartridges from "../../carts/mod.ts";
 import typemaps from "../../typemaps/mod.ts";
 import { compile } from "../../../lib/fart.ts";
 
-const fetchGitHubFile = async (pathname: string) => {
-  try {
-    const GITHUB_BASE = "https://raw.githubusercontent.com/";
-    const url = GITHUB_BASE + pathname.replace(/\.[^.]*$/, "") + ".fart";
-    const response = await fetch(url);
-    return await response.text();
-  } catch {
-    return undefined;
-  }
-};
-
 const processRequest = async (request: Request) => {
   const { pathname } = new URL(request.url);
   const [id, ...path] = pathname.split("/").slice(1);
-  const file = await fetchGitHubFile(path.join("/"));
+  const file = await fetchGitHubFile(path.join("/"), /*transform=*/ true);
   const content = file ?? await request.text();
   return { id, content };
 };

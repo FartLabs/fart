@@ -10,7 +10,8 @@
   },
   "deno.suggest.imports.hosts": {
     "https://deno.land": false,
-    "https://fart.deno.dev": false
+    "https://fart.deno.dev": false,
+    "https://cdn.skypack.dev": false
   },
   "cSpell.words": ["typemap", "typemaps"]
 }
