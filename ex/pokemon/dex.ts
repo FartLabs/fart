@@ -3,7 +3,7 @@ import type { Dex as iDex } from "https://fart.tools/ts/EthanThatOneKid/fart/mai
 export class Dex implements iDex {
   constructor(
     public national = {
-      25: {
+      [25 as number]: {
         name: "Pikachu",
         num: 25,
         caught: false,

@@ -40,8 +40,5 @@ for (const ball of bag.balls) {
   if (caught) break;
 }
 
-// Check the Bag
-console.log("Bag: ", bag);
-
 // Check the PC
 console.log("PC: ", pc);
