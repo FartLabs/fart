@@ -17,14 +17,15 @@ export default async (request: Request): Promise<Response> => {
     return makeError(`No such language target ${cartridgeId}.`);
   }
   const { cartridge, typemap, mimetype } = item;
-  let code: string;
   try {
-    code = await compile(content, { cartridge, typemap });
+    return new Response(
+      await compile(content, { cartridge, typemap }),
+      {
+        status: 200,
+        headers: { "Content-Type": mimetype },
+      }
+    );
   } catch (error) {
     return makeError(error.message, 500);
   }
-  return new Response(code, {
-    status: 200,
-    headers: { "Content-Type": mimetype },
-  });
 };
