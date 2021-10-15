@@ -6,12 +6,9 @@ import {
 } from "../../../deps/std/path.ts";
 import { marked as parse } from "../../../deps/third_party/marked.ts";
 import { Time } from "../../../lib/consts/time.ts";
-import { makeCacheLayer } from "../common.ts";
+import { makeCacheLayer, removeFrontmatter } from "../common.ts";
 import { convertFilenameToTargetFilename } from "../../common.ts";
 import { Mime } from "../../common.ts";
-
-const removeFrontmatter = (md: string) =>
-  md.replace(/^\-\-\-[\r\n]*(.*?)[\r\n]*\-\-\-/g, "");
 
 const fetchDoc = async (pathname: string): Promise<string | undefined> => {
   // TODO: Do not check if --allow-env is unspecified.

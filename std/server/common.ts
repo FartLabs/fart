@@ -48,3 +48,6 @@ export const makeCacheLayer = <T>(
     return updatedEntry.value;
   };
 };
+
+export const removeFrontmatter = (md: string) =>
+  md.replace(/^\-\-\-[\r\n]*(.*?)[\r\n]*\-\-\-/g, "");
