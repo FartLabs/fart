@@ -39,25 +39,25 @@ deployctl run --watch std/server/worker.ts
 
 ### Homepage (`GET /`)
 
-> [/middleware/home.ts](middleware/home.ts)
+> [/middleware/home.ts](https://etok.codes/fart/blob/main/std/server/middleware/gh_docs.ts)
 
 This page renders and serves the README.md of <https://etok.codes/fart/>.
 
 ### Static Files (`GET /[...path].*`)
 
-> [/middleware/static.ts](middleware/static.ts)
+> [/middleware/static.ts](https://etok.codes/fart/blob/main/std/server/middleware/static.ts)
 
-This middleware serves static files located under [`/std/server/static/`](/static).
+This middleware serves static files located under [`/std/server/static/`](https://etok.codes/fart/blob/main/std/server/static/).
 
 ### GitHub Docs (`/[...path]`)
 
 > [/middleware/gh_docs.ts](middleware/gh_docs.ts)
 
-Any markdown files located under [`/docs](../../docs) are rendered and served.
+Any markdown files located under [`/docs](/) are rendered and served.
 
 ### Compile Farts (`GET /[registry]/[...path].*`)
 
-> [/middleware/compile.ts](middleware/compile.ts)
+> [/middleware/compile.ts](https://etok.codes/fart/blob/main/std/server/middleware/compile.ts)
 
 This middleware serves the compiled result of any Fart source file publicly hosted on GitHub.
 
