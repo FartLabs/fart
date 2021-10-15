@@ -6,12 +6,19 @@ self_link: https://fart.tools/pokemon-example
 
 This example runs on two files: a type declaration file, [`mod.fart`](https://etok.codes/fart/blob/main/ex/pokemon/mod.fart), and an implementation file, [`run.ts`](https://etok.codes/fart/blob/main/ex/pokemon/run.ts).
 
-## To Run
-
-```
-# Locally
-deno run --reload ex/pokemon/run.ts
-
-# Online
+```bash
 deno run --reload https://etok.codes/fart/raw/main/ex/pokemon/run.ts
 ```
+
+<details>
+  <summary>Local Variation</summary>
+
+```bash
+deno run --reload ex/pokemon/run.ts
+```
+
+</details>
+
+## stdout
+
+![Pokemon Example Stdout](https://etok.codes/fart/blob/main/std/server/static/pokemon-example-stdout.png)
