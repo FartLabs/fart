@@ -2,7 +2,7 @@
 self_link: https://fart.tools/pokemon-example
 ---
 
-# Pokemon Fart Example
+# Pokémon Fart Example
 
 This example runs on two files: a type declaration file, [`mod.fart`](https://etok.codes/fart/blob/main/ex/pokemon/mod.fart), and an implementation file, [`run.ts`](https://etok.codes/fart/blob/main/ex/pokemon/run.ts).
 
