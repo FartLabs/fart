@@ -10,7 +10,7 @@ Program that generates type definitions, libraries, and programs in multiple lan
 
 ## Development 👨‍💻
 
-> ℹ **INFO**: `CONTRIBUTING.md` coming soon!!
+> ℹ **INFO**: `docs/contributing.md` coming soon!!
 
 To execute the Fart tests, simply run `deno test`. If you have not done so already, please [install Deno](https://github.com/denoland/deno_install).
 
