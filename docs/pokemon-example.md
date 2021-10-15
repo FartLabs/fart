@@ -19,6 +19,6 @@ deno run --reload ex/pokemon/run.ts
 
 </details>
 
-## stdout
+## Expected Stdout
 
-![Pokemon Example Stdout](https://etok.codes/fart/blob/main/std/server/static/pokemon-example-stdout.png)
+![Pokemon Example Stdout](https://github.com/EthanThatOneKid/fart/blob/main/std/server/static/pokemon-example-stdout.png?raw=true)
