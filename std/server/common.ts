@@ -20,3 +20,31 @@ export const fetchGitHubFile = async (pathname: string, transform = false) => {
     return undefined;
   }
 };
+
+// TODO: Allow user-defined `getSize` function to help calculate the size
+// of a given cache item. That way we can start removing some entries once
+// we reach a given threshold.
+export const makeCacheLayer = <T>(
+  download: (k: string) => Promise<T>,
+  expirationTimeout: number,
+) => {
+  const cache = new Map<
+    string,
+    { value: T; lastUpdated: number }
+  >([]);
+  return async (key = "", currentTimestamp = new Date().valueOf()) => {
+    const cacheEntry = cache.get(key);
+    if (
+      cacheEntry !== undefined &&
+      cacheEntry.lastUpdated + expirationTimeout > currentTimestamp
+    ) {
+      return cacheEntry.value;
+    }
+    const updatedEntry = {
+      value: await download(key),
+      lastUpdated: currentTimestamp,
+    };
+    cache.set(key, updatedEntry);
+    return updatedEntry.value;
+  };
+};

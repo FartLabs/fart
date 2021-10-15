@@ -1,5 +1,6 @@
-import { fetchGitHubFile } from "../common.ts";
+import { fetchGitHubFile, makeCacheLayer } from "../common.ts";
 import { Mime } from "../../common.ts";
+import { Time } from "../../../lib/consts/time.ts";
 import { marked as parse } from "../../../deps/third_party/marked.ts";
 
 const fetchPageBody = async (): Promise<string> => {
@@ -10,19 +11,22 @@ const fetchPageBody = async (): Promise<string> => {
   return html;
 };
 
+const cache = makeCacheLayer(async () =>
+  `<html>
+<head>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main id="wrapper">
+    <img src="fart-logo.png" alt="Fart Logo" style="float: right; width: 144px;" />
+    ${await fetchPageBody()}
+  </main>
+</body>
+</html>`, Time.Hour);
+
 export default async (): Promise<Response> =>
   new Response(
-    `<html>
-  <head>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <main id="wrapper">
-      <img src="fart-logo.png" alt="Fart Logo" style="float: right; width: 144px;" />
-      ${await fetchPageBody()}
-    </main>
-  </body>
-</html>`,
+    await cache(),
     {
       status: 200,
       headers: { "Content-Type": Mime.HTML },

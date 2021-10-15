@@ -1,3 +1,7 @@
+---
+self_link: https://fart.tools/
+---
+
 # Fart 🌫
 
 Program that generates type definitions, libraries, and programs in multiple languages.
@@ -31,7 +35,6 @@ deno run --reload ex/pokemon/run.ts
 ### Fart CLI
 
 Try running the command below after cloning the repository.
-
 
 ```bash
 deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon.fart --reg=ts.deno --output=./ex/pokemon.ts

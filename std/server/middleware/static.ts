@@ -1,4 +1,6 @@
 import { getMimeType } from "../../common.ts";
+import { makeCacheLayer } from "../common.ts";
+import { Time } from "../../../lib/consts/time.ts";
 import {
   dirname,
   fromFileUrl,
@@ -17,11 +19,15 @@ const processPathname = (pathname: string): string => {
   );
 };
 
+const cache = makeCacheLayer(
+  async (key: string) => await Deno.readFile(key),
+  Time.Hour,
+);
+
 export default async (pathname: string): Promise<Response | undefined> => {
   try {
     const filename = processPathname(pathname);
-    const file = await Deno.readFile(filename);
-    return new Response(file, {
+    return new Response(await cache(filename), {
       headers: {
         "Content-Type": getMimeType(pathname),
       },

@@ -5,6 +5,8 @@ import {
   normalize,
 } from "../../../deps/std/path.ts";
 import { marked as parse } from "../../../deps/third_party/marked.ts";
+import { Time } from "../../../lib/consts/time.ts";
+import { makeCacheLayer } from "../common.ts";
 import { convertFilenameToTargetFilename } from "../../common.ts";
 import { Mime } from "../../common.ts";
 
@@ -39,17 +41,11 @@ const fetchDoc = async (pathname: string): Promise<string | undefined> => {
 //   return join(BASE_URL + targetName) + hash;
 // };
 
-export default async (
-  pathname: string,
-  hash?: string,
-): Promise<Response | undefined> => {
-  try {
-    const doc = await fetchDoc(pathname);
-    if (doc !== undefined) {
-      console.log(hash);
-      const html = parse(doc);
-      return new Response(
-        `<html>
+const cache = makeCacheLayer(async (pathname: string) => {
+  const doc = await fetchDoc(pathname);
+  if (doc !== undefined) {
+    const html = parse(doc);
+    return `<html>
   <head>
     <link rel="stylesheet" href="/style.css" />
   </head>
@@ -59,13 +55,23 @@ export default async (
       ${html}
     </main>
   </body>
-</html>`,
-        {
-          status: 200,
-          headers: { "Content-Type": Mime.HTML },
-        },
-      );
+</html>`;
+  }
+}, Time.Hour);
+
+export default async (
+  pathname: string,
+  hash?: string,
+): Promise<Response | undefined> => {
+  try {
+    console.log(hash);
+    const result = await cache(pathname);
+    if (result !== undefined) {
+      return new Response(result, {
+        status: 200,
+        headers: { "Content-Type": Mime.HTML },
+      });
     }
-    // deno-lint-ignore no-empty
-  } catch {}
+  } // deno-lint-ignore no-empty
+  catch {}
 };
