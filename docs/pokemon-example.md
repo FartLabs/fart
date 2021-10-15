@@ -6,6 +6,8 @@ self_link: https://fart.tools/pokemon-example
 
 This example runs on two files: a type declaration file, [`mod.fart`](https://etok.codes/fart/blob/main/ex/pokemon/mod.fart), and an implementation file, [`run.ts`](https://etok.codes/fart/blob/main/ex/pokemon/run.ts).
 
+## Running it Yourself
+
 ```bash
 deno run --reload https://etok.codes/fart/raw/main/ex/pokemon/run.ts
 ```
@@ -19,7 +21,7 @@ deno run --reload ex/pokemon/run.ts
 
 </details>
 
-## Example Code
+## Example code
 
 ### [`/ex/pokemon/mod.fart`](https://etok.codes/fart/blob/main/ex/pokemon/mod.fart)
 
