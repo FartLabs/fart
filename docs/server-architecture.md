@@ -64,7 +64,7 @@ This middleware serves the compiled result of any Fart source file publicly host
 If no matching public GitHub source Farts can be found, the request checks to see if there is any raw Fart code in the body.
 If so, the server will generate the code based on the source Fart from the request body.
 
-## URL Composition
+#### URL Composition
 
 This is a more detailed diagram of the pattern that the compilation middlware snags on.
 
@@ -72,7 +72,7 @@ This is a more detailed diagram of the pattern that the compilation middlware sn
 /[registry]/[owner]/[project_name]/[branch]/[...path].*
 ```
 
-### Compilation Endpoint Examples
+#### Compilation Endpoint Examples
 
 - `/go/EthanThatOneKid/fart/main/ex/pokemon/mod.go`
 - `/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
