@@ -102,7 +102,7 @@ import type {
 } from "https://fart.tools/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
 
 // Extended Pokeball class
-// Source: https://etok.codes/fart/blob/main/ex/pokemon/pokeball.ts>
+// Source: https://etok.codes/fart/blob/main/ex/pokemon/pokeball.ts
 import { Pokeball } from "./pokeball.ts";
 
 // Extended Dex class

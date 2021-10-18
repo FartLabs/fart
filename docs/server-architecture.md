@@ -61,17 +61,20 @@ Any markdown files located under [`/docs](/) are rendered and served.
 
 This middleware serves the compiled result of any Fart source file publicly hosted on GitHub.
 
+If no matching public GitHub source Farts can be found, the request checks to see if there is any raw Fart code in the body.
+If so, the server will generate the code based on the source Fart from the request body.
+
+## URL Composition
+
+This is a more detailed diagram of the pattern that the compilation middlware snags on.
+
 ```
-URL Composition:
-================
-
-/[registry]/[author]/[project_name]/[branch]/[...path].*
-
-Examples:
-=========
-
-/go/EthanThatOneKid/fart/main/ex/pokemon/mod.go
-/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts
-/ts.deno/EthanThatOneKid/fart/main/ex/pokemon/mod.ts
-/ts.deno.api/EthanThatOneKid/fart/main/ex/pokemon/mod.ts
+/[registry]/[owner]/[project_name]/[branch]/[...path].*
 ```
+
+### Compilation Endpoint Examples
+
+- `/go/EthanThatOneKid/fart/main/ex/pokemon/mod.go`
+- `/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
+- `/ts.deno/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
+- `/ts.deno.api/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
