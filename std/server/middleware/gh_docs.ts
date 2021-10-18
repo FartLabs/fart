@@ -35,7 +35,7 @@ const processUrl = (pathname: string, hash = "#readme"): string => {
   const BASE_URL = "https://etok.codes/fart/blob/main/docs/";
   const targetName = convertFilenameToTargetFilename(pathname, ".md");
   hash = hash !== undefined && hash.length > 0 ? hash : "#readme";
-  return join(BASE_URL + targetName) + hash;
+  return BASE_URL + targetName + hash;
 };
 
 const cache = makeCacheLayer(async (pathname: string) => {
