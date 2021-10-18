@@ -51,9 +51,9 @@ This middleware serves static files located under [`/std/server/static/`](https:
 
 ### GitHub Docs (`/[...path]`)
 
-> [/middleware/gh_docs.ts](middleware/gh_docs.ts)
+> [/middleware/gh_docs.ts](https://github.com/EthanThatOneKid/fart/tree/main/std/server/middleware/gh_docs.ts)
 
-Any markdown files located under [`/docs](/) are rendered and served.
+Any markdown files located under [`/docs`](https://etok.codes/fart/tree/main/docs/) are rendered and served.
 
 ### Compile Farts (`GET /[registry]/[...path].*`)
 
@@ -78,3 +78,4 @@ This is a more detailed diagram of the pattern that the compilation middlware sn
 - `/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
 - `/ts.deno/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
 - `/ts.deno.api/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
+- `/html.highlight/EthanThatOneKid/fart/main/ex/pokemon/mod.html`
