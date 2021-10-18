@@ -31,24 +31,25 @@ const fetchDoc = async (pathname: string): Promise<string | undefined> => {
   } catch {}
 };
 
-// const processUrl = (pathname: string, hash?: string): string => {
-//   const BASE_URL = "https://etok.codes/fart/blob/main/docs/";
-//   const targetName = convertFilenameToTargetFilename(pathname, ".md");
-//   hash = hash !== undefined && hash.length > 0 ? hash : "#readme";
-//   return join(BASE_URL + targetName) + hash;
-// };
+const processUrl = (pathname: string, hash = "#readme"): string => {
+  const BASE_URL = "https://etok.codes/fart/blob/main/docs/";
+  const targetName = convertFilenameToTargetFilename(pathname, ".md");
+  hash = hash !== undefined && hash.length > 0 ? hash : "#readme";
+  return join(BASE_URL + targetName) + hash;
+};
 
 const cache = makeCacheLayer(async (pathname: string) => {
   const doc = await fetchDoc(pathname);
   if (doc !== undefined) {
     const html = parse(doc);
+    const ghLink = processUrl(pathname);
     return `<html>
   <head>
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
     <main id="wrapper">
-      <a href="https://etok.codes/fart/blob/main/docs${pathname}#readme" style="float: right;">
+      <a href="${ghLink}" style="float: right;">
         <img src="fart-logo.png" alt="Fart Logo" style="width: 144px;" />
       </a>
       ${html}
@@ -60,10 +61,8 @@ const cache = makeCacheLayer(async (pathname: string) => {
 
 export default async (
   pathname: string,
-  hash?: string,
 ): Promise<Response | undefined> => {
   try {
-    console.log(hash);
     const result = await cache(pathname);
     if (result !== undefined) {
       return new Response(result, {

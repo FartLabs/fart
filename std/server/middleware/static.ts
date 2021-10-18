@@ -21,7 +21,7 @@ const processPathname = (pathname: string): string => {
 
 const cache = makeCacheLayer(
   async (key: string) => await Deno.readFile(key),
-  Time.Hour,
+  Time.Day,
 );
 
 export default async (pathname: string): Promise<Response | undefined> => {
