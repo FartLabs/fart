@@ -12,7 +12,7 @@ const typescript: TypeMap = {
   [ModifierType.Array]: (t: string) => `Array<${t}>`, // foos: array % Foo
   [ModifierType.Async]: (t: string) => `Promise<${t}>`, // bar: async % Bar
   [ModifierType.Dictionary]: (t1: string, t2: string) => `Record<${t1}, ${t2}>`, // dex: dict % <number, Pokemon>
-  [ModifierType.Function]: (...t: string[]) => {
+  [ModifierType.Function]: (...t: string[]) => { // catch: func % <PokeBall, async % CatchStatus>
     let result = "(";
     const gimmeName = genUniqueNames();
     while (t.length > 1) {
@@ -27,7 +27,11 @@ const typescript: TypeMap = {
     }
     const returnType = t.pop()?.replace(OMIT_PATTERN, "void") ?? "void";
     return result + `) => ${returnType}`;
-  }, // catch: func % <PokeBall, async % CatchStatus>
+  },
+  [ModifierType.Date]: (t: string) =>
+    // created_at*: date % string
+    t === "string" || t === "number" ? "Date" : t,
+  [ModifierType.URL]: (t: string) => t === "string" ? "URL" : t, // avatar_url*: url % string
 };
 
 export default typescript;

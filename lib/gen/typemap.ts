@@ -10,6 +10,8 @@ export enum ModifierType {
   Async = "async", // Modifies anything.
   Dictionary = "dict", // Modifies length-2 tuples.
   Function = "fn", // Modifies length-2 tuples.
+  Date = "date", // Modifies string or number.
+  URL = "url", // Modifies string.
 }
 
 /**
@@ -33,4 +35,6 @@ export interface TypeMap {
   [ModifierType.Async]?: TypeModifier;
   [ModifierType.Dictionary]?: TypeModifier;
   [ModifierType.Function]?: TypeModifier;
+  [ModifierType.Date]?: TypeModifier;
+  [ModifierType.URL]?: TypeModifier;
 }

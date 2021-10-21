@@ -1,0 +1,28 @@
+; All properties listed on:
+; https://docs.github.com/en/rest/reference/users
+type GitHubUser {
+  id*: number
+  avatar_url*: string
+  html_url*: string
+  name*: string
+  company*: string
+  blog*: url % string
+  bio*: string
+  public_repos*: number
+  public_gists*: number
+  followers*: number
+  following*: number
+  twitter_username: string
+  created_at: date % string
+  updated_at: date % string
+}
+
+type GitHubRepo {
+  name*: string
+}
+
+type GitHubDepartment {
+  authenticate*: fn % <string, _>
+  getUser*: fn % <string, async % GitHubUser>
+  getRepos*: fn % <GitHubUser, array % GitHubRepo>
+}
