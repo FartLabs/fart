@@ -1,5 +1,5 @@
 import type {
-  GitHubDepartment as iGitHubDepartment,
+  GitHubDepartment as fGitHubDepartment,
   GitHubRepo,
   GitHubUser,
 } from "https://fart.tools/ts/EthanThatOneKid/fart/main/std/gh/gh.ts";
@@ -13,8 +13,8 @@ import { Octokit } from "../../../deps/third_party/octokit/rest.ts";
  * import { GitHubDepartment } from "https://etok.codes/fart/raw/main/std/gh/mod.ts";
  * ```
  */
-export class GitHubDepartment implements iGitHubDepartment {
-  httpClient?: Octokit;
+export class GitHubDepartment implements fGitHubDepartment {
+  httpClient?: unknown; // typeof Octokit
 
   authenticate(accessToken: string) {
     this.httpClient = new Octokit({
@@ -25,9 +25,11 @@ export class GitHubDepartment implements iGitHubDepartment {
 
   async getUser(username: string): Promise<GitHubUser> {
     console.log("USER", { username });
+    return {} as GitHubUser;
   }
 
-  async getRepos(user: GitHubUser): Promise<GitHubRepo> {
+  async getRepos(user: GitHubUser): Promise<GitHubRepo[]> {
     console.log("REPOS", { user });
+    return [] as GitHubRepo[];
   }
 }

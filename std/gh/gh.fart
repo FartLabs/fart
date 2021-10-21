@@ -24,5 +24,5 @@ type GitHubRepo {
 type GitHubDepartment {
   authenticate*: fn % <string, _>
   getUser*: fn % <string, async % GitHubUser>
-  getRepos*: fn % <GitHubUser, array % GitHubRepo>
+  getRepos*: fn % <GitHubUser, async % array % GitHubRepo>
 }
