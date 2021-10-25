@@ -43,6 +43,7 @@ switch (subcommand) {
   ${
       subcommands.map((subcommand) =>
         `case "${subcommand}": {
+          console.log({subcommand});
     console.log(await fart.${subcommand}(FLAGS));
     break;
   }`
