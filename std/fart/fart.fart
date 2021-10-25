@@ -1,4 +1,5 @@
 type FartDepartment {
   ; args: filepath, code_cart_id
-  compile*: fn % <string, string, async % _>
+  ; returns: generated_code
+  compile*: fn % <string, string, async % string>
 }

@@ -1,0 +1,4 @@
+type IODepartment {
+  readFile*: fn % <string, async % string>
+  writeFile*: fn % <string, async % _>
+}
