@@ -5,6 +5,7 @@ import tsTypeMap from "../typemaps/typescript.ts";
 import { Mime } from "../common.ts";
 
 import denoCart from "./deno.cart.ts";
+import denoCliCart from "./deno.cli.cart.ts";
 // import denoApiCart from "./deno.api.cart.ts";
 // import goCart from "./go.cart.ts";
 
@@ -28,5 +29,11 @@ base.set("ts.deno", {
   typemap: tsTypeMap,
   mimetype: Mime.TypeScript,
 });
+
+base.set("ts.deno.cli", {
+  cartridge: denoCliCart,
+  typemap: tsTypeMap,
+  mimetypeL Mime.TypeScript,
+})
 
 export default base;
