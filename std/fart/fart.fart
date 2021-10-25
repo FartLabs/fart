@@ -1,5 +1,10 @@
+type CompilerSettings {
+  filepath*: string
+  cartridge_id*: string
+}
+
 type FartDepartment {
   ; args: filepath, code_cart_id
   ; returns: generated_code
-  compile*: fn % <string, string, async % string>
+  compile*: fn % <CompilerSettings, async % string>
 }
