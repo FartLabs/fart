@@ -3,18 +3,18 @@ import { FakeIODepartment } from "./fake_io_department.ts";
 
 const assertReturnsVoid = (value: unknown) => assertEquals(value, undefined);
 
+const TESTDATA_PATH = "std/io/testdata/pikachu.json";
+
 Deno.test("Returns the path.", async () => {
-  const testdataPath = "/std/io/testdata/pikachu.json";
   const io = new FakeIODepartment();
-  const file = await io.readFile(testdataPath);
-  assertEquals(file, testdataPath);
+  const file = await io.readFile(TESTDATA_PATH);
+  assertEquals(file, TESTDATA_PATH);
 });
 
 Deno.test("Returns the path when asked to read if exists.", async () => {
-  const testdataPath = "/std/io/testdata/pikachu.json";
   const io = new FakeIODepartment();
-  const file = await io.readIfExists(testdataPath);
-  assertEquals(file, testdataPath);
+  const file = await io.readIfExists(TESTDATA_PATH);
+  assertEquals(file, TESTDATA_PATH);
 });
 
 Deno.test("Returns the path when asked to fetch if valid.", async () => {

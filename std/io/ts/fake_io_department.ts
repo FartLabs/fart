@@ -8,9 +8,7 @@ export class FakeIODepartment implements fIODepartment {
     return path;
   }
 
-  async writeFile(path: string, content: string): Promise<void> {
-    return;
-  }
+  async writeFile(path: string, content: string): Promise<void> {}
 
   async fetchIfValidURL(url: string): Promise<string> {
     return url;
