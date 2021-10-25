@@ -37,6 +37,8 @@ denoCli.on(
     event.code.append(`const FLAGS = parse(Deno.args);
 const [subcommand] = FLAGS._;
 
+console.log({FLAGS});
+
 switch (subcommand) {
   ${
       subcommands.map((subcommand) =>
