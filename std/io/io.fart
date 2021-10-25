@@ -1,4 +1,6 @@
 type IODepartment {
+  fetchIfValidURL*: fn % <string, async % string>
+  readIfExists*: fn % <string, async % string>
   readFile*: fn % <string, async % string>
   writeFile*: fn % <string, async % _>
 }

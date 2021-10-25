@@ -1,0 +1,6 @@
+type LocalStorage {
+  setItem*: fn % <string, string, _>
+  getItem*: fn % <string, string>
+  removeItem*: fn % <string, _>
+  clear*: fn % <_, _>
+}
