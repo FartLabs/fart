@@ -100,7 +100,7 @@ export class Builder {
     return BoC.join(topOfFile, ...this.blocks, bottomOfFile);
   }
 
-  private getType(
+  public getType(
     alias?: string,
   ): string | undefined {
     if (alias === undefined) return undefined;

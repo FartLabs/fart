@@ -40,12 +40,15 @@ export async function compile(
     tokens: Token[],
     ...mods: ModifierType[]
   ): string | undefined =>
-    mods.reduceRight((result, mod) => {
-      if (typemap !== undefined && typemap[mod] !== undefined) {
-        return [(typemap[mod] as TypeModifier)(...result)];
-      }
-      return result;
-    }, tokens.map(({ value }) => value)).pop();
+    mods.reduceRight(
+      (result, mod) => {
+        if (typemap !== undefined && typemap[mod] !== undefined) {
+          return [(typemap[mod] as TypeModifier)(...result)];
+        }
+        return result;
+      },
+      tokens.map(({ value }) => builder.getType(value) ?? value),
+    ).pop();
 
   const checkModExists = (identifier: string) =>
     (Object.values(ModifierType) as string[]).includes(identifier);
