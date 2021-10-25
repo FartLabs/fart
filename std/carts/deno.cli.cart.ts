@@ -41,6 +41,7 @@ switch (subcommand) {
   ${
       [...subcommands].map((subcommand) =>
         `case "${subcommand}": {
+          console.log({FLAGS})
     console.log(await (fart.${subcommand} as any)(FLAGS));
     break;
   }`
