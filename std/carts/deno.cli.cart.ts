@@ -13,9 +13,9 @@ denoCli.on(
   CartEventName.FileStart,
   (event) => {
     event.code.append(`${makeComment()}
-import { FartDepartment } from "https://github.com/EthanThatOneKid/fart/blob/main/std/fart/ts/fart_department.ts";
+import { FartDepartment } from "https://github.com/EthanThatOneKid/fart/raw/main/std/fart/ts/fart_department.ts";
 import { IODepartment } from "https://github.com/EthanThatOneKid/fart/raw/main/std/io/ts/io_department.ts";
-import { parse } from "https://denoCli.land/std@0.112.0/flags/mod.ts";
+import { parse } from "https://deno.land/std@0.112.0/flags/mod.ts";
 
 const fart = new FartDepartment(new IODepartment());
 `);
