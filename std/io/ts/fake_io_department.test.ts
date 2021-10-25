@@ -10,6 +10,20 @@ Deno.test("Returns the path.", async () => {
   assertEquals(file, testdataPath);
 });
 
+Deno.test("Returns the path when asked to read if exists.", async () => {
+  const testdataPath = "/std/io/testdata/pikachu.json";
+  const io = new FakeIODepartment();
+  const file = await io.readIfExists(testdataPath);
+  assertEquals(file, testdataPath);
+});
+
+Deno.test("Returns the path when asked to fetch if valid.", async () => {
+  const testdataPath = "https://example.com/pikachu.json";
+  const io = new FakeIODepartment();
+  const file = await io.fetchIfValidURL(testdataPath);
+  assertEquals(file, testdataPath);
+});
+
 Deno.test("Does nothing when asked to write.", async () => {
   const io = new FakeIODepartment();
   assertReturnsVoid(await io.writeFile("/example.txt", "nothingness"));

@@ -11,4 +11,12 @@ export class FakeIODepartment implements fIODepartment {
   async writeFile(path: string, content: string): Promise<void> {
     return;
   }
+
+  async fetchIfValidURL(url: string): Promise<string> {
+    return url;
+  }
+
+  async readIfExists(path: string): Promise<string> {
+    return path;
+  }
 }
