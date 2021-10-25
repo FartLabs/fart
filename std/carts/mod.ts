@@ -33,7 +33,7 @@ base.set("ts.deno", {
 base.set("ts.deno.cli", {
   cartridge: denoCliCart,
   typemap: tsTypeMap,
-  mimetypeL Mime.TypeScript,
-})
+  mimetype: Mime.TypeScript,
+});
 
 export default base;
