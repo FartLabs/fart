@@ -13,7 +13,6 @@ export class FartDepartment implements fFartDepartment {
   async compile(settings: CompilerSettings): Promise<string> {
     // deno-lint-ignore camelcase
     const { filepath, cartridge_id } = settings;
-    console.log({ settings });
     const content = await this.io.readFile(filepath);
     const item = cartridges.vendor(cartridge_id);
     if (item === undefined) return "";
