@@ -1,8 +1,9 @@
 export enum ReservedType {
-  Default = "any",
+  Omit = "_",
   Number = "number",
   String = "string",
   Boolean = "boolean",
+  Default = "any",
 }
 
 export enum ModifierType {
@@ -25,10 +26,11 @@ export type TypeModifier = (...inner: string[]) => string;
  * syntax for various programming languages.
  */
 export interface TypeMap {
-  [ReservedType.Default]: string;
+  [ReservedType.Omit]: string;
   [ReservedType.Number]: string;
   [ReservedType.String]: string;
   [ReservedType.Boolean]: string;
+  [ReservedType.Default]: string;
 
   // Modifiers are not required for all languages.
   [ModifierType.Array]?: TypeModifier;
@@ -38,3 +40,5 @@ export interface TypeMap {
   [ModifierType.Date]?: TypeModifier;
   [ModifierType.URL]?: TypeModifier;
 }
+
+export const OMIT_PATTERN = /^\_$/;

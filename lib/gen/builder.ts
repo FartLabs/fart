@@ -1,5 +1,5 @@
 import { IndentOption } from "../consts/indent.ts";
-import { ReservedType, TypeMap } from "./typemap.ts";
+import { OMIT_PATTERN, ReservedType, TypeMap } from "./typemap.ts";
 import { Cart, CartEventName } from "./cart.ts";
 import { BoC } from "./common.ts";
 
@@ -113,8 +113,9 @@ export class Builder {
         return this.typemap[ReservedType.Boolean];
       case ReservedType.Default:
         return this.typemap[ReservedType.Default];
-      default:
-        return alias;
+      default: {
+        return alias.replace(OMIT_PATTERN, "void") ?? "";
+      }
     }
   }
 }
