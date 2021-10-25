@@ -37,21 +37,15 @@ denoCli.on(
     event.code.append(`const FLAGS = parse(Deno.args);
 const [subcommand] = FLAGS._;
 
-console.log({FLAGS});
-
 switch (subcommand) {
   ${
       subcommands.map((subcommand) =>
         `case "${subcommand}": {
-          console.log({subcommand});
     console.log(await fart.${subcommand}(FLAGS));
     break;
   }`
       ).join("\n")
     }
-  default: {
-    // console.log(await fart.help());
-  }
 }
 
 ${makeComment()}`);

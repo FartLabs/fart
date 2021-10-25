@@ -129,10 +129,12 @@ export async function compile(
           // TODO: Throw warning (depos only register methods).
           continue;
         }
+        const isMethod = token.value.startsWith(ModifierType.Function);
         await builder.appendProperty(
           name.value,
           required,
           nextModifier(token) ?? token.value,
+          isMethod,
         );
       }
     }
