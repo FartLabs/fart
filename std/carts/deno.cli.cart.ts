@@ -34,7 +34,7 @@ denoCli.on(
 denoCli.on(
   CartEventName.FileEnd,
   (event) => {
-    event.code.append(`const FLAGS = parse(denoCli.args);
+    event.code.append(`const FLAGS = parse(Deno.args);
 const [subcommand] = FLAGS._;
 
 switch (subcommand) {
@@ -47,7 +47,7 @@ switch (subcommand) {
       ).join("\n")
     }
   default: {
-    console.log(await fart.help());
+    // console.log(await fart.help());
   }
 }
 
