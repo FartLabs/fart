@@ -57,4 +57,11 @@ deno.on(
   },
 );
 
+deno.on(
+  CartEventName.Comment,
+  (event) => {
+    event.code.append(`// ${event.comment}`);
+  },
+);
+
 export default deno;

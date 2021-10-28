@@ -53,19 +53,25 @@ export async function compile(
   const checkModExists = (identifier: string) =>
     (Object.values(ModifierType) as string[]).includes(identifier);
 
-  const nextToken = (): Token => (curr = it.next()).value;
+  const nextToken = async (): Promise<Token> => {
+    while ((curr = it.next()).value.kind === Lexicon.Comment) {
+      const { value, line, column } = curr.value;
+      await builder.appendComment(value, line, column);
+    }
+    return curr.value;
+  };
 
-  const nextTuple = (
+  const nextTuple = async (
     ateFirstToken = false,
     maxLength?: number,
     closingToken: Lexicon = Lexicon.Denester,
-  ): Token[] => {
-    if (!ateFirstToken) nextToken(); // TODO: Assert this token === openingToken.
+  ): Promise<Token[]> => {
+    if (!ateFirstToken) await nextToken(); // TODO: Assert this token === openingToken.
     const list: Token[] = [];
     const isLengthValid = maxLength === undefined || maxLength >= list.length;
-    while (!nextToken().is(closingToken) && isLengthValid) {
+    while (!(await nextToken()).is(closingToken) && isLengthValid) {
       if (!curr.value.is(Lexicon.Separator)) {
-        const modifiedValue = nextModifier(curr.value);
+        const modifiedValue = await nextModifier(curr.value);
         if (modifiedValue !== undefined) {
           list.push(
             new Token(
@@ -85,9 +91,9 @@ export async function compile(
 
   const nextStruct = async (depoMode = false) => {
     builder.incrementIndentLevel();
-    while (!nextToken().is(Lexicon.Denester)) {
+    while (!(await nextToken()).is(Lexicon.Denester)) {
       const name = curr.value; // TODO: Assert this is identifier.
-      const setter = nextToken(); // TODO: Assert this is setter or required_setter.
+      const setter = await nextToken(); // TODO: Assert this is setter or required_setter.
       let required = depoMode; // All methods of a `depo` are required by default.
       switch (setter.kind) {
         case Lexicon.Setter:
@@ -100,7 +106,7 @@ export async function compile(
           console.error(`Expected a setter, but got ${setter} instead.`); // TODO: Throw error.
         }
       }
-      const token = nextToken();
+      const token = await nextToken();
       if (token.is(Lexicon.Nester)) {
         if (depoMode) {
           // TODO: Throw warning (depos only register methods).
@@ -111,7 +117,7 @@ export async function compile(
         await nextStruct();
       } else if (token.is(Lexicon.OpeningAngle)) {
         const [inputToken //, outputToken
-        ] = nextTuple(
+        ] = await nextTuple(
           true,
           16,
           Lexicon.ClosingAngle,
@@ -133,7 +139,7 @@ export async function compile(
         await builder.appendProperty(
           name.value,
           required,
-          nextModifier(token) ?? token.value,
+          await nextModifier(token) ?? token.value,
           isMethod,
         );
       }
@@ -142,22 +148,24 @@ export async function compile(
     await builder.appendClosingStruct();
   };
 
-  const nextModifier = (
+  const nextModifier = async (
     currentToken: Token,
-  ): string | undefined => {
+  ): Promise<string | undefined> => {
     const mods: ModifierType[] = [];
     while (checkModExists(currentToken.value)) {
       mods.push(currentToken.value as ModifierType);
-      nextToken(); // TODO: Assert this is modifier (%)
-      currentToken = nextToken();
+      await nextToken(); // TODO: Assert this is modifier (%)
+      currentToken = await nextToken();
     }
     const tokens = [];
     if (currentToken.is(Lexicon.OpeningAngle)) {
-      tokens.push(...nextTuple(
-        true,
-        2,
-        Lexicon.ClosingAngle,
-      ));
+      tokens.push(
+        ...await nextTuple(
+          true,
+          2,
+          Lexicon.ClosingAngle,
+        ),
+      );
     } else {
       tokens.push(currentToken);
     }
@@ -167,29 +175,29 @@ export async function compile(
   while (!curr.done) {
     switch (curr.value.kind) {
       case Lexicon.LoadDefiner: {
-        const { value: filename } = nextToken();
-        const dependencyTokens = nextTuple();
+        const { value: filename } = await nextToken();
+        const dependencyTokens = await nextTuple();
         const dependencies = dependencyTokens.map(({ value }) => value);
         await builder.appendImport(filename, dependencies);
         break;
       }
       case Lexicon.TypeDefiner: {
-        const identifier = nextToken(); // TODO: Assert is valid identifier.
+        const identifier = await nextToken(); // TODO: Assert is valid identifier.
         await builder.appendOpeningStruct(identifier.value);
-        nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
+        await nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
         await nextStruct();
         break;
       }
       case Lexicon.DepoDefiner: {
-        const identifier = nextToken(); // TODO: Assert is valid identifier.
+        const identifier = await nextToken(); // TODO: Assert is valid identifier.
         await builder.appendOpeningStruct(identifier.value);
-        nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
+        await nextToken(); // TODO: Assert this token.is(Lexicon.Nester).
         const depoMode = true;
         await nextStruct(depoMode);
         break;
       }
       default: {
-        nextToken(); // TODO: Throw error (unexpected token).
+        await nextToken(); // TODO: Throw error (unexpected token).
       }
     }
   }

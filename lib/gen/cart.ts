@@ -7,6 +7,7 @@ export enum CartEventName {
   SetProperty = "set_property",
   StructClose = "struct_close",
   FileEnd = "file_end",
+  Comment = "comment",
 }
 
 interface FileStartDetail {
@@ -48,6 +49,14 @@ interface SetPropertyDetail {
   method: boolean;
 }
 
+interface CommentDetail {
+  type: CartEventName.Comment;
+  code: BoC;
+  comment: string;
+  line: number;
+  column: number;
+}
+
 export type CartDispatch = {
   type: CartEventName.FileStart;
 } | {
@@ -69,6 +78,11 @@ export type CartDispatch = {
   value?: string;
   required: boolean;
   method: boolean;
+} | {
+  type: CartEventName.Comment;
+  comment: string;
+  line: number;
+  column: number;
 };
 
 export type CartEvent =
@@ -77,7 +91,8 @@ export type CartEvent =
   | FileEndDetail
   | ImportDetail
   | StructOpenDetail
-  | SetPropertyDetail;
+  | SetPropertyDetail
+  | CommentDetail;
 
 /**
  * If a code generation function returns null, that means that the
@@ -90,7 +105,8 @@ export type CartHandler<T extends CartEventName> = (
     : T extends CartEventName.StructOpen ? StructOpenDetail
     : T extends CartEventName.SetProperty ? SetPropertyDetail
     : T extends CartEventName.StructClose ? StructCloseDetail
-    : FileEndDetail,
+    : T extends CartEventName.FileEnd ? FileEndDetail
+    : CommentDetail,
 ) => void | Promise<void>;
 
 export class Cart {
@@ -113,6 +129,9 @@ export class Cart {
         | undefined,
       [CartEventName.FileEnd]: undefined as
         | CartHandler<CartEventName.FileEnd>
+        | undefined,
+      [CartEventName.Comment]: undefined as
+        | CartHandler<CartEventName.Comment>
         | undefined,
     },
   ) {}
@@ -165,6 +184,13 @@ export class Cart {
         });
         break;
       }
+      case CartEventName.Comment: {
+        result = (handler as CartHandler<CartEventName.Comment>)({
+          code,
+          ...event,
+        });
+        break;
+      }
     }
     if (result instanceof Promise) await result;
     return code;
@@ -193,6 +219,10 @@ export class Cart {
   addEventListener(
     name: CartEventName.FileEnd,
     handler: CartHandler<CartEventName.FileEnd>,
+  ): void;
+  addEventListener(
+    name: CartEventName.Comment,
+    handler: CartHandler<CartEventName.Comment>,
   ): void;
   addEventListener(
     name: CartEventName,

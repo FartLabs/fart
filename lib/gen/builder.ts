@@ -87,6 +87,17 @@ export class Builder {
     this.append(code);
   }
 
+  public async appendComment(comment: string, line: number, column: number) {
+    const code = await this.cartridge.dispatch({
+      type: CartEventName.Comment,
+      comment,
+      line,
+      column,
+    });
+    if (code === null) return;
+    this.append(code);
+  }
+
   toString = this.export.bind(this);
 
   public async export(): Promise<string> {
