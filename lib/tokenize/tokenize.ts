@@ -16,6 +16,7 @@ export function* tokenize(
     | null = null;
   let lineCount = 1;
   let columnCount = 0;
+
   const makeToken = (
     raw: string,
     lineOffset = 0,
@@ -27,6 +28,7 @@ export function* tokenize(
       columnOffset;
     return new Token(raw, tokenLine, tokenColumn);
   };
+
   const closeCurrentToken = (
     currentCharacter: string | null = null,
   ): Token | null => {
@@ -63,6 +65,7 @@ export function* tokenize(
     }
     return null;
   };
+
   const checkForComment = (): Token | null => {
     if (currentComment !== undefined && !omitComments) {
       const cleanedComment = currentComment.trim();
@@ -71,8 +74,12 @@ export function* tokenize(
         lineCount,
         currentCommentColumn,
       );
+      currentComment = undefined;
+      currentCommentColumn = -1;
       return commentToken;
     }
+    currentComment = undefined;
+    currentCommentColumn = -1;
     return null;
   };
 
@@ -87,13 +94,12 @@ export function* tokenize(
       if (nextToken !== null) yield nextToken;
       const nextComment = checkForComment();
       if (nextComment !== null) yield nextComment;
-      currentComment = undefined;
-      currentCommentColumn = -1;
       lineCount++;
       columnCount = 0;
     }
     // Comment mode is activated when the variable `currentComment` is not undefined.
     if (currentComment !== undefined) {
+      // console.log({ character });
       currentComment += character;
       continue;
     }
@@ -110,6 +116,7 @@ export function* tokenize(
       case LEXICON[Lexicon.Commenter]: {
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;
+        // console.log("COMMENTER", { lineCount, columnCount, nextToken });
         currentCommentColumn = columnCount;
         currentComment = "";
         break;
@@ -177,5 +184,8 @@ export function* tokenize(
       }
     }
   }
+  // Check for any lingering comments.
+  const nextComment = checkForComment();
+  if (nextComment !== null) yield nextComment;
   return makeToken(LEXICON[Lexicon.EOF]);
 }

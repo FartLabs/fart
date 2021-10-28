@@ -111,9 +111,7 @@ export class Builder {
     return BoC.join(topOfFile, ...this.blocks, bottomOfFile);
   }
 
-  public getType(
-    alias?: string,
-  ): string | undefined {
+  public getType(alias?: string): string | undefined {
     if (alias === undefined) return undefined;
     switch (alias) {
       case ReservedType.Number:
@@ -124,8 +122,11 @@ export class Builder {
         return this.typemap[ReservedType.Boolean];
       case ReservedType.Default:
         return this.typemap[ReservedType.Default];
+      case ReservedType.Omit:
+        return this.typemap[ReservedType.Omit];
       default: {
-        return alias.replace(OMIT_PATTERN, "void") ?? "";
+        return alias.replace(OMIT_PATTERN, this.typemap[ReservedType.Omit]) ??
+          "";
       }
     }
   }

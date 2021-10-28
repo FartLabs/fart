@@ -125,7 +125,13 @@ Deno.test("Omits valid code comments from results", () => {
   assertEquals(actual, expected);
 });
 
-Deno.test("Reflects comments by default", () => {
+Deno.test("Successfully parses one comment", () => {
+  const actual = [...tokenize(`; This is a comment`)];
+  const expected = [T.comment("This is a comment", 1, 1)];
+  assertEquals(actual, expected);
+});
+
+Deno.test("Includes comments by default", () => {
   const actual = tokenize(`type Thing {
   foo: number; This is a comment
 }`);

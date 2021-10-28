@@ -16,7 +16,9 @@ export class Token {
   get value(): string {
     switch (this.kind) {
       case Lexicon.Identifier:
+      case Lexicon.Comment: {
         return this.raw;
+      }
       case Lexicon.StringMarker:
       case Lexicon.StringMarker2:
       case Lexicon.StringMarker3:

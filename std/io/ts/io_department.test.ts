@@ -25,7 +25,7 @@ Deno.test("Returns empty string when no media can be found.", async () => {
   assertEquals(file, "");
 });
 
-Deno.test("Reads text file from file system successfully.", async () => {
+Deno.test("Reads text file from file system successfully with helper function.", async () => {
   const io = new IODepartment();
   const file = await io.readIfExists(TESTDATA_PATH);
   if (file === undefined) return;
@@ -39,7 +39,7 @@ Deno.test("Returns undefined when file does not exist.", async () => {
   assertEquals(file, "");
 });
 
-Deno.test("Reads text file from Internet successfully.", async () => {
+Deno.test("Reads text file from Internet successfully with helper function.", async () => {
   const io = new IODepartment();
   const file = await io.fetchIfValidURL(
     "https://github.com/EthanThatOneKid/fart/raw/main/std/io/testdata/pikachu.json",

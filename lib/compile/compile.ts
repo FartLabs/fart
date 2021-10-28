@@ -174,6 +174,12 @@ export async function compile(
 
   while (!curr.done) {
     switch (curr.value.kind) {
+      case Lexicon.Comment: {
+        const { value, line, column } = curr.value;
+        await builder.appendComment(value, line, column);
+        await nextToken();
+        break;
+      }
       case Lexicon.LoadDefiner: {
         const { value: filename } = await nextToken();
         const dependencyTokens = await nextTuple();

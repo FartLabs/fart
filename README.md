@@ -37,7 +37,7 @@ deno run --reload ex/pokemon/run.ts
 Try running the command below after cloning the repository.
 
 ```bash
-deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon.fart --reg=ts.deno --output=./ex/pokemon.ts
+deno run --allow-read --allow-write std/legacy_cli/run.ts ./ex/pokemon/mod.fart --reg=ts.deno --output=./ex/pokemon/mod.ts
 ```
 
 ### Fart Server 📡
