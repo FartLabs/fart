@@ -87,10 +87,13 @@ Deno.test("Successfully tokenizes nested syntax", () => {
   assertTokensEqual(actual, expected);
 });
 
-Deno.test("Omits comments from results", () => {
-  const actual = tokenize(`type Thing {
+Deno.test("Omits comments from results when asked", () => {
+  const actual = tokenize(
+    `type Thing {
   foo: number; This is a comment
-}`);
+}`,
+    /*omitComments=*/ true,
+  );
   const expected = [
     T.type_definer(1, 1),
     T.id("Thing", 1, 6),
@@ -104,9 +107,12 @@ Deno.test("Omits comments from results", () => {
 });
 
 Deno.test("Omits valid code comments from results", () => {
-  const actual = [...tokenize(`type Thing {
+  const actual = [...tokenize(
+    `type Thing {
   foo: number; bar: string
-}`)];
+}`,
+    /*omitComments=*/ true,
+  )];
   const expected = [
     T.type_definer(1, 1),
     T.id("Thing", 1, 6),
@@ -117,6 +123,23 @@ Deno.test("Omits valid code comments from results", () => {
     T.denester(3, 1),
   ];
   assertEquals(actual, expected);
+});
+
+Deno.test("Reflects comments by default", () => {
+  const actual = tokenize(`type Thing {
+  foo: number; This is a comment
+}`);
+  const expected = [
+    T.type_definer(1, 1),
+    T.id("Thing", 1, 6),
+    T.nester(1, 12),
+    T.id("foo", 2, 3),
+    T.setter(2, 6),
+    T.id("number", 2, 8),
+    T.comment("This is a comment", 2, 14),
+    T.denester(3, 1),
+  ];
+  assertTokensEqual(actual, expected);
 });
 
 Deno.test("Tokenizes a string literal", () => {

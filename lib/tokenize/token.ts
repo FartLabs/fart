@@ -84,7 +84,7 @@ export class Token {
       default: {
         if (validateIdentifier(raw)) return Lexicon.Identifier;
         else if (validateStringLiteral(raw)) return Lexicon.StringLiteral;
-        else return null;
+        else return Lexicon.Comment; // Invalid token is treated as comment.
       }
     }
   }
