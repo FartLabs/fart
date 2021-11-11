@@ -67,20 +67,18 @@ export function* tokenize(
   };
 
   const checkForComment = (): Token | null => {
+    let commentToken: Token | null = null;
     if (currentComment !== undefined && !omitComments) {
       const cleanedComment = currentComment.trim();
-      const commentToken = new Token(
+      commentToken = new Token(
         cleanedComment,
         lineCount,
         currentCommentColumn,
       );
-      currentComment = undefined;
-      currentCommentColumn = -1;
-      return commentToken;
     }
     currentComment = undefined;
     currentCommentColumn = -1;
-    return null;
+    return commentToken;
   };
 
   for (const character of content) {

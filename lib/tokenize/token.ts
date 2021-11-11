@@ -34,7 +34,7 @@ export class Token {
         if (this.kind !== null && LEXICON[this.kind] !== undefined) {
           return LEXICON[this.kind];
         }
-        throw new Error(`Invalid token`);
+        throw new Error(`Invalid token ${this}`);
       }
     }
   }

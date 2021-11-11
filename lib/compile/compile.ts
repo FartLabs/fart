@@ -9,6 +9,7 @@ export interface CompilationSettings {
   cartridge: Cart;
   typemap: TypeMap;
   indentation?: string;
+  implementationPathname?: string | null;
 }
 
 /**
@@ -21,6 +22,7 @@ export function validateCompilationSettings(
     cartridge: settings.cartridge,
     typemap: settings.typemap,
     indentation: settings.indentation ?? INDENT[Indent.Space2],
+    implementationPathname: settings.implementationPathname ?? null,
   };
 }
 
@@ -31,7 +33,12 @@ export async function compile(
   const { cartridge, typemap, indentation } = validateCompilationSettings(
     settings,
   );
-  const builder = new Builder(cartridge, typemap, indentation);
+  const builder = new Builder(
+    cartridge,
+    typemap,
+    indentation,
+    settings.implementationPathname,
+  );
 
   const it = tokenize(content);
   let curr: IteratorResult<Token, Token> = it.next();

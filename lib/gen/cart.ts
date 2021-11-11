@@ -10,38 +10,39 @@ export enum CartEventName {
   Comment = "comment",
 }
 
-interface FileStartDetail {
+interface CartEventDetail {
+  type: CartEventName;
+  code: BoC;
+  implementationPathname: string | null;
+  comments: string[];
+}
+
+interface FileStartDetail extends CartEventDetail {
   type: CartEventName.FileStart;
-  code: BoC;
 }
 
-interface StructCloseDetail {
+interface StructCloseDetail extends CartEventDetail {
   type: CartEventName.StructClose;
-  code: BoC;
 }
 
-interface FileEndDetail {
+interface FileEndDetail extends CartEventDetail {
   type: CartEventName.FileEnd;
-  code: BoC;
 }
 
-interface ImportDetail {
+interface ImportDetail extends CartEventDetail {
   type: CartEventName.Import;
-  code: BoC;
   source: string;
   dependencies: string[];
 }
 
-interface StructOpenDetail {
+interface StructOpenDetail extends CartEventDetail {
   type: CartEventName.StructOpen;
-  code: BoC;
   identifier: string;
   department: boolean;
 }
 
-interface SetPropertyDetail {
+interface SetPropertyDetail extends CartEventDetail {
   type: CartEventName.SetProperty;
-  code: BoC;
   identifier: string;
   department: boolean;
   value?: string;
@@ -59,20 +60,28 @@ interface CommentDetail {
 
 export type CartDispatch = {
   type: CartEventName.FileStart;
+  implementationPathname: string | null;
 } | {
   type: CartEventName.StructClose;
+  implementationPathname: string | null;
 } | {
   type: CartEventName.FileEnd;
+  implementationPathname: string | null;
 } | {
   type: CartEventName.Import;
+  implementationPathname: string | null;
   source: string;
   dependencies: string[];
+  comments: string[];
 } | {
   type: CartEventName.StructOpen;
+  implementationPathname: string | null;
   identifier: string;
   department: boolean;
+  comments: string[];
 } | {
   type: CartEventName.SetProperty;
+  implementationPathname: string | null;
   identifier: string;
   department: boolean;
   value?: string;
@@ -145,6 +154,7 @@ export class Cart {
       case CartEventName.FileStart: {
         result = (handler as CartHandler<CartEventName.FileStart>)({
           code,
+          comments: [],
           ...event,
         });
         break;
@@ -166,6 +176,7 @@ export class Cart {
       case CartEventName.SetProperty: {
         result = (handler as CartHandler<CartEventName.SetProperty>)({
           code,
+          comments: [],
           ...event,
         });
         break;
@@ -173,6 +184,7 @@ export class Cart {
       case CartEventName.StructClose: {
         result = (handler as CartHandler<CartEventName.StructClose>)({
           code,
+          comments: [],
           ...event,
         });
         break;
@@ -180,6 +192,7 @@ export class Cart {
       case CartEventName.FileEnd: {
         result = (handler as CartHandler<CartEventName.FileEnd>)({
           code,
+          comments: [],
           ...event,
         });
         break;
