@@ -1,21 +1,47 @@
-import { LEXICON, Lexicon } from "./lexicon.ts";
+import { Lexicon } from "./lexicon.ts";
+import {
+  checkIsIdentifier,
+  checkIsTextLiteral,
+  findInLexicon,
+} from "./utils.ts";
 
 export class Token {
   public kind: Lexicon | null = null;
-  public line: number = -1;
-  public column: number = -1;
 
   constructor(
     private raw: string,
-    line: number,
-    column: number,
+    public line = -1,
+    public column = -1,
     noCheck = false,
   ) {
-    this.line = line;
-    this.column = column;
     this.kind = noCheck ? Lexicon.Identifier : Token.getKindOf(raw);
   }
 
-  // https://github.com/EthanThatOneKid/fart/blob/c43f2333458b2cbc40d167610d87e2a2e3f89885/lib/tokenize/token.ts?_pjax=%23js-repo-pjax-container%2C%20div%5Bitemtype%3D%22http%3A%2F%2Fschema.org%2FSoftwareSourceCode%22%5D%20main%2C%20%5Bdata-pjax-container%5D#L48
-  static getKindOf(raw: string): Lexicon | null {}
+  is(kind: Lexicon | null): boolean {
+    return this.kind === kind;
+  }
+
+  toString() {
+    return this.value;
+  }
+
+  get value(): string {
+    switch (this.kind) {
+      case Lexicon.TextLiteral: {
+        // strips expected text markers from beginning and end of input string
+        return this.value.slice(1, this.value.length - 1);
+      }
+      default: {
+        return this.raw;
+      }
+    }
+  }
+
+  static getKindOf(raw: string): Lexicon {
+    const matchingKind = findInLexicon(raw);
+    if (matchingKind !== null) return matchingKind;
+    if (checkIsIdentifier(raw)) return Lexicon.Identifier;
+    if (checkIsTextLiteral(raw)) return Lexicon.TextLiteral;
+    return Lexicon.Unknown;
+  }
 }

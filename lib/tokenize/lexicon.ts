@@ -1,4 +1,3 @@
-// https://github.com/EthanThatOneKid/fart/blob/main/lib/consts/lexicon.ts
 export enum Lexicon {
   Identifier,
   StructOpener,
@@ -8,8 +7,10 @@ export enum Lexicon {
   TypeDefiner,
   PropertyDefiner,
   PropertyOptionalMarker,
+  PropertyOptionalDefiner,
   Modifier,
   TextWrapper,
+  TextLiteral,
   Comment,
   CommentOpener,
   CommentCloser,
@@ -18,7 +19,7 @@ export enum Lexicon {
 }
 
 export const LEXICON = new Map<Lexicon, string | string[] | null>([
-  [Lexicon.Identifier,  null],
+  [Lexicon.Identifier, null],
   [Lexicon.StructOpener, "{"],
   [Lexicon.StructCloser, "}"],
   [Lexicon.TupleOpener, "("],
@@ -26,11 +27,24 @@ export const LEXICON = new Map<Lexicon, string | string[] | null>([
   [Lexicon.TypeDefiner, ["type", "struct", "interface"]],
   [Lexicon.PropertyDefiner, ":"],
   [Lexicon.PropertyOptionalMarker, "?"],
-  [Lexicon.Modifier, ["%", "mod"]],
+  [Lexicon.PropertyOptionalDefiner, "?:"],
+  [Lexicon.Modifier, "%"],
   [Lexicon.TextWrapper, ['"', "'", "`"]],
+  [Lexicon.TextLiteral, null],
   [Lexicon.Comment, [";", "//"]],
   [Lexicon.CommentOpener, "/*"],
   [Lexicon.CommentCloser, "*/"],
   [Lexicon.Unknown, null],
   [Lexicon.EOF, null],
+]);
+
+// freezing LEXICON map into place, courtesy of https://stackoverflow.com/a/35776333
+LEXICON.set = function (key) {
+  throw new Error("Can't add property " + key + ", map is not extensible");
+};
+LEXICON.delete = function (key) {
+  throw new Error("Can't delete property " + key + ", map is frozen");
+};
+LEXICON.clear = function () {
+  throw new Error("Can't clear map, map is frozen");
 };
