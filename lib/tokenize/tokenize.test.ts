@@ -261,9 +261,51 @@ Deno.test("tokenizes type definition successfully given minimized input", () => 
     T.id("fn", 1, 21),
     T.mod(1, 23),
     T.open_tuple(1, 24),
-    T.id("input", 1, 22),
-    T.close_tuple(1, 29),
-    T.denest(1, 1),
+    T.id("input", 1, 25),
+    T.setter_1(1, 30),
+    T.id("string", 1, 31),
+    T.separator(1, 37),
+    T.id("boolean", 1, 38),
+    T.close_tuple(1, 45),
+    T.denest(1, 46),
+  ];
+  const reality = [...tokenize(input)];
+  assertEquals(expectation, reality);
+});
+
+Deno.test("tokenizes type definition successfully given expanded input", () => {
+  const input = `; here we will define a method with an argument 'input'
+; of type string a and return type of type boolean array
+spec Example
+{
+  method: fn % (
+    input: string,   ; here is the argument type
+    array % boolean, ; here is the return type
+  )
+}`;
+  const expectation = [
+    T.comment("; here we will define a method with an argument 'input'", 1, 1),
+    T.comment("; of type string a and return type of type boolean array", 2, 1),
+    T.spec(3, 1),
+    T.id("Example", 3, 6),
+    T.nest(4, 1),
+    T.id("method", 5, 3),
+    T.setter_1(5, 9),
+    T.id("fn", 5, 11),
+    T.mod(5, 14),
+    T.open_tuple(5, 16),
+    T.id("input", 6, 5),
+    T.setter_1(6, 10),
+    T.id("string", 6, 12),
+    T.separator(6, 18),
+    T.comment("; here is the argument type", 6, 22),
+    T.id("array", 7, 5),
+    T.mod(7, 11),
+    T.id("boolean", 7, 13),
+    T.separator(7, 20),
+    T.comment("; here is the return type", 7, 22),
+    T.close_tuple(8, 3),
+    T.denest(9, 1),
   ];
   const reality = [...tokenize(input)];
   assertEquals(expectation, reality);

@@ -116,11 +116,12 @@ export function* tokenize(
       memo.yieldingMultilineComment && memo.prevChar === "*" &&
       memo.char === "/"
     ) {
+      memo.substr += memo.char;
       const commentLines = memo.substr.split("\n").length - 1;
       yield new Token(
         memo.substr,
         memo.line - commentLines,
-        memo.oldColumn ?? 1,
+        (memo.oldColumn ?? 2) - 1,
       );
       memo.prevSubstr = memo.substr;
       memo.substr = INITIAL_TOKENIZATION_STATE.substr;
