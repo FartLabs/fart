@@ -9,10 +9,11 @@ import { findInLexicon } from "./utils.ts";
 interface TokenizationState {
   char: null | string;
   prevChar: null | string;
-  substr: string;
+  substr: string; // contains the current keyword or identifier being tokenized
   prevSubstr: string;
   line: number;
   column: number;
+  oldColumn: number | null;
   yieldingChar: boolean; // if true, yields character as token at end of iteration
   yieldingSubstr: boolean; // if true, yields substring as token at end of iteration
   yieldingInlineComment: boolean; // if true, yields substring as comment at end of line
@@ -29,6 +30,7 @@ const INITIAL_TOKENIZATION_STATE: Readonly<TokenizationState> = Object.freeze({
   prevSubstr: "",
   line: 1,
   column: 1,
+  oldColumn: null,
   yieldingChar: false,
   yieldingSubstr: false,
   yieldingInlineComment: false,
@@ -48,6 +50,11 @@ export function* tokenize(
     memo.yieldingSubstr = INITIAL_TOKENIZATION_STATE.yieldingSubstr;
     memo.breakingLine = INITIAL_TOKENIZATION_STATE.breakingLine;
 
+    // this variable keeps track of whether or not all characters are
+    // included when building the substring or not.
+    const catchAllChars = memo.yieldingInlineComment ||
+      memo.yieldingMultilineComment;
+
     switch (findInLexicon(memo.char, lex)) {
       // when a line break occurs, increment the line count, set column back to initial,
       // and the current substring should become a token.
@@ -60,7 +67,8 @@ export function* tokenize(
       case Lexicon.StructCloser:
       case Lexicon.TupleOpener:
       case Lexicon.TupleCloser:
-      case Lexicon.PropertyDefiner: {
+      case Lexicon.PropertyDefiner:
+      case Lexicon.Separator: {
         memo.yieldingChar = true;
         memo.yieldingSubstr = true;
         break;
@@ -71,22 +79,22 @@ export function* tokenize(
         break;
       }
       default: {
-        memo.substr += memo.char;
+        if (!catchAllChars) memo.substr += memo.char;
         break;
       }
     }
 
     // yield and reset substring if substring is to be yielded
-    if (memo.yieldingSubstr && memo.substr.length > 0) {
+    if (memo.yieldingSubstr && memo.substr.length > 0 && !catchAllChars) {
       yield new Token(memo.substr, memo.line, memo.column - memo.substr.length);
       memo.prevSubstr = memo.substr;
       memo.substr = INITIAL_TOKENIZATION_STATE.substr;
     }
 
     // if the current character is to be yielded, it must be yielded
-    // _after_ the substring.
-    if (memo.yieldingChar && memo.char !== null) {
-      // if a '?' comes before a ':', then they are combined and yielded as a `?:`.
+    // _after_ the substring
+    if (memo.yieldingChar && memo.char !== null && !catchAllChars) {
+      // if a '?' comes before a ':', then they are combined and yielded as a `?:`
       if (
         findInLexicon(memo.prevChar, lex) === Lexicon.PropertyOptionalMarker &&
         findInLexicon(memo.char, lex) === Lexicon.PropertyDefiner
@@ -97,9 +105,48 @@ export function* tokenize(
       }
     }
 
+    // if a '/*' occurs, then multiline comment mode is enabled
+    if (memo.prevChar === "/" && memo.char === "*") {
+      memo.yieldingMultilineComment = true;
+      memo.oldColumn = memo.column;
+      // if a '*/' occurs, then multiline comment mode is disabled
+    } else if (
+      memo.yieldingMultilineComment && memo.prevChar === "*" &&
+      memo.char === "/"
+    ) {
+      const commentLines = memo.substr.split("\n").length - 1;
+      yield new Token(
+        memo.substr,
+        memo.line - commentLines,
+        memo.oldColumn ?? 1,
+      );
+      memo.prevSubstr = memo.substr;
+      memo.substr = INITIAL_TOKENIZATION_STATE.substr;
+      memo.oldColumn = null;
+      memo.yieldingMultilineComment = false;
+      // if a ';' occurs, then inline comment mode is enabled
+    } else if (memo.char === ";") {
+      memo.yieldingInlineComment = true;
+      console.log("INLINE", { memo });
+    }
+
+    // if in inline/multiline comment mode or string literal mode, all
+    // characters are unconditionally included into the substring
+    if (memo.yieldingInlineComment || memo.yieldingMultilineComment) {
+      memo.substr += memo.char;
+    }
+
     // when a line is broken, set the column count to it's initial
-    // value and increment the line count by one.
+    // value and increment the line count by one
     if (memo.breakingLine) {
+      // if a line is broken in inline comment mode, then the comment
+      // is yielded
+      if (memo.yieldingInlineComment) {
+        yield new Token(memo.substr, memo.line - memo.substr.length, 0);
+        memo.prevSubstr = memo.substr;
+        memo.substr = INITIAL_TOKENIZATION_STATE.substr;
+        memo.yieldingInlineComment = false;
+      }
       memo.column = INITIAL_TOKENIZATION_STATE.column - 1;
       memo.line++;
     }
