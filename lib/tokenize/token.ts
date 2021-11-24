@@ -1,4 +1,4 @@
-import { Lexicon } from "./lexicon.ts";
+import { LEXICON, Lexicon } from "./lexicon.ts";
 import {
   checkIsIdentifier,
   checkIsTextLiteral,
@@ -38,7 +38,7 @@ export class Token {
   }
 
   static getKindOf(raw: string): Lexicon {
-    const matchingKind = findInLexicon(raw);
+    const matchingKind = findInLexicon(raw, LEXICON);
     if (matchingKind !== null) return matchingKind;
     if (checkIsIdentifier(raw)) return Lexicon.Identifier;
     if (checkIsTextLiteral(raw)) return Lexicon.TextLiteral;

@@ -14,17 +14,21 @@ export enum Lexicon {
   Comment,
   CommentOpener,
   CommentCloser,
+  Whitespace,
   Unknown,
   EOF,
 }
 
-export const LEXICON = new Map<Lexicon, string | string[] | null>([
+export const LEXICON: ReadonlyMap<Lexicon, string | string[] | null> = new Map<
+  Lexicon,
+  string | string[] | null
+>([
   [Lexicon.Identifier, null],
   [Lexicon.StructOpener, "{"],
   [Lexicon.StructCloser, "}"],
   [Lexicon.TupleOpener, "("],
   [Lexicon.TupleCloser, ")"],
-  [Lexicon.TypeDefiner, ["type", "struct", "interface"]],
+  [Lexicon.TypeDefiner, ["type", "spec"]],
   [Lexicon.PropertyDefiner, ":"],
   [Lexicon.PropertyOptionalMarker, "?"],
   [Lexicon.PropertyOptionalDefiner, "?:"],
@@ -34,17 +38,18 @@ export const LEXICON = new Map<Lexicon, string | string[] | null>([
   [Lexicon.Comment, [";", "//"]],
   [Lexicon.CommentOpener, "/*"],
   [Lexicon.CommentCloser, "*/"],
+  [Lexicon.Whitespace, " "],
   [Lexicon.Unknown, null],
-  [Lexicon.EOF, null],
+  [Lexicon.EOF, "\n"],
 ]);
 
-// freezing LEXICON map into place, courtesy of https://stackoverflow.com/a/35776333
-LEXICON.set = function (key) {
-  throw new Error("Can't add property " + key + ", map is not extensible");
+// force-freezing LEXICON map into place, courtesy of https://stackoverflow.com/a/35776333
+(LEXICON as Map<unknown, unknown>).set = function (key) {
+  throw new Error(`Can't add property ${key}, map is not extensible`);
 };
-LEXICON.delete = function (key) {
-  throw new Error("Can't delete property " + key + ", map is frozen");
+(LEXICON as Map<unknown, unknown>).delete = function (key) {
+  throw new Error(`Can't delete property ${key}, map is frozen`);
 };
-LEXICON.clear = function () {
+(LEXICON as Map<unknown, unknown>).clear = function () {
   throw new Error("Can't clear map, map is frozen");
 };

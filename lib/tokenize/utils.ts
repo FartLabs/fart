@@ -1,8 +1,11 @@
-import { LEXICON, Lexicon } from "./lexicon.ts";
+import { Lexicon } from "./lexicon.ts";
 
-export const findInLexicon = (raw: string): Lexicon | null => {
-  for (const [kind, value] of LEXICON) {
-    if ((Array.isArray(value) && value.includes(raw) || (raw === value))) {
+export const findInLexicon = (
+  raw: string,
+  lex: ReadonlyMap<Lexicon, string | string[] | null>,
+): Lexicon | null => {
+  for (const [kind, value] of lex) {
+    if (Array.isArray(value) && value.includes(raw) || (raw === value)) {
       return kind;
     }
   }
