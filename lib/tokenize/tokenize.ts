@@ -21,7 +21,7 @@ interface TokenizationState {
   breakingLine: boolean; // if true, updates line and column counts at end of iteration
 }
 
-type FartTokenGenerator = Generator<Token, undefined, undefined | Token>;
+type FartTokenGenerator = Generator<Token, undefined, string | undefined>;
 
 const INITIAL_TOKENIZATION_STATE: Readonly<TokenizationState> = Object.freeze({
   char: null,
@@ -68,6 +68,7 @@ export function* tokenize(
       case Lexicon.TupleOpener:
       case Lexicon.TupleCloser:
       case Lexicon.PropertyDefiner:
+      case Lexicon.Modifier:
       case Lexicon.Separator: {
         memo.yieldingChar = true;
         memo.yieldingSubstr = true;
@@ -109,6 +110,7 @@ export function* tokenize(
     if (memo.prevChar === "/" && memo.char === "*") {
       memo.yieldingMultilineComment = true;
       memo.oldColumn = memo.column;
+      memo.substr = memo.substr.slice(0, memo.substr.length - 1); // offset substring
       // if a '*/' occurs, then multiline comment mode is disabled
     } else if (
       memo.yieldingMultilineComment && memo.prevChar === "*" &&
@@ -127,13 +129,7 @@ export function* tokenize(
       // if a ';' occurs, then inline comment mode is enabled
     } else if (memo.char === ";") {
       memo.yieldingInlineComment = true;
-      console.log("INLINE", { memo });
-    }
-
-    // if in inline/multiline comment mode or string literal mode, all
-    // characters are unconditionally included into the substring
-    if (memo.yieldingInlineComment || memo.yieldingMultilineComment) {
-      memo.substr += memo.char;
+      memo.substr = memo.substr.slice(0, memo.substr.length - 1); // offset substring
     }
 
     // when a line is broken, set the column count to it's initial
@@ -142,13 +138,23 @@ export function* tokenize(
       // if a line is broken in inline comment mode, then the comment
       // is yielded
       if (memo.yieldingInlineComment) {
-        yield new Token(memo.substr, memo.line - memo.substr.length, 0);
+        yield new Token(
+          memo.substr,
+          memo.line,
+          memo.column - memo.substr.length,
+        );
         memo.prevSubstr = memo.substr;
         memo.substr = INITIAL_TOKENIZATION_STATE.substr;
         memo.yieldingInlineComment = false;
       }
       memo.column = INITIAL_TOKENIZATION_STATE.column - 1;
       memo.line++;
+    }
+
+    // if in inline/multiline comment mode or string literal mode, all
+    // characters are unconditionally included into the substring
+    if (memo.yieldingInlineComment || memo.yieldingMultilineComment) {
+      memo.substr += memo.char;
     }
 
     // column count is incremented per iteration

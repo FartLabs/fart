@@ -187,15 +187,15 @@ Deno.test("yields a method expecting a named input and returning a boolean", () 
 Deno.test("yields each comment as a special token", () => {
   const input = `; this comment is above \`Example\`
 spec Example {
-  ; this comment is about \`method\`
+  ; this comment is above \`method\`
   method: fn % (boolean)
 }`;
   const expectation = [
-    T.comment("; this comment is about `Example`", 1, 1),
+    T.comment("; this comment is above `Example`", 1, 1),
     T.spec(2, 1),
     T.id("Example", 2, 6),
     T.nest(2, 14),
-    T.comment("; this comment is about `method`", 3, 3),
+    T.comment("; this comment is above `method`", 3, 3),
     T.id("method", 4, 3),
     T.setter_1(4, 9),
     T.id("fn", 4, 11),
@@ -215,7 +215,7 @@ Deno.test("yields each multiline comment as a special token", () => {
  */
 spec Example {
   /**
-   * this comment is about \`method\`
+   * this comment is above \`method\`
    */
   method: fn % (boolean)
 }`;
@@ -232,7 +232,7 @@ spec Example {
     T.nest(4, 14),
     T.multiline_comment(
       `/**
-   * this comment is about \`method\`
+   * this comment is above \`method\`
    */`,
       5,
       3,
