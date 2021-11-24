@@ -15,6 +15,8 @@ interface TokenizationState {
   column: number;
   yieldingChar: boolean; // if true, yields character as token at end of iteration
   yieldingSubstr: boolean; // if true, yields substring as token at end of iteration
+  yieldingInlineComment: boolean; // if true, yields substring as comment at end of line
+  yieldingMultilineComment: boolean; // if true, yields substring as comment at end of comment (*/)
   breakingLine: boolean; // if true, updates line and column counts at end of iteration
 }
 
@@ -29,6 +31,8 @@ const INITIAL_TOKENIZATION_STATE: Readonly<TokenizationState> = Object.freeze({
   column: 1,
   yieldingChar: false,
   yieldingSubstr: false,
+  yieldingInlineComment: false,
+  yieldingMultilineComment: false,
   breakingLine: false,
 });
 
@@ -82,7 +86,15 @@ export function* tokenize(
     // if the current character is to be yielded, it must be yielded
     // _after_ the substring.
     if (memo.yieldingChar && memo.char !== null) {
-      yield new Token(memo.char, memo.line, memo.column);
+      // if a '?' comes before a ':', then they are combined and yielded as a `?:`.
+      if (
+        findInLexicon(memo.prevChar, lex) === Lexicon.PropertyOptionalMarker &&
+        findInLexicon(memo.char, lex) === Lexicon.PropertyDefiner
+      ) {
+        yield new Token(memo.prevChar + memo.char, memo.line, memo.column - 1);
+      } else {
+        yield new Token(memo.char, memo.line, memo.column);
+      }
     }
 
     // when a line is broken, set the column count to it's initial

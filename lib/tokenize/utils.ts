@@ -1,9 +1,10 @@
 import { Lexicon } from "./lexicon.ts";
 
 export const findInLexicon = (
-  raw: string,
+  raw: string | null,
   lex: ReadonlyMap<Lexicon, string | string[] | null>,
 ): Lexicon | null => {
+  if (raw === null) return null;
   for (const [kind, value] of lex) {
     if (Array.isArray(value) && value.includes(raw) || (raw === value)) {
       return kind;
@@ -19,3 +20,9 @@ export const checkIsTextLiteral = (candidate: string): boolean =>
   /^\`(.*?)\`$/g.test(candidate) ||
   /^\'(.*?)\'$/g.test(candidate) ||
   /^\"(.*?)\"$/g.test(candidate);
+
+export const checkIsInlineComment = (candidate: string): boolean =>
+  /^;(.*?)$/.test(candidate);
+
+export const checkIsMultilineComment = (candidate: string): boolean =>
+  /^\/\*(.*?)\*\/$/.test(candidate);

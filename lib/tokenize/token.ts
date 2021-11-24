@@ -1,6 +1,8 @@
 import { LEXICON, Lexicon } from "./lexicon.ts";
 import {
   checkIsIdentifier,
+  checkIsInlineComment,
+  checkIsMultilineComment,
   checkIsTextLiteral,
   findInLexicon,
 } from "./utils.ts";
@@ -42,6 +44,8 @@ export class Token {
     if (matchingKind !== null) return matchingKind;
     if (checkIsIdentifier(raw)) return Lexicon.Identifier;
     if (checkIsTextLiteral(raw)) return Lexicon.TextLiteral;
+    if (checkIsInlineComment(raw)) return Lexicon.InlineComment;
+    if (checkIsMultilineComment(raw)) return Lexicon.MultilineComment;
     return Lexicon.Unknown;
   }
 }
