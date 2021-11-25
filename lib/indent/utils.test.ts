@@ -10,7 +10,7 @@ import { getCachedIndent } from "./utils.ts";
 
 const CACHE_BENCH_ID = "CACHE_TEST";
 const COMPUTED_BENCH_ID = "COMPUTED_TEST";
-const BENCH_RUNS = 100; // the higher the number, the more accurate the benchmark results
+const BENCH_RUNS = 1000; // the higher the number, the more accurate the benchmark results
 
 /**
  * @see https://deno.land/std@0.63.0/testing#benching
@@ -49,10 +49,10 @@ bench({
 
 Deno.test("benchmarking the cache algorithm vs the `repeat` method", async () => {
   const { results } = await runBenchmarks({ silent: true });
-  const cacheResults = results.find(({ name }) =>
+  const cacheResults = results.find(({ name }: BenchmarkResult) =>
     name === CACHE_BENCH_ID
   ) as BenchmarkResult;
-  const computedResults = results.find(({ name }) =>
+  const computedResults = results.find(({ name }: BenchmarkResult) =>
     name === COMPUTED_BENCH_ID
   ) as BenchmarkResult;
   const speedBoost = computedResults.measuredRunsAvgMs /
