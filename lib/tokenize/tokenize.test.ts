@@ -2,7 +2,6 @@ import { T } from "./t.ts";
 import { Token } from "./token.ts";
 import { tokenize } from "./tokenize.ts";
 import { assertEquals } from "../../deps/std/testing.ts";
-// import { LEXICON, Lexicon } from "./lexicon.ts";
 
 Deno.test("yields no tokens given an empty string", () => {
   const input = "";

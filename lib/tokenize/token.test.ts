@@ -1,1 +1,4 @@
-// TODO: Make tests for Token class and getKindOf static function.
+// TODO(@ethandavidson): test `is` method
+// TODO(@ethandavidson): test `getKindOf` method
+// TODO(@ethandavidson): test `toString` method
+// TODO(@ethandavidson): test `value` method
