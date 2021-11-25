@@ -19,7 +19,9 @@ export enum Lexicon {
   EOF,
 }
 
-export const LEXICON: ReadonlyMap<Lexicon, string | string[] | null> = new Map<
+export type LexiconType = ReadonlyMap<Lexicon, string | string[] | null>;
+
+export const LEXICON: LexiconType = new Map<
   Lexicon,
   string | string[] | null
 >([

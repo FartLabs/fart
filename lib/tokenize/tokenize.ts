@@ -1,4 +1,4 @@
-import { LEXICON, Lexicon } from "./lexicon.ts";
+import { LEXICON, Lexicon, LexiconType } from "./lexicon.ts";
 import { Token } from "./token.ts";
 import { findInLexicon } from "./utils.ts";
 
@@ -40,7 +40,7 @@ const INITIAL_TOKENIZATION_STATE: Readonly<TokenizationState> = Object.freeze({
 
 export function* tokenize(
   input: string,
-  lex: ReadonlyMap<Lexicon, string | string[] | null> = LEXICON,
+  lex: LexiconType = LEXICON,
 ): FartTokenGenerator {
   const memo = { ...INITIAL_TOKENIZATION_STATE };
 
