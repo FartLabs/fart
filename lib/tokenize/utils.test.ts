@@ -77,15 +77,15 @@ Deno.test("correctly checks identifier (hyphens are bad)", () => {
   assert(!checkIsIdentifier("hyphens-are-bad"));
 });
 
-Deno.test("correctly checks text literal (with '`')", () => {
+Deno.test("correctly checks text literal (wrapped in '`')", () => {
   assert(checkIsTextLiteral("`example`"));
 });
 
-Deno.test('correctly checks text literal (with "\'")', () => {
+Deno.test('correctly checks text literal (wrapped in "\'")', () => {
   assert(checkIsTextLiteral("'example'"));
 });
 
-Deno.test("correctly checks text literal (with '\"')", () => {
+Deno.test("correctly checks text literal (wrapped in '\"')", () => {
   assert(checkIsTextLiteral('"example"'));
 });
 

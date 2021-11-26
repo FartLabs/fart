@@ -21,7 +21,11 @@ interface TokenizationState {
   breakingLine: boolean; // if true, updates line and column counts at end of iteration
 }
 
-type FartTokenGenerator = Generator<Token, undefined, string | undefined>;
+export type FartTokenGenerator = Generator<
+  Token,
+  undefined,
+  string | undefined
+>;
 
 const INITIAL_TOKENIZATION_STATE: Readonly<TokenizationState> = Object.freeze({
   char: null,
