@@ -1,15 +1,6 @@
 import { assertEquals } from "../../deps/std/testing.ts";
 import { INDENT, Indent } from "./indent.ts";
 
-// TODO(@ethanthatonekid): generate tests for the length of each indentation level
-
-// let result = "";
-// for (let i = 1; i <= 16; i++) {
-//   result += `Deno.test("cache of Indent.Tab${i} equals ${i} tab", () => {
-//   assertEquals(INDENT[Indent.Tab${i}], "\t".repeat(${i}));
-// });`;
-// }
-
 Deno.test("cache of Indent.Tab1 equals 1 tab", () => {
   assertEquals(INDENT[Indent.Tab1], "\t".repeat(1));
 });

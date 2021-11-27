@@ -4,7 +4,8 @@ import { TextBuilder } from "../text_builder/mod.ts";
 import type { FartTokenGenerator } from "../tokenize/mod.ts";
 
 export interface FartOptions {
-  targetLanguage: "ts" | "go" | "json" | "html";
+  targetLanguage: string; // "ts" | "go"
+  sourceLanguage: string; // "fart" | "fart-pb" | "fart-go"
   codeCartridges: Cartridge[];
   indentation: number;
   preserveComments: boolean;
@@ -12,13 +13,13 @@ export interface FartOptions {
 
 interface TranspilationContext {
   tokenizer: FartTokenGenerator | null;
-  builder: TextBuilder;
+  builder: TextBuilder | null;
   prevTokens: Token[];
 }
 
 const INITIAL_TRANSPILATION_CONTEXT: TranspilationContext = Object.freeze({
   tokenizer: null,
-  builder: new TextBuilder(),
+  builder: null,
   prevTokens: [],
 });
 
@@ -32,5 +33,6 @@ export const transpile = async (
 ): Promise<string> => {
   const ctx = initializeTranspilationContext();
   ctx.tokenizer = tokenize(code);
+
   return "";
 };
