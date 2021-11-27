@@ -11,9 +11,19 @@ export enum CartridgeEvent {
   FileEnd = "file_end",
 }
 
+export type CartridgeEventReturnType = (
+  | void
+  | Promise<void>
+  | string
+  | Promise<string>
+  | null
+);
+
 export interface CartridgeEventContext<T extends CartridgeEvent> {
   type: T;
-  code: { append: (code: string) => void };
+  code: {
+    append: (code: string) => CartridgeEventReturnType;
+  };
   tokens: Token[];
   data: T extends CartridgeEvent.InlineComment ? { comments: string[] }
     : T extends CartridgeEvent.MultilineComment ? { comments: string[] }
@@ -32,7 +42,7 @@ export interface CartridgeEventContext<T extends CartridgeEvent> {
  */
 export type CartridgeHandler<T extends CartridgeEvent> = (
   event: CartridgeEventContext<T>,
-) => void | Promise<void>;
+) => CartridgeEventReturnType;
 
 export interface CartridgeHandlerMap {
   [CartridgeEvent.FileStart]?: CartridgeHandler<CartridgeEvent.FileStart>;

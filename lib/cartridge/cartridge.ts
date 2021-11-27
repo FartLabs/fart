@@ -1,4 +1,4 @@
-import { CartridgeEvent } from "./cartridge_event.ts";
+import { CartridgeEvent, CartridgeEventReturnType } from "./cartridge_event.ts";
 import type {
   CartridgeEventContext,
   CartridgeHandler,
@@ -14,35 +14,35 @@ export class Cartridge {
     private handlers: CartridgeHandlerMap = {},
   ) {}
 
-  addEventListener(
+  public addEventListener(
     name: CartridgeEvent.FileStart,
     handler: CartridgeHandler<CartridgeEvent.FileStart>,
   ): void;
-  addEventListener(
+  public addEventListener(
     name: CartridgeEvent.InlineComment,
     handler: CartridgeHandler<CartridgeEvent.InlineComment>,
   ): void;
-  addEventListener(
+  public addEventListener(
     name: CartridgeEvent.MultilineComment,
     handler: CartridgeHandler<CartridgeEvent.MultilineComment>,
   ): void;
-  addEventListener(
+  public addEventListener(
     name: CartridgeEvent.Load,
     handler: CartridgeHandler<CartridgeEvent.Load>,
   ): void;
-  addEventListener(
+  public addEventListener(
     name: CartridgeEvent.StructOpen,
     handler: CartridgeHandler<CartridgeEvent.StructOpen>,
   ): void;
-  addEventListener(
+  public addEventListener(
     name: CartridgeEvent.SetProperty,
     handler: CartridgeHandler<CartridgeEvent.StructClose>,
   ): void;
-  addEventListener(
+  public addEventListener(
     name: CartridgeEvent.FileEnd,
     handler: CartridgeHandler<CartridgeEvent.FileEnd>,
   ): void;
-  addEventListener(
+  public addEventListener(
     name: CartridgeEvent,
     // deno-lint-ignore no-explicit-any
     handler: any,
@@ -53,10 +53,22 @@ export class Cartridge {
   /**
    * `on` is an alias for `addEventListener`
    */
-  on = this.addEventListener.bind(this);
+  public on = this.addEventListener.bind(this);
 
-  removeEventListener(name: CartridgeEvent) {
+  public removeEventListener(name: CartridgeEvent) {
     delete this.handlers[name];
+  }
+
+  public async dispatch<T extends CartridgeEvent>(
+    name: CartridgeEvent,
+    ctx: CartridgeEventContext<T>,
+  ): Promise<string | null | void> {
+    const handleEvent = this.handlers[name] as CartridgeHandler<T>;
+    if (handleEvent === undefined) return null;
+    const executionResult = handleEvent(ctx);
+    return executionResult instanceof Promise
+      ? await executionResult
+      : executionResult;
   }
 
   // TODO(@ethanthatonekid): add a `dispatch` method

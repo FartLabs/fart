@@ -1,7 +1,8 @@
-import { CodeBlock } from "./code_block/mod.ts";
+import { CodeBlock } from "../code_block/mod.ts";
 import { Indent, IndentOption } from "../indent/mod.ts";
 import { Cartridge, CartridgeEvent } from "../cartridge/mod.ts";
 import { Token } from "../tokenize/mod.ts";
+import { makeFileStartEventContext } from "./utils.ts";
 
 export class TextBuilder {
   private blocks: CodeBlock[];
@@ -18,10 +19,14 @@ export class TextBuilder {
    * @todo @ethanthatonekid complete this method
    * @see https://github.com/EthanThatOneKid/fart/blob/c43f233345/lib/gen/builder.ts#L20
    */
-  // deno-lint-ignore no-unused-vars
-  append(event: CartridgeEvent, tokens: Token[]): void {
+  async append(event: CartridgeEvent, tokens: Token[]): Promise<void> {
     switch (event) {
       case CartridgeEvent.FileStart: {
+        const code = await this.cartridge.dispatch(
+          CartridgeEvent.FileStart,
+          makeFileStartEventContext(this.currentBlock, tokens),
+        );
+        if (typeof code === "string") this.currentBlock.append(code);
         break;
       }
       case CartridgeEvent.InlineComment: {

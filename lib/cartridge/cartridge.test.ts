@@ -7,6 +7,9 @@ import { CartridgeEvent } from "./cartridge_event.ts";
  */
 Deno.test("hello world", () => {
   const cartridge = new Cartridge();
+  cartridge.on(CartridgeEvent.Load, (event) => {
+    event.data;
+  });
   cartridge.on(CartridgeEvent.FileStart, console.log);
   assertEquals(1, 1);
 });
