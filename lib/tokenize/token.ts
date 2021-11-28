@@ -31,7 +31,13 @@ export class Token {
     switch (this.kind) {
       case Lexicon.TextLiteral: {
         // strips expected text markers from beginning and end of input string
-        return this.value.slice(1, this.value.length - 1);
+        return this.raw.slice(1, this.value.length - 1);
+      }
+      case Lexicon.InlineComment: {
+        return this.raw.slice(1).trim();
+      }
+      case Lexicon.MultilineComment: {
+        return this.raw.slice(2, this.raw.length - 2).trim();
       }
       default: {
         return this.raw;

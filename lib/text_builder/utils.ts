@@ -20,19 +20,17 @@ export const cleanComment = (commentToken: Token): string[] => {
       const rawComment = commentToken.value;
       const lineBreakIndex = rawComment.indexOf("\n");
       const inlineCommentContent = rawComment
-        .slice(
-          1,
-          lineBreakIndex > -1 ? lineBreakIndex : rawComment.length,
-        )
+        .slice(0, lineBreakIndex > -1 ? lineBreakIndex : rawComment.length)
         .trim();
       trimmedCommentLines.push(inlineCommentContent);
       break;
     }
     case Lexicon.MultilineComment: {
-      const rawCommentLines = commentToken.value.slice(2, -2).split("\n");
-      rawCommentLines.forEach((rawCommentLine) =>
-        trimmedCommentLines.push(rawCommentLine.trim())
-      );
+      const rawCommentLines = commentToken.value.split("\n");
+      rawCommentLines.forEach((rawCommentLine) => {
+        // TODO: push only if the line is not a blank edge
+        trimmedCommentLines.push(rawCommentLine.trim());
+      });
       break;
     }
   }
