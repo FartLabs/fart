@@ -4,4 +4,5 @@ export type {
   CartridgeEventContext,
   CartridgeHandler,
   CartridgeHandlerMap,
+  PropertyDefinition,
 } from "./cartridge_event.ts";

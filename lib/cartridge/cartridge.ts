@@ -70,7 +70,4 @@ export class Cartridge {
       ? await executionResult
       : executionResult;
   }
-
-  // TODO(@ethanthatonekid): add a `dispatch` method
-  // @see <https://github.com/EthanThatOneKid/fart/blob/c43f233345/lib/gen/cart.ts#L120>
 }

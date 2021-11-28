@@ -19,19 +19,30 @@ export type CartridgeEventReturnType = (
   | null
 );
 
+export interface PropertyDefinition {
+  modifier?: string;
+  struct?: Record<string, PropertyDefinition>;
+  tuple?: Array<{
+    label?: string;
+    value: PropertyDefinition;
+  }>;
+}
+
 export interface CartridgeEventContext<T extends CartridgeEvent> {
   type: T;
-  code: {
-    append: (code: string) => CartridgeEventReturnType;
-  };
+  code: { append: (code: string) => CartridgeEventReturnType };
   tokens: Token[];
   data: T extends CartridgeEvent.InlineComment ? { comments: string[] }
     : T extends CartridgeEvent.MultilineComment ? { comments: string[] }
-    : T extends CartridgeEvent.Load ? { comments: string[] }
+    : T extends CartridgeEvent.Load
+      ? { comments: string[]; dependencies: string[]; source: string }
     : T extends CartridgeEvent.StructOpen
       ? { comments: string[]; name?: string } // undefined name implies anonymous struct
-    : T extends CartridgeEvent.SetProperty
-      ? { comments: string[]; name: string; value: string }
+    : T extends CartridgeEvent.SetProperty ? ({
+      comments: string[];
+      name: string;
+      definition: PropertyDefinition;
+    })
     : null;
 }
 
