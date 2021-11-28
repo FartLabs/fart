@@ -77,19 +77,19 @@ Deno.test("correctly checks identifier (hyphens are bad)", () => {
   assert(!checkIsIdentifier("hyphens-are-bad"));
 });
 
-Deno.test("correctly checks text literal (wrapped in '`')", () => {
+Deno.test("tokenizes text literal wrapped in backtick (`)", () => {
   assert(checkIsTextLiteral("`example`"));
 });
 
-Deno.test('correctly checks text literal (wrapped in "\'")', () => {
+Deno.test("tokenizes text literal wrapped in single-quotes (')", () => {
   assert(checkIsTextLiteral("'example'"));
 });
 
-Deno.test("correctly checks text literal (wrapped in '\"')", () => {
+Deno.test('tokenizes text literal wrapped in double-quotes (")', () => {
   assert(checkIsTextLiteral('"example"'));
 });
 
-Deno.test("correctly checks text literal (multiline is good)", () => {
+Deno.test("tokenizes multiline text literal", () => {
   assert(
     checkIsTextLiteral(`"example
 example

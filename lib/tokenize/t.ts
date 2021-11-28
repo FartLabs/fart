@@ -8,7 +8,7 @@ import { Token } from "./token.ts";
 type SimpleTokenMaker = (line: number, col: number) => Token;
 type SpecialTokenMaker = (raw: string, line: number, col: number) => Token;
 
-interface LexiconAliasLayer {
+export interface LexiconAliasLayer {
   /** `___` — identifier */
   id: SpecialTokenMaker;
   /** `{` — struct opener */

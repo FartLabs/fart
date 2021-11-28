@@ -1,5 +1,4 @@
 import {
-  assert,
   bench,
   BenchmarkTimer,
   runBenchmarks,
@@ -46,13 +45,12 @@ bench({
   },
 });
 
-Deno.test("benchmarking the cache algorithm vs the `repeat` method", async () => {
-  const { results: [cache, computed] } = await runBenchmarks({ silent: true });
+if (import.meta.main) {
+  const { results: [cache, computed] } = await runBenchmarks();
   const speedBoostPercentage = 100 * computed.measuredRunsAvgMs /
     cache.measuredRunsAvgMs;
   const finalMessage = `the cache algorithm is ${
     speedBoostPercentage.toFixed(2)
   }% the speed of the \`repeat\` algorithm`;
   console.log(finalMessage);
-  assert(speedBoostPercentage > 100);
-});
+}

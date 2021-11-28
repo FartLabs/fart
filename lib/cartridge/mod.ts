@@ -1,8 +1,7 @@
-export { Cartridge } from "./cartridge.ts";
-export { CartridgeEvent } from "./cartridge_event.ts";
+export { Cartridge, CartridgeEvent } from "./cartridge.ts";
 export type {
   CartridgeEventContext,
   CartridgeHandler,
   CartridgeHandlerMap,
   PropertyDefinition,
-} from "./cartridge_event.ts";
+} from "./cartridge.ts";
