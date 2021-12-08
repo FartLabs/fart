@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        deno_version: [canary, 1.16.4]
+        deno_version: [canary]
         # See supported Deno releases at:
         #   https://github.com/denoland/deno/releases
 
