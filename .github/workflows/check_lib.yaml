@@ -33,5 +33,5 @@ jobs:
 
       - name: Test and Check Coverage
         run: |
-          deno test --coverage=cov_profile
+          deno test lib --coverage=cov_profile
           deno coverage cov_profile
