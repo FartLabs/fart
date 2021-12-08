@@ -5,7 +5,7 @@ import {
   CartridgeEvent,
   PropertyDefinition,
 } from "../cartridge/mod.ts";
-import { Lexicon, Token } from "../tokenize/mod.ts";
+import type { Token } from "../tokenize/mod.ts";
 import {
   makeFileEndEventContext,
   makeFileStartEventContext,
@@ -35,12 +35,12 @@ export class TextBuilder {
   ): Promise<void>;
   public async append(
     event: CartridgeEvent.InlineComment,
-    tokens: Token[],
+    tokens: [Token],
     comments: Token[],
   ): Promise<void>;
   public async append(
     event: CartridgeEvent.MultilineComment,
-    tokens: Token[],
+    tokens: [Token],
     comments: Token[],
   ): Promise<void>;
   public async append(
@@ -63,7 +63,7 @@ export class TextBuilder {
   ): Promise<void>;
   public async append(
     event: CartridgeEvent.StructClose,
-    tokens: Token[],
+    tokens: [Token],
     comments: Token[],
   ): Promise<void>;
   public async append(
@@ -90,14 +90,14 @@ export class TextBuilder {
       case CartridgeEvent.InlineComment: {
         code = await this.cartridge.dispatch(
           CartridgeEvent.InlineComment,
-          makeInlineCommentEventContext(this.currentBlock, tokens, comments),
+          makeInlineCommentEventContext(this.currentBlock, tokens),
         );
         break;
       }
       case CartridgeEvent.MultilineComment: {
         code = await this.cartridge.dispatch(
           CartridgeEvent.MultilineComment,
-          makeMultilineCommentEventContext(this.currentBlock, tokens, comments),
+          makeMultilineCommentEventContext(this.currentBlock, tokens),
         );
         break;
       }

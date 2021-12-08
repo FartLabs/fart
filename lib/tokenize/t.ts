@@ -11,6 +11,8 @@ type SpecialTokenMaker = (raw: string, line: number, col: number) => Token;
 export interface LexiconAliasLayer {
   /** `___` — identifier */
   id: SpecialTokenMaker;
+  /** `load` — struct opener */
+  load: SimpleTokenMaker;
   /** `{` — struct opener */
   nest: SimpleTokenMaker;
   /** `}` — struct closer */
@@ -52,6 +54,7 @@ export interface LexiconAliasLayer {
 const makeSpecialToken: SpecialTokenMaker = (raw, line, col) =>
   new Token(raw, line, col);
 
+const LOAD = LEXICON.get(Lexicon.Load) as string;
 const NEST = LEXICON.get(Lexicon.StructOpener) as string;
 const DENEST = LEXICON.get(Lexicon.StructCloser) as string;
 const OPEN_TUPLE = LEXICON.get(Lexicon.TupleOpener) as string;
@@ -65,6 +68,7 @@ const SEPARATOR = LEXICON.get(Lexicon.Separator) as string;
 
 export const T: LexiconAliasLayer = {
   id: makeSpecialToken,
+  load: (line, col) => new Token(LOAD, line, col),
   nest: (line, col) => new Token(NEST, line, col),
   denest: (line, col) => new Token(DENEST, line, col),
   open_tuple: (line, col) => new Token(OPEN_TUPLE, line, col),

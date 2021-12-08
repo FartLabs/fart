@@ -50,23 +50,21 @@ export const makeFileStartEventContext = (
 export const makeInlineCommentEventContext = (
   code: CodeBlock,
   tokens: Token[],
-  comments: Token[],
 ): CartridgeEventContext<CartridgeEvent.InlineComment> => ({
   type: CartridgeEvent.InlineComment,
   code,
   tokens,
-  data: { comments: comments.flatMap(cleanComment) },
+  data: { comments: tokens.flatMap(cleanComment) },
 });
 
 export const makeMultilineCommentEventContext = (
   code: CodeBlock,
   tokens: Token[],
-  comments: Token[],
 ): CartridgeEventContext<CartridgeEvent.MultilineComment> => ({
   type: CartridgeEvent.MultilineComment,
   code,
   tokens,
-  data: { comments: comments.flatMap(cleanComment) },
+  data: { comments: tokens.flatMap(cleanComment) },
 });
 
 export const makeLoadEventContext = (

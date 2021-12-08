@@ -1,5 +1,6 @@
 export enum Lexicon {
   Identifier,
+  Load,
   StructOpener,
   StructCloser,
   TupleOpener,
@@ -26,6 +27,7 @@ export const LEXICON: LexiconType = new Map<
   string | string[] | null
 >([
   [Lexicon.Identifier, null],
+  [Lexicon.Load, "load"],
   [Lexicon.StructOpener, "{"],
   [Lexicon.StructCloser, "}"],
   [Lexicon.TupleOpener, "("],

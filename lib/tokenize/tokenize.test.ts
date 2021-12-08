@@ -309,3 +309,25 @@ spec Example
   const reality = [...tokenize(input)];
   assertEquals(expectation, reality);
 });
+
+Deno.test("yields tokens of proper `load` statement", () => {
+  const input = `load "./example.fart" {
+  Example1,
+  Example2,
+  Example3,
+}`;
+  const expectation = [
+    T.load(1, 1),
+    T.text_1("./example.fart", 1, 6),
+    T.nest(1, 23),
+    T.id("Example1", 2, 3),
+    T.separator(2, 11),
+    T.id("Example2", 3, 3),
+    T.separator(3, 11),
+    T.id("Example3", 4, 3),
+    T.separator(4, 11),
+    T.denest(5, 1),
+  ];
+  const reality = [...tokenize(input)];
+  assertEquals(expectation, reality);
+});
