@@ -15,22 +15,41 @@ interface TranspilationContext {
   tokenizer: FartTokenGenerator | null;
   builder: TextBuilder | null;
   prevTokens: Token[];
+  currentToken: Token | null;
+  nextToken: () => Token | undefined;
+  nextStruct: () => Promise<void>;
+  nextTuple: () => Promise<void>;
 }
 
-const INITIAL_TRANSPILATION_CONTEXT: TranspilationContext = Object.freeze({
+const INITIAL_TRANSPILATION_CONTEXT: TranspilationContext = {
   tokenizer: null,
   builder: null,
   prevTokens: [],
-});
+  currentToken: null,
+  nextToken() {
+    if (this.tokenizer !== null) {
+      if (this.currentToken !== null) {
+        this.prevTokens.push(this.currentToken);
+      }
+      return this.tokenizer.next().value;
+    }
+  },
+  async nextStruct() {
+    // TODO: handle struct
+  },
+  async nextTuple() {
+    // TODO: handle tuple
+  },
+};
 
 const initializeTranspilationContext = () => ({
   ...INITIAL_TRANSPILATION_CONTEXT,
 });
 
-export const transpile = async (
+export const transpile = (
   code: string,
-  options: FartOptions,
-): Promise<string> => {
+  // options: FartOptions,
+): string => {
   const ctx = initializeTranspilationContext();
   ctx.tokenizer = tokenize(code);
 

@@ -1,3 +1,4 @@
+// deno-lint-ignore-file camelcase
 // This file simply exports an object which contains lightweight
 // functions for creating Token instances with fewer keystrokes;
 // used primarily for testing-purposes.
