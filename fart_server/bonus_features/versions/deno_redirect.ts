@@ -28,17 +28,19 @@ const fetchAllDeployments = async (
         totalPages: incomingTotalPages,
       },
     ] = await response.json();
-    incomingDeployments.forEach((deployment: any) => {
-      const previewUrl = `https://${projectName}-${deployment.id}.deno.dev`;
-      const validIds = [
-        deployment.id,
-        deployment.relatedCommit.hash,
-        deployment.relatedCommit.hash.slice(0, 7),
-      ];
-      for (const id of validIds) {
-        deployments.set(id, previewUrl);
-      }
-    });
+    incomingDeployments.forEach(
+      (deployment: { id: string; relatedCommit: { hash: string } }) => {
+        const previewUrl = `https://${projectName}-${deployment.id}.deno.dev`;
+        const validIds = [
+          deployment.id,
+          deployment.relatedCommit.hash,
+          deployment.relatedCommit.hash.slice(0, 7),
+        ];
+        for (const id of validIds) {
+          deployments.set(id, previewUrl);
+        }
+      },
+    );
     currentPage = incomingPage + 1;
     totalPages = incomingTotalPages;
   }
