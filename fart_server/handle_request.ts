@@ -1,10 +1,9 @@
-// deno-lint-ignore-file
-
 // import {
 //   fetchDenoDoc,
 //   fetchGitHubDoc,
 // } from "./bonus_features/doc_generator/mod.ts";
 import { redirectToDenoDeployPreviewUrl } from "./bonus_features/versions/mod.ts";
+import { matchHome, matchSubroute, register, route } from "./utils.ts";
 
 /**
  * This function handles any request sent to the Fart server. This includes

@@ -16,17 +16,13 @@ const fetchAllDeployments = async (
 
   const canFetchMore = lastFetch + refreshRate < Date.now();
   while (canFetchMore && currentPage < totalPages - 1) {
-    const target =
-      `https://dash.deno.com/api/projects/${projectName}/deployments?page=${currentPage}&limit=${limit}`;
-    const response = await fetch(target, {
-      headers: { "Authorization": `Bearer ${accessToken}` },
-    });
+    const response = await fetch(
+      `https://dash.deno.com/api/projects/${projectName}/deployments?page=${currentPage}&limit=${limit}`,
+      { headers: { "Authorization": `Bearer ${accessToken}` } },
+    );
     const [
       incomingDeployments,
-      {
-        page: incomingPage,
-        totalPages: incomingTotalPages,
-      },
+      { page: incomingPage, totalPages: incomingTotalPages },
     ] = await response.json();
     incomingDeployments.forEach(
       (deployment: { id: string; relatedCommit: { hash: string } }) => {
