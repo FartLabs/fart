@@ -1,12 +1,11 @@
-export type MatchingFunction = (r: Request) => boolean;
-export type RequestHandler = (r: Request) => Response | Promise<Response>;
+export type Result = null | Response | Promise<null | Response>;
 
-export type Route = [MatchingFunction, RequestHandler];
+export type RequestHandler = (r: Request) => Result;
 
 /**
  * In-memory storage of the Fart Server's configuration.
  */
-const routes: Route[] = [];
+const handlers: RequestHandler[] = [];
 
 /**
  * Routes a given HTTP request to the intended `bonus_features` and
@@ -14,28 +13,27 @@ const routes: Route[] = [];
  * @param request incoming http request
  * @returns routed Fart server response
  */
-export const route = async (request: Request): Promise<Response> => {
-  for (const [match, handler] of routes) {
-    if (match(request)) {
-      return await handler(request);
+export const inject = async (request: Request): Promise<Response> => {
+  for (const handler of handlers) {
+    const result = await handler(request);
+    if (result !== null) {
+      return result;
     }
   }
   return new Response("404", { status: 404 });
 };
 
-export const register = (
-  matchRoute: MatchingFunction,
-  handler: RequestHandler,
-) => {
-  routes.push([matchRoute, handler]);
+export const register = (...gimmeHandlers: RequestHandler[]) => {
+  handlers.push(...gimmeHandlers);
 };
 
-export const matchHome = (r: Request): boolean => {
-  return new URL(r.url).pathname === "/";
+export const clear = () => {
+  handlers.length = 0;
 };
 
-export const matchSubroute = (subroute: string) => {
-  return (r: Request): boolean => {
-    return new URL(r.url).pathname === subroute;
-  };
+export const getSize = () => {
+  return handlers.length;
 };
+
+// TODO(@ethanthatonekid): Write new functions to access the Fart Server's
+// configuration.
