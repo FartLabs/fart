@@ -1,4 +1,5 @@
 import { redirectToDenoDeployPreviewUrl } from "./bonus_features/versions/mod.ts";
+import { redirectIfShortlink } from "./bonus_features/shortlinks/mod.ts";
 import { getSize, inject, register } from "./utils.ts";
 
 export const handleRequest = async (event: Deno.RequestEvent) => {
