@@ -34,4 +34,5 @@ jobs:
       - name: Test and Check Coverage
         run: |
           deno test lib --coverage=cov_profile
-          deno coverage cov_profile
+          deno coverage cov_profile --lcov > cov_profile.lcov
+          deno run --allow-read --unstable devops/check_cov.ts
