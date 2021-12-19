@@ -1,4 +1,3 @@
-// TODO(@ethanthatonekid): write implementation for shortlinks.test.ts
 import shortlinks from "./shortlinks.json" assert { type: "json" };
 
 const map = Object.entries(shortlinks)
@@ -8,13 +7,15 @@ const map = Object.entries(shortlinks)
   }, new Map<string, string>());
 
 export const redirectIfShortlink = (request: Request): Response | null => {
-  const { pathname } = new URL(request.url);
-  if (pathname.includes("?")) {
-    const query = pathname.slice(pathname.indexOf("?"));
-    const shortlink = map.get(pathname.slice(0, pathname.indexOf("?")));
-    if (shortlink !== undefined) return Response.redirect(shortlink + query);
+  const { pathname, searchParams } = new URL(request.url);
+  for (const [shortlink, target] of map) {
+    if (pathname.startsWith(shortlink)) {
+      let destination = target + pathname.slice(shortlink.length);
+      if (searchParams.toString()) destination += "?" + searchParams;
+      // add a slash if the destination doesn't end with one
+      else if (!destination.endsWith("/")) destination += "/";
+      return Response.redirect(destination, 302);
+    }
   }
-  const shortlink = map.get(pathname.replace(/([^:]\/)\/+/g, "/"));
-  if (shortlink !== undefined) return Response.redirect(shortlink);
   return null;
 };

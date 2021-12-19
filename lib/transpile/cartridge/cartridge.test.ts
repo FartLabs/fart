@@ -1,7 +1,6 @@
-import { assertEquals } from "../../deps/std/testing.ts";
+import { assertEquals } from "../../../deps/std/testing.ts";
 import { Cartridge, CartridgeEvent } from "./cartridge.ts";
 import { CodeBlock } from "../code_block/mod.ts";
-// import { Lexicon, T } from "../tokenize/mod.ts";
 
 Deno.test("event 'file_start' makes a successful dispatch", async () => {
   const cartridge = new Cartridge();

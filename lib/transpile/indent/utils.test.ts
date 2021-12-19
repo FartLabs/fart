@@ -2,7 +2,7 @@ import {
   bench,
   BenchmarkTimer,
   runBenchmarks,
-} from "../../deps/std/testing.ts";
+} from "../../../deps/std/testing.ts";
 import { INDENT, Indent } from "./indent.ts";
 import { getCachedIndent } from "./utils.ts";
 

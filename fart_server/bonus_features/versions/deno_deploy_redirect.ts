@@ -1,8 +1,9 @@
 import { Time } from "../../../lib/constants/time.ts";
 
 const deployments = new Map<string, string>();
-const projectName = Deno.env.get("DENO_DEPLOY_PROJECT_NAME");
-const token = Deno.env.get("DENO_DEPLOY_ACCESS_TOKEN");
+const projectName = Deno.env.get("DENO_DEPLOY_PROJECT_NAME") ?? "fart";
+const token = Deno.env.get("DENO_DEPLOY_ACCESS_TOKEN") ??
+  "ddp_10rd56LtEpRv33U37xJQK7Jdl5g0KC3EoB2p";
 const refreshRate = 10 * Time.Minute;
 let lastFetch = -1;
 

@@ -1,7 +1,7 @@
-import { Token, tokenize } from "../tokenize/mod.ts";
-import { Cartridge } from "../cartridge/mod.ts";
-import { TextBuilder } from "../text_builder/mod.ts";
-import type { FartTokenGenerator } from "../tokenize/mod.ts";
+import { Token, tokenize } from "./tokenize/mod.ts";
+import { Cartridge } from "./cartridge/mod.ts";
+import { TextBuilder } from "./text_builder/mod.ts";
+import type { FartTokenGenerator } from "./tokenize/mod.ts";
 
 export interface FartOptions {
   targetLanguage: string; // "ts" | "go"
@@ -11,47 +11,52 @@ export interface FartOptions {
   preserveComments: boolean;
 }
 
-interface TranspilationContext {
-  tokenizer: FartTokenGenerator | null;
-  builder: TextBuilder | null;
-  prevTokens: Token[];
-  currentToken: Token | null;
-  nextToken: () => Token | undefined;
-  nextStruct: () => Promise<void>;
-  nextTuple: () => Promise<void>;
-}
+class TranspilationContext {
+  constructor(
+    public tokenizer?: FartTokenGenerator,
+    public builder?: TextBuilder,
+    public currentToken: Token | null = null,
+    public prevTokens: Token[] = [],
+  ) {}
 
-const INITIAL_TRANSPILATION_CONTEXT: TranspilationContext = {
-  tokenizer: null,
-  builder: null,
-  prevTokens: [],
-  currentToken: null,
-  nextToken() {
-    if (this.tokenizer !== null) {
-      if (this.currentToken !== null) {
+  public nextToken(): Token | null {
+    if (this.tokenizer !== undefined) {
+      if (
+        this.currentToken !== null &&
+        this.prevTokens !== undefined &&
+        this.currentToken !== undefined
+      ) {
         this.prevTokens.push(this.currentToken);
       }
-      return this.tokenizer.next().value;
+      const token = this.tokenizer.next().value;
+      if (token !== undefined) {
+        return this.currentToken = token;
+      }
     }
-  },
-  async nextStruct() {
-    // TODO: handle struct
-  },
-  async nextTuple() {
-    // TODO: handle tuple
-  },
-};
+    return null;
+  }
 
-const initializeTranspilationContext = () => ({
-  ...INITIAL_TRANSPILATION_CONTEXT,
-});
+  /**
+   * @todo implement
+   */
+  public async nextStruct(): Promise<void> {
+  }
+
+  /**
+   * @todo implement
+   */
+  public async nextTuple(): Promise<void> {
+  }
+}
 
 export const transpile = (
   code: string,
   // options: FartOptions,
 ): string => {
-  const ctx = initializeTranspilationContext();
-  ctx.tokenizer = tokenize(code);
-
+  const ctx = new TranspilationContext(
+    tokenize(code),
+    new TextBuilder(new Cartridge()),
+  );
+  console.log({ ctx });
   return "";
 };

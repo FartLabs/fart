@@ -1,4 +1,4 @@
-import { assertEquals } from "../../deps/std/testing.ts";
+import { assertEquals } from "../../../deps/std/testing.ts";
 import { TextBuilder } from "./text_builder.ts";
 import { Cartridge } from "../cartridge/mod.ts";
 

@@ -1,1 +1,1 @@
-export { redirectToDenoDeployPreviewUrl } from "./deno_redirect.ts";
+export { redirectToDenoDeployPreviewUrl } from "./deno_deploy_redirect.ts";

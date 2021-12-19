@@ -1,4 +1,4 @@
-import { assertEquals } from "../../deps/std/testing.ts";
+import { assertEquals } from "../../../deps/std/testing.ts";
 import { CodeBlock } from "./code_block.ts";
 
 Deno.test("new code block is empty", () => {
