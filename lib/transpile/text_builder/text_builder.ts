@@ -5,6 +5,7 @@ import {
   CartridgeEvent,
   PropertyDefinition,
 } from "../cartridge/mod.ts";
+import { Lexicon } from "../tokenize/mod.ts";
 import type { Token } from "../tokenize/mod.ts";
 import {
   makeFileEndEventContext,
@@ -16,12 +17,12 @@ import {
   makeStructCloseEventContext,
   makeStructOpenEventContext,
 } from "./utils.ts";
+import { assertKind } from "../utils.ts";
 
 export class TextBuilder {
   private blocks: CodeBlock[];
   private currentBlock: CodeBlock;
   private indentLevel: number;
-
   constructor(private cartridge: Cartridge) {
     this.blocks = [];
     this.currentBlock = new CodeBlock();
@@ -116,9 +117,10 @@ export class TextBuilder {
         break;
       }
       case CartridgeEvent.StructOpen: {
+        const { value: name } = assertKind(tokens[1], Lexicon.Identifier);
         code = await this.cartridge.dispatch(
           CartridgeEvent.StructOpen,
-          makeStructOpenEventContext(this.currentBlock, tokens, comments),
+          makeStructOpenEventContext(this.currentBlock, tokens, comments, name),
         );
         break;
       }

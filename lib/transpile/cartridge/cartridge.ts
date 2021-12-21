@@ -133,12 +133,13 @@ export class Cartridge {
   public async dispatch<T extends CartridgeEvent>(
     name: CartridgeEvent,
     ctx: CartridgeEventContext<T>,
-  ): Promise<string | null | void> {
+  ): Promise<string | null> {
     const handleEvent = this.handlers[name] as CartridgeHandler<T>;
     if (handleEvent === undefined) return null;
     const executionResult = handleEvent(ctx);
-    return executionResult instanceof Promise
-      ? await executionResult
-      : executionResult;
+    if (executionResult instanceof Promise) {
+      return await executionResult ?? null;
+    }
+    return executionResult ?? null;
   }
 }
