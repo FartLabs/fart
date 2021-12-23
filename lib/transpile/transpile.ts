@@ -18,30 +18,22 @@ export interface FartOptions {
   preserveComments: boolean;
 }
 
-class TranspilationContext {
+export class TranspilationContext {
+  public started = false;
+  public done = false;
+  public prevTokens: Token[] = [];
+
   constructor(
-    public tokenizer?: FartTokenGenerator,
-    public builder?: TextBuilder,
-    public currentToken: IteratorResult<Token, Token> | null = null,
-    public prevTokens: Token[] = [],
+    public tokenizer: FartTokenGenerator,
+    public builder: TextBuilder,
   ) {}
 
-  public nextToken(): Token | null {
-    if (this.tokenizer !== undefined) {
-      if (
-        this.currentToken !== null &&
-        this.prevTokens !== undefined &&
-        this.currentToken !== undefined
-      ) {
-        this.prevTokens.push(this.currentToken.value);
-      }
-      const curr = this.tokenizer.next();
-      if (curr.value !== undefined) {
-        this.currentToken = curr;
-        return curr.value;
-      }
-    }
-    return null;
+  public nextToken(): Token | undefined {
+    if (this.done) return undefined;
+    this.started = true;
+    const curr = this.tokenizer.next();
+    if (curr.done) this.done = true;
+    return curr.value;
   }
 
   /**
@@ -65,10 +57,11 @@ class TranspilationContext {
  * - indentation: number;
  * - preserveComments: boolean;
  */
-export function transpile(
+export async function transpile(
   code: string,
   options: Cartridge | FartOptions,
 ): Promise<string> {
+  // return Promise.resolve("");
   // const srcLang = (options as FartOptions).sourceLanguage ?? Lang.Fart;
   // const targetLang = (options as FartOptions).sourceLanguage ?? Lang.TypeScript;
   // const indentation: number | undefined = (options as FartOptions).indentation;
@@ -76,16 +69,17 @@ export function transpile(
   const cartridge = options instanceof Cartridge
     ? options
     : options.codeCartridge;
+
   const builder = new TextBuilder(cartridge);
   const ctx = new TranspilationContext(tokenize(code), builder);
 
-  do {
-    switch (ctx.nextToken()?.kind) {
+  for (
+    const token = ctx.nextToken();
+    !ctx.done;
+  ) {
+    switch (token?.kind) {
       case Lexicon.Load: {
-        const loader = assertKind(
-          ctx.currentToken?.value as Token,
-          Lexicon.Load,
-        );
+        const loader = assertKind(token, Lexicon.Load);
         const source = assertKind(ctx.nextToken(), Lexicon.TextLiteral);
         const opener = assertKind(ctx.nextToken(), Lexicon.StructOpener);
         console.log({ loader, source, opener });
@@ -99,23 +93,20 @@ export function transpile(
       }
 
       case Lexicon.TypeDefiner: {
-        const definer = assertKind(
-          ctx.currentToken?.value as Token,
-          Lexicon.TypeDefiner,
-        );
+        const definer = assertKind(token, Lexicon.TypeDefiner);
         const ident = assertKind(ctx.nextToken(), Lexicon.Identifier);
         const opener = assertKind(ctx.nextToken(), Lexicon.StructOpener);
-        console.log({ definer, ident, opener });
-        // await ctx.builder?.append(
-        //   CartridgeEvent.StructOpen,
-        //   [definer, ident, opener],
-        //   [],
-        // );
-        // await ctx.nextStruct();
+        await ctx.builder.append(
+          CartridgeEvent.StructOpen,
+          [definer, ident, opener],
+          /* comments=*/ [],
+          { value: ident.value },
+        );
+        await ctx.nextStruct();
         break;
       }
     }
-  } while (!ctx.currentToken?.done);
+  }
 
-  return Promise.resolve(ctx.builder?.export() ?? "");
+  return ctx.builder.export();
 }
