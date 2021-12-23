@@ -11,6 +11,21 @@ export enum CartridgeEvent {
   FileEnd = "file_end",
 }
 
+export enum ReservedType {
+  Omit = "_",
+  Number = "number",
+  String = "string",
+  Boolean = "boolean",
+  Default = "any",
+}
+
+export enum Modifier {
+  Array = "array", // Modifies anything.
+  Async = "async", // Modifies anything.
+  Dictionary = "dict", // Modifies length-2 tuples.
+  Function = "fn", // Modifies length-2 tuples.
+}
+
 export type CartridgeEventReturnType = (
   | void
   | Promise<void>
@@ -73,11 +88,32 @@ export interface CartridgeHandlerMap {
 }
 
 /**
- * @todo @ethanthatonekid pass all tests in ./cartridge.test.ts
- * @todo @ethanthatonekid refactor <https://github.com/EthanThatOneKid/fart/blob/c43f2333458b2cbc40d167610d87e2a2e3f89885/lib/gen/cart.ts>
+ * Returns a type composed into plain text (e.g. `number`,
+ * `Array<string>`, `(a: number, b: number) => number`, etc.).
  */
+export type ModHandler = (...inner: string[]) => string;
+
+/**
+ * The TypeMap API is designed to delegate the generation of
+ * syntax for various programming languages.
+ */
+export interface CartridgeTypeMap {
+  [ReservedType.Omit]?: string;
+  [ReservedType.Number]?: string;
+  [ReservedType.String]?: string;
+  [ReservedType.Boolean]?: string;
+  [ReservedType.Default]?: string;
+
+  // Modifiers are not required for all languages.
+  [Modifier.Array]?: ModHandler;
+  [Modifier.Async]?: ModHandler;
+  [Modifier.Dictionary]?: ModHandler;
+  [Modifier.Function]?: ModHandler;
+}
+
 export class Cartridge {
   constructor(
+    private typemap: CartridgeTypeMap = {},
     private handlers: CartridgeHandlerMap = {},
   ) {}
 
@@ -121,9 +157,7 @@ export class Cartridge {
     this.handlers[name] = handler;
   }
 
-  /**
-   * `on` is an alias for `addEventListener`
-   */
+  /** `on` is an alias for `addEventListener` */
   public on = this.addEventListener.bind(this);
 
   public removeEventListener(name: CartridgeEvent) {
@@ -138,8 +172,16 @@ export class Cartridge {
     if (handleEvent === undefined) return null;
     const executionResult = handleEvent(ctx);
     if (executionResult instanceof Promise) {
-      return await executionResult ?? null;
+      return (await executionResult) ?? null;
     }
     return executionResult ?? null;
+  }
+
+  public getType(type: string): string | undefined {
+    return this.typemap[type as ReservedType];
+  }
+
+  public getMod(mod: string): ModHandler | undefined {
+    return this.typemap[mod as Modifier];
   }
 }

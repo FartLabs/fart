@@ -81,8 +81,8 @@ export class TextBuilder {
   ): Promise<void>;
   public async append(
     event: CartridgeEvent.FileEnd,
-    tokens: Token[],
-    comments: Token[],
+    tokens?: Token[],
+    comments?: Token[],
   ): Promise<void>;
   public async append(
     event: CartridgeEvent,
@@ -99,6 +99,7 @@ export class TextBuilder {
           CartridgeEvent.FileStart,
           makeFileStartEventContext(this.currentBlock, tokens),
         );
+        this.stash();
         break;
       }
 
@@ -172,6 +173,7 @@ export class TextBuilder {
       }
 
       case CartridgeEvent.FileEnd: {
+        this.stash();
         code = await this.cartridge.dispatch(
           CartridgeEvent.FileEnd,
           makeFileEndEventContext(this.currentBlock, tokens),

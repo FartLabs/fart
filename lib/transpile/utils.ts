@@ -3,10 +3,14 @@ import { Lexicon, Token } from "./tokenize/mod.ts";
 /**
  * @todo write tests in utils.test.ts
  */
-export function assertKind(token: Token | undefined, lexeme: Lexicon): Token {
-  if (token === undefined || token.kind !== lexeme) {
+export function assertKind(
+  token?: Token,
+  ...validLex: Lexicon[]
+): Token {
+  const isValidLexeme = validLex.includes(token?.kind ?? Lexicon.Unknown);
+  if (token === undefined || !isValidLexeme) {
     throw new Error(
-      `Expected token kind ${Lexicon[lexeme]}, got ${token}`,
+      `Expected token kind ${validLex.join(" or ")}, but got ${token}`,
     );
   }
   return token;

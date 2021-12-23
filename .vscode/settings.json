@@ -13,5 +13,5 @@
     "https://cdn.skypack.dev": false,
     "https://fart.tools": false
   },
-  "cSpell.words": ["typedefs", "typemap", "typemaps"]
+  "cSpell.words": ["transpiles", "typedefs", "typemap", "typemaps"]
 }
