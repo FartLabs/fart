@@ -63,9 +63,9 @@ export class TranspilationContext {
         }
 
         case Lexicon.TupleOpener: {
-          const results = 
+          const results = this.nextTuple();
+          break;
         }
-
       }
       mod = this.cartridge.getMod(this.nextToken()?.value);
     }
@@ -181,7 +181,7 @@ export class TranspilationContext {
   /**
    * @todo implement
    */
-  public  nextTuple(): PropertyDefinition["tuple"]{
+  public nextTuple(): PropertyDefinition["tuple"] {
     return [];
   }
 }
