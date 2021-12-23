@@ -74,21 +74,21 @@ export async function transpile(
   const ctx = new TranspilationContext(tokenize(code), builder);
 
   for (
-    const token = ctx.nextToken();
+    let token = ctx.nextToken();
     !ctx.done;
+    token = ctx.nextToken()
   ) {
     switch (token?.kind) {
       case Lexicon.Load: {
         const loader = assertKind(token, Lexicon.Load);
         const source = assertKind(ctx.nextToken(), Lexicon.TextLiteral);
         const opener = assertKind(ctx.nextToken(), Lexicon.StructOpener);
-        console.log({ loader, source, opener });
-        // await ctx.builder?.append(
-        //   CartridgeEvent.StructOpen,
-        //   [loader, source, opener],
-        //   [],
-        // );
-        // await ctx.nextTuple();
+        await ctx.builder.append(
+          CartridgeEvent.StructOpen,
+          [loader, source, opener],
+          [],
+        );
+        await ctx.nextTuple();
         break;
       }
 
