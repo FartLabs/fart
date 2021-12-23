@@ -34,6 +34,17 @@ export type CartridgeEventReturnType = (
   | null
 );
 
+// TODO: Refactor PropertyDefinition interface to be more strict using the
+// list of possible definitions as a guide.
+// Possible Property Definitions
+// - example: string
+// - example?: string
+// - example: { nestedExample: string }
+// - example: async % string; Promise<string>
+// - example: fn % async % string; () => Promise<string>
+// - example: fn % (a: string, async % string); (a: string) => Promise<string>
+// - example: fn % (cb: fn % (async % _), number); (cb: () => Promise<void>) => number
+
 export interface PropertyDefinition {
   optional?: boolean;
   modifier?: string;
@@ -177,11 +188,11 @@ export class Cartridge {
     return executionResult ?? null;
   }
 
-  public getType(type: string): string | undefined {
+  public getType(type?: string): string | undefined {
     return this.typemap[type as ReservedType];
   }
 
-  public getMod(mod: string): ModHandler | undefined {
+  public getMod(mod?: string): ModHandler | undefined {
     return this.typemap[mod as Modifier];
   }
 }

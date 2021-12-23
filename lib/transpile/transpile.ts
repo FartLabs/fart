@@ -1,6 +1,10 @@
 import { Lexicon, Token, tokenize } from "./tokenize/mod.ts";
 import { Cartridge, CartridgeEvent } from "./cartridge/mod.ts";
-import type { PropertyDefinition } from "./cartridge/mod.ts";
+import type {
+  ModHandler,
+  Modifier,
+  PropertyDefinition,
+} from "./cartridge/mod.ts";
 import { TextBuilder } from "./text_builder/mod.ts";
 // import { Lang } from "../constants/lang.ts";
 import { assertKind } from "./utils.ts";
@@ -40,6 +44,43 @@ export class TranspilationContext {
     return curr.value;
   }
 
+  public nextMod(currentToken?: Token): PropertyDefinition["value"] {
+    const initialToken = currentToken ?? this.nextToken();
+    const mods: ModHandler[] = [];
+    let mod = this.cartridge.getMod(initialToken?.value);
+    while (mod !== undefined) {
+      mods.push(mod);
+      const modSymbol = assertKind(this.nextToken(), Lexicon.Modifier);
+      const wildToken = this.nextToken();
+
+      switch (wildToken?.kind) {
+        case Lexicon.Identifier: {
+          const result = mods.reduceRight(
+            (result: string, modify: ModHandler) => modify(result),
+            wildToken.value,
+          );
+          return result;
+        }
+
+        case Lexicon.TupleOpener: {
+          const results = 
+        }
+
+      }
+      mod = this.cartridge.getMod(this.nextToken()?.value);
+    }
+  }
+
+  // public computeMods(
+  //   tokens: Token[],
+  //   ...mods: ModHandler[]
+  // ): string | undefined {
+  //   return mods.reduceRight(
+  //     (result: string[], mod: ModHandler) => [mod(...result)],
+  //     tokens.map(({ value }) => this.cartridge.getType(value) ?? value),
+  //   ).pop();
+  // }
+
   /**
    * Consumes the next struct, tuple, or value.
    */
@@ -63,6 +104,7 @@ export class TranspilationContext {
         // if (modifier !== undefined) {
         // if ident is known modifier, await nextModifier();
         // }
+
         def.value = wildToken.value;
         break;
       }
@@ -86,20 +128,26 @@ export class TranspilationContext {
     const result: PropertyDefinition["struct"] = {};
 
     while (true) {
+      // expects identifier or '}'
       const ident = assertKind(
         this.nextToken(),
         Lexicon.Identifier,
         Lexicon.StructCloser,
       );
-      if (ident.kind === Lexicon.StructCloser) break;
 
+      if (ident.is(Lexicon.StructCloser)) {
+        break;
+      }
+
+      // expects ':' or '?:'
       const propertyDefiner = assertKind(
         this.nextToken(),
         Lexicon.PropertyDefiner,
         Lexicon.PropertyOptionalDefiner,
       );
 
-      // 1st token of right-hand expression
+      // 1st token of right-hand expression (e.g. identifier, text literal, or
+      // '{').
       const wildToken = await this.nextToken();
 
       switch (wildToken?.kind) {
@@ -121,7 +169,7 @@ export class TranspilationContext {
 
         default: {
           throw new Error(
-            `Expected struct opener, tuple opener, or type value, but got ${wildToken}`,
+            `Expected struct opener or type value, but got ${wildToken}`,
           );
         }
       }
@@ -133,7 +181,7 @@ export class TranspilationContext {
   /**
    * @todo implement
    */
-  public async nextTuple(): Promise<PropertyDefinition["tuple"]> {
+  public  nextTuple(): PropertyDefinition["tuple"]{
     return [];
   }
 }
