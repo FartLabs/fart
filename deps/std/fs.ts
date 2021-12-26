@@ -1,1 +1,1 @@
-export { exists, expandGlob } from "https://deno.land/std@0.110.0/fs/mod.ts";
+export { exists, expandGlob } from "https://deno.land/std@0.119.0/fs/mod.ts";
