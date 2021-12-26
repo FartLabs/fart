@@ -1,12 +1,7 @@
 import { Lexicon, Token, tokenize } from "./tokenize/mod.ts";
 import { Cartridge, CartridgeEvent } from "./cartridge/mod.ts";
-import type {
-  ModHandler,
-  Modifier,
-  PropertyDefinition,
-} from "./cartridge/mod.ts";
+import type { ModHandler, PropertyDefinition } from "./cartridge/mod.ts";
 import { TextBuilder } from "./text_builder/mod.ts";
-// import { Lang } from "../constants/lang.ts";
 import { assertKind } from "./utils.ts";
 import type { FartTokenGenerator } from "./tokenize/mod.ts";
 

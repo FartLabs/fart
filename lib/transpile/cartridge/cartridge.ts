@@ -37,13 +37,14 @@ export type CartridgeEventReturnType = (
 // TODO: Refactor PropertyDefinition interface to be more strict using the
 // list of possible definitions as a guide.
 // Possible Property Definitions
-// - example: string
+// - example: string; data = { id: "example", optional: false, value: "string" }
 // - example?: string
-// - example: { nestedExample: string }
+// - example: { abc?: string }; data = { id: "example", optional: false, value: { id: "abc", optional: true, value: "string" } }
 // - example: async % string; Promise<string>
 // - example: fn % async % string; () => Promise<string>
 // - example: fn % (a: string, async % string); (a: string) => Promise<string>
 // - example: fn % (cb: fn % (async % _), number); (cb: () => Promise<void>) => number
+//   ; data = { id: "example", value: { mods: [{ name: "fn" }] } }
 
 export interface PropertyDefinition {
   optional?: boolean;
@@ -181,11 +182,9 @@ export class Cartridge {
   ): Promise<string | null> {
     const handleEvent = this.handlers[name] as CartridgeHandler<T>;
     if (handleEvent === undefined) return null;
-    const executionResult = handleEvent(ctx);
-    if (executionResult instanceof Promise) {
-      return (await executionResult) ?? null;
-    }
-    return executionResult ?? null;
+    const result = await handleEvent(ctx);
+    if (typeof result === "string") return result;
+    return null;
   }
 
   public getType(type?: string): string | undefined {
