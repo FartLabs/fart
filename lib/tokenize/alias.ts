@@ -22,6 +22,7 @@ interface LexiconUtil {
   "string_marker": (line: number, column: number) => Token;
   "string_marker2": (line: number, column: number) => Token;
   "string_marker3": (line: number, column: number) => Token;
+  "comment": (raw: string, line: number, column: number) => Token;
   "eof": (line: number, column: number) => Token;
 }
 
@@ -61,5 +62,6 @@ export const T: LexiconUtil = {
     new Token(LEXICON[Lexicon.StringMarker2], line, column),
   "string_marker3": (line, column) =>
     new Token(LEXICON[Lexicon.StringMarker3], line, column),
+  "comment": (raw, line, column) => new Token(raw, line, column),
   "eof": (line, column) => new Token(LEXICON[Lexicon.EOF], line, column),
 };

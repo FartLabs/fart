@@ -16,7 +16,9 @@ export class Token {
   get value(): string {
     switch (this.kind) {
       case Lexicon.Identifier:
+      case Lexicon.Comment: {
         return this.raw;
+      }
       case Lexicon.StringMarker:
       case Lexicon.StringMarker2:
       case Lexicon.StringMarker3:
@@ -32,7 +34,7 @@ export class Token {
         if (this.kind !== null && LEXICON[this.kind] !== undefined) {
           return LEXICON[this.kind];
         }
-        throw new Error(`Invalid token`);
+        throw new Error(`Invalid token ${this}`);
       }
     }
   }
@@ -84,7 +86,7 @@ export class Token {
       default: {
         if (validateIdentifier(raw)) return Lexicon.Identifier;
         else if (validateStringLiteral(raw)) return Lexicon.StringLiteral;
-        else return null;
+        else return Lexicon.Comment; // Invalid token is treated as comment.
       }
     }
   }

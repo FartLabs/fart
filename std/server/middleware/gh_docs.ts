@@ -38,11 +38,11 @@ const processUrl = (pathname: string, hash = "#readme"): string => {
   return BASE_URL + targetName + hash;
 };
 
-const cache = makeCacheLayer(async (pathname: string) => {
+const cache = makeCacheLayer(async (pathname: string, hash?: string) => {
   const doc = await fetchDoc(pathname);
   if (doc !== undefined) {
     const html = parse(doc);
-    const ghLink = processUrl(pathname);
+    const ghLink = processUrl(pathname, hash);
     return `<html>
   <head>
     <link rel="stylesheet" href="/style.css" />
@@ -61,6 +61,7 @@ const cache = makeCacheLayer(async (pathname: string) => {
 
 export default async (
   pathname: string,
+  // hash?: string,
 ): Promise<Response | undefined> => {
   try {
     const result = await cache(pathname);

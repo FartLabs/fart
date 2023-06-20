@@ -15,6 +15,7 @@ export class Builder {
     private cartridge: Cart,
     private typemap: TypeMap,
     private indent: IndentOption | string,
+    private implementationPathname: string | null = null,
   ) {}
 
   private append(code?: BoC) {
@@ -35,11 +36,17 @@ export class Builder {
     }
   }
 
-  public async appendImport(source: string, dependencies: string[]) {
+  public async appendImport(
+    source: string,
+    dependencies: string[],
+    comments: string[] = [],
+  ) {
     const code = await this.cartridge.dispatch({
       type: CartEventName.Import,
       source,
       dependencies,
+      comments,
+      implementationPathname: this.implementationPathname,
     });
     if (code === null) return;
     for (const depId of dependencies) {
@@ -48,11 +55,17 @@ export class Builder {
     this.append(code);
   }
 
-  public async appendOpeningStruct(identifier: string, department = false) {
+  public async appendOpeningStruct(
+    identifier: string,
+    department = false,
+    comments: string[] = [],
+  ) {
     const code = await this.cartridge.dispatch({
       type: CartEventName.StructOpen,
       identifier,
       department,
+      comments,
+      implementationPathname: this.implementationPathname,
     });
     if (code === null) return;
     this.localTypes.add(identifier);
@@ -74,6 +87,7 @@ export class Builder {
       required,
       method,
       department,
+      implementationPathname: this.implementationPathname,
     });
     if (code === null) return;
     this.append(code);
@@ -82,6 +96,18 @@ export class Builder {
   public async appendClosingStruct() {
     const code = await this.cartridge.dispatch({
       type: CartEventName.StructClose,
+      implementationPathname: this.implementationPathname,
+    });
+    if (code === null) return;
+    this.append(code);
+  }
+
+  public async appendComment(comment: string, line: number, column: number) {
+    const code = await this.cartridge.dispatch({
+      type: CartEventName.Comment,
+      comment,
+      line,
+      column,
     });
     if (code === null) return;
     this.append(code);
@@ -93,16 +119,16 @@ export class Builder {
     if (this.currentIndentLevel > 0) return "";
     const topOfFile = await this.cartridge.dispatch({
       type: CartEventName.FileStart,
+      implementationPathname: this.implementationPathname,
     });
     const bottomOfFile = await this.cartridge.dispatch({
       type: CartEventName.FileEnd,
+      implementationPathname: this.implementationPathname,
     });
     return BoC.join(topOfFile, ...this.blocks, bottomOfFile);
   }
 
-  public getType(
-    alias?: string,
-  ): string | undefined {
+  public getType(alias?: string): string | undefined {
     if (alias === undefined) return undefined;
     switch (alias) {
       case ReservedType.Number:
@@ -113,8 +139,11 @@ export class Builder {
         return this.typemap[ReservedType.Boolean];
       case ReservedType.Default:
         return this.typemap[ReservedType.Default];
+      case ReservedType.Omit:
+        return this.typemap[ReservedType.Omit];
       default: {
-        return alias.replace(OMIT_PATTERN, "void") ?? "";
+        return alias.replace(OMIT_PATTERN, this.typemap[ReservedType.Omit]) ??
+          "";
       }
     }
   }

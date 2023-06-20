@@ -14,7 +14,10 @@ export const handleRequest = async (request: Request): Promise<Response> => {
   if (request.method === "GET") {
     const staticFile = await middleware.static(pathname);
     if (staticFile !== undefined) return staticFile;
-    const ghDoc = await middleware.gh_docs(pathname, getHash(request));
+    const ghDoc = await middleware.gh_docs(
+      pathname,
+      /*hash=getHash(request),*/
+    );
     if (ghDoc !== undefined) return ghDoc;
     return await middleware.compile(request);
   }
