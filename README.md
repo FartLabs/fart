@@ -6,7 +6,7 @@ self_link: https://fart.tools/
 
 Program that generates type definitions, libraries, and programs in multiple languages.
 
-> 🚧 **Beware of Project Status**: _Work-in-Progress_
+> 🚧 **Beware of Project Status**: Working on part 2!!
 
 ## Development 👨‍💻
 
