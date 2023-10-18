@@ -1,17 +1,9 @@
 {
   "deno.enable": true,
-  "deno.lint": true,
-  "deno.unstable": false,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "deno.unstable": true,
   "editor.formatOnSave": true,
-  // "deno.importMap": "./examples/import_map.json",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
-  },
-  "deno.suggest.imports.hosts": {
-    "https://deno.land": false,
-    "https://cdn.skypack.dev": false,
-    "https://fart.tools": false
-  },
-  "cSpell.words": ["typemap", "typemaps"]
+  }
 }

@@ -1,7 +1,3 @@
----
-self_link: https://fart.tools/
----
-
 # Fart 🌫
 
 Program that generates type definitions, libraries, and programs in multiple languages.
@@ -12,9 +8,9 @@ Program that generates type definitions, libraries, and programs in multiple lan
 
 > ℹ **INFO**: `docs/contributing.md` coming soon!!
 
-To execute the Fart tests, simply run `deno test`. If you have not done so already, please [install Deno](https://github.com/denoland/deno_install).
+To execute the Fart tests, simply run `deno task test`. If you have not done so already, [install Deno](https://github.com/denoland/deno_install).
 
-### Give it a Spin
+### Give it a spin
 
 You can give Fart a spin on your machine in one command (assuming Deno is installed).
 Check out the example code on <https://fart.tools/pokemon-example/>.
@@ -40,7 +36,7 @@ Try running the command below after cloning the repository.
 deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon.fart --reg=ts.deno --output=./ex/pokemon.ts
 ```
 
-### Fart Server 📡
+### Fart server 📡
 
 Please refer to [docs/server-architecture.md](https://etok.codes/fart/blob/main/docs/server-architecture.md#readme) to learn about how the server code is organized.
 
