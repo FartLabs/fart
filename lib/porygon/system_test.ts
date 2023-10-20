@@ -13,15 +13,11 @@ const system: System<typeof SCHEMA> = {
   components: [
     {
       kind: "deno_deploy",
-      fields: {
-        project_name: "string",
-      },
+      project_name: "string",
     },
     {
       kind: "google_sheets",
-      fields: {
-        sheet_id: "string",
-      },
+      sheet_id: "string",
     },
   ],
 };

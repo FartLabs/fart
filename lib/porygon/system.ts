@@ -20,17 +20,16 @@ export type ComponentOf<TSchema extends Schema> = {
 /**
  * Component is a component from a schema by kind.
  */
-export interface Component<
+export type Component<
   TSchema extends Schema,
   TKind extends keyof TSchema,
-> {
-  kind: TKind;
-  fields: {
+> =
+  & { kind: TKind }
+  & {
     [TFieldName in keyof TSchema[TKind]]: FieldTypeOf<
       TSchema[TKind][TFieldName]
     >;
   };
-}
 
 /**
  * FieldTypeOf converts a schema field type to a TypeScript type.
