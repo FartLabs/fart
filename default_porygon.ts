@@ -1,14 +1,16 @@
 // import * as porygon from "./porygon.ts";
 
 interface System<TSchema extends Schema> {
-  components: Component<TSchema[keyof TSchema]>[];
-}
-
-interface Component<TSchemaComponent extends SchemaComponent> {
-  name: TSchemaComponent["name"];
-  fields: {
-    [TName in keyof TSchemaComponent]: FieldTypeOf<TSchemaComponent[TName]>;
-  };
+  components: ({
+    [TName in keyof TSchema]: {
+      type: TName;
+      fields: {
+        [TFieldName in keyof TSchema[TName]]: FieldTypeOf<
+          TSchema[TName][TFieldName]
+        >;
+      };
+    };
+  }[keyof TSchema])[];
 }
 
 type FieldTypeOf<TSchemaFieldType extends SchemaFieldType> =
@@ -35,10 +37,15 @@ const SCHEMA = {
 const system: System<typeof SCHEMA> = {
   components: [
     {
-      name: "deno_deploy",
+      type: "deno_deploy",
       fields: {
         project_name: "string",
-        sheet_id: "string", // this is a bug, name "deno_deploy" only has "project_name" field but typescript doesn't catch it.
+      },
+    },
+    {
+      type: "google_sheets",
+      fields: {
+        "sheet_id": "string",
       },
     },
   ],
