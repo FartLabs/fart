@@ -1,4 +1,4 @@
-import type { Component } from "./component.ts";
+import type { Component, GenerateFn } from "./component.ts";
 
 export function generateHTMLAttributes(
   attributes: Record<string, unknown>,
@@ -18,11 +18,11 @@ export function generateHTMLChildren(
 ): string {
   return children
     ?.map((child) => typeof child === "string" ? child : generateHTML(child))
-    .join("\n") ?? "";
+    .join("") ?? "";
 }
 
-export function generateHTML(component: Component): string {
-  return `<${component.type}${generateHTMLAttributes(component.properties)}>\n${
+export const generateHTML: GenerateFn = (component) => {
+  return `<${component.type}${generateHTMLAttributes(component.properties)}>${
     generateHTMLChildren(component.children)
-  }\n</${component.type}>`;
-}
+  }</${component.type}>`;
+};

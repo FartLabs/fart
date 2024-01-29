@@ -1,4 +1,4 @@
-import type { Component } from "../component.ts";
+import type { Component, GenerateFn } from "../component.ts";
 
 export interface CodeBlockProperties {
   /**
@@ -47,15 +47,17 @@ export function indentCodeBlock(
     .join(newLine);
 }
 
-export function generateCodeBlock(component: CodeBlockComponent): string {
+export const generateCodeBlock: GenerateFn<CodeBlockComponent> = (
+  component,
+) => {
   const indentLevel = component.properties.indentLevel ?? 0;
   return component.children
-    ?.map((child: CodeBlockComponent | string) => {
+    ?.map((child: string | CodeBlockComponent) => {
       if (typeof child === "string") {
         return indentCodeBlock(child, component.properties);
       }
 
-      // TODO: Generate TS code. How to generate plain text with external logic?
+      // TODO: Generate TS code. How to generate plain text with external logic? Call another generator passed in the generate function arguments?
       return generateCodeBlock({
         ...child,
         properties: {
@@ -65,5 +67,5 @@ export function generateCodeBlock(component: CodeBlockComponent): string {
         },
       });
     })
-    .join("\n") ?? "";
-}
+    .join(component.properties.newLine ?? "\n") ?? "";
+};
