@@ -14,15 +14,15 @@ export function generateHTMLAttributes(
 }
 
 export function generateHTMLChildren(
-  children?: Component["children"],
+  children?: (Component | string)[],
 ): string {
   return children
     ?.map((child) => typeof child === "string" ? child : generateHTML(child))
-    .join("") ?? "";
+    .join("\n") ?? "";
 }
 
 export function generateHTML(component: Component): string {
-  return `<${component.type}${generateHTMLAttributes(component.properties)}>${
+  return `<${component.type}${generateHTMLAttributes(component.properties)}>\n${
     generateHTMLChildren(component.children)
-  }</${component.type}>`;
+  }\n</${component.type}>`;
 }

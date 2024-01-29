@@ -5,12 +5,12 @@
 
 //deno:generate deno run -A cmd/generate_app/main.ts
 // generate the whole as main function using a sequencer module.
-import { main } from "./main_generated.ts";
-import { makeApp } from "./app_generated.ts";
+// import { main } from "./main_generated.ts";
+// import { makeApp } from "./app_generated.ts";
 
 if (import.meta.main) {
-  const app = makeApp();
-  Deno.serve(app);
+  // const app = makeApp();
+  // Deno.serve(app);
 }
 
 // Run:

@@ -1,13 +1,13 @@
-export interface InputSchema {
-  /**
-   * info is the JSON Schema type info about the input.
-   */
-  info: any;
-}
+// export interface InputSchema {
+//   /**
+//    * info is the JSON Schema type info about the input.
+//    */
+//   info: any;
+// }
 
-interface Input {
-  idk: number;
-}
+// interface Input {
+//   idk: number;
+// }
 
 // TODO: Construct
 // - Component/ComponentSchema

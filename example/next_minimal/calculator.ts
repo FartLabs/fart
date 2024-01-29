@@ -4,17 +4,19 @@ function add(a: number, b: number) {
   return a + b;
 }
 
-function subtract(a: number, b: number) {
-  return a - b;
-}
+console.log(add);
 
-function multiply(a: number, b: number) {
-  return a * b;
-}
+// function subtract(a: number, b: number) {
+//   return a - b;
+// }
 
-function divide(a: number, b: number) {
-  return a / b;
-}
+// function multiply(a: number, b: number) {
+//   return a * b;
+// }
+
+// function divide(a: number, b: number) {
+//   return a / b;
+// }
 
 // console.log(add(1, 2));
 // console.log(Deno.readTextFileSync(new URL("./calculator.ts", import.meta.url)));
@@ -25,4 +27,6 @@ const sourceCode = Deno.readTextFileSync(
 );
 const sourceFile = project.createSourceFile("calculator.ts", sourceCode);
 const addFunction = sourceFile.getFunctionOrThrow("add");
-console.log(addFunction.getReturnType().getText());
+console.log(addFunction.getSignature().getDeclaration().getText());
+
+// TODO: Clean up lib/fart/ directory.
