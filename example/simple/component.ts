@@ -74,5 +74,5 @@ const output = call(
 console.log(output);
 
 // deno run example/simple/component.ts
-// ts json rpc experimentation. next step is to learn how to nest calls.
+// ts json rpc experimentation. next step is to learn how to predict outputs and nest calls.
 //
