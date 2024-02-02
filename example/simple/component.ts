@@ -1,34 +1,61 @@
-export interface Component<
-  TType extends string = string,
-  // deno-lint-ignore no-explicit-any
-  TProps = any,
-> {
-  type: TType;
-  properties: TProps;
-  children?: (Component | string)[];
-}
-
-export interface GenerateFn<
-  TComponent extends Component = Component,
-  TOutput = string,
-> {
-  (component: TComponent): TOutput;
-}
-
 /**
  * Call is JSON representation of a function call.
  */
-export interface Call<TID extends string, TArgs extends unknown[]> {
+export interface Call<TID extends string, TArgs extends Args> {
   id: TID;
   args?: TArgs;
 }
 
-// Do Fart functions call other Fart functions?
+// deno-lint-ignore no-explicit-any
+export type Args = any[];
 
-export type AmbiguousCall<
-  TID extends string = string,
-  TArgs extends unknown[] = unknown[],
-> = Call<TID, TArgs>;
+export type Fn = (...args: Args) => unknown;
+
+/**
+ * ArgsOf extracts the argument types of a function.
+ */
+export type ArgsOf<TFn extends Fn> = TFn extends (
+  ...args: infer TArgs
+) => unknown ? TArgs
+  : never;
+
+/**
+ * CallOf represents a call to a function with serialized arguments.
+ */
+export interface CallOf<
+  TID extends string,
+  TFn extends Fn,
+> {
+  id: TID;
+  args: ArgsOf<TFn>;
+}
+
+/**
+ * Calls is a map of function calls by their ID.
+ */
+export type Calls<TID extends string> = {
+  [id in TID]: Fn;
+};
+
+// export type Calls<TID extends string> = {
+//   [id in TID]: Fn;
+// };
+
+function call<
+  TCalls extends Calls<TID>,
+  TID extends string,
+  TArgs extends Args,
+>(
+  calls: TCalls,
+  c: Call<TID, TArgs>,
+) {
+  const fn = calls[c.id];
+  if (!fn) {
+    throw new Error(`Function not found: ${c.id}`);
+  }
+
+  return fn(...(c.args || []));
+}
 
 function generateGreet(id = "greet", defaultName = "world") {
   return `function ${id}(name = "${defaultName}") {
@@ -36,19 +63,12 @@ function generateGreet(id = "greet", defaultName = "world") {
 }`;
 }
 
-// TODO: Infer call type from generate function.
+const simpleGreetCall: CallOf<
+  "generateGreet",
+  typeof generateGreet
+> = { id: "generateGreet", args: ["greet", "world"] };
 
-const simpleGreetCall = { id: "generateGreet" } satisfies AmbiguousCall;
+console.log({ simpleGreetCall });
+console.log(call({ generateGreet }, simpleGreetCall));
 
-export interface CallRouter {
-}
-
-function call<TID extends string, TArgs extends unknown[]>(
-  c: Call<TID, TArgs>,
-) {
-  // switch (call.id) {
-  //   case "generateGreet":
-  //     return generateGreet(...call.args);
-  // }
-}
-// A component represents a call to a pure deterministic function with simplified/serialized arguments.
+// deno run example/simple/component.ts
