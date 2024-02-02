@@ -9,14 +9,16 @@ export interface Call<TID extends string, TArgs extends Args> {
 // deno-lint-ignore no-explicit-any
 export type Args = any[];
 
+/**
+ * Fn is a function type.
+ */
 export type Fn = (...args: Args) => unknown;
 
 /**
  * ArgsOf extracts the argument types of a function.
  */
-export type ArgsOf<TFn extends Fn> = TFn extends (
-  ...args: infer TArgs
-) => unknown ? TArgs
+export type ArgsOf<TFn extends Fn> = TFn extends
+  (...args: infer TArgs) => unknown ? TArgs
   : never;
 
 /**
@@ -31,18 +33,17 @@ export interface CallOf<
 }
 
 /**
- * Calls is a map of function calls by their ID.
+ * FnMap is a map of functions.
  */
-export type Calls<TID extends string> = {
+export type FnMap<TID extends string> = {
   [id in TID]: Fn;
 };
 
-// export type Calls<TID extends string> = {
-//   [id in TID]: Fn;
-// };
-
-function call<
-  TCalls extends Calls<TID>,
+/**
+ * call calls a function by its ID with serialized arguments.
+ */
+export function call<
+  TCalls extends FnMap<TID>,
   TID extends string,
   TArgs extends Args,
 >(
@@ -57,18 +58,22 @@ function call<
   return fn(...(c.args || []));
 }
 
-function generateGreet(id = "greet", defaultName = "world") {
-  return `function ${id}(name = "${defaultName}") {
+const output = call(
+  {
+    generateGreet(id = "greet", defaultName = "world") {
+      return `function ${id}(name = "${defaultName}") {
   return \`Hello, \${name}!\`;
 }`;
-}
+    },
+  },
+  {
+    id: "generateGreet",
+    args: ["greet", "world"],
+  },
+);
 
-const simpleGreetCall: CallOf<
-  "generateGreet",
-  typeof generateGreet
-> = { id: "generateGreet", args: ["greet", "world"] };
-
-console.log({ simpleGreetCall });
-console.log(call({ generateGreet }, simpleGreetCall));
+console.log(output);
 
 // deno run example/simple/component.ts
+// ts json rpc experimentation. next step is to learn how to nest calls.
+//
