@@ -50,12 +50,11 @@ export function call<
   calls: TCalls,
   c: Call<TID, TArgs>,
 ) {
-  const fn = calls[c.id];
-  if (!fn) {
+  if (typeof calls[c.id] !== "function") {
     throw new Error(`Function not found: ${c.id}`);
   }
 
-  return fn(...(c.args || []));
+  return calls[c.id](...(c.args || []));
 }
 
 const output = call(
