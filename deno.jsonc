@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "fart-jsx"
+  },
+  "imports": {
+    "fart-jsx/jsx-runtime": "./example/simple/jsx/jsx-runtime.ts"
+  }
+}
