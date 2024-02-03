@@ -1,5 +1,3 @@
-// TODO: Fix type error.
-// JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.deno-ts(7026)
 function App() {
   return (
     <div hello="world">

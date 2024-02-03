@@ -1,3 +1,5 @@
+import "./intrinsic-elements.ts";
+
 export function jsx(
   tagNameOrComponent: any,
   props: any = {},
