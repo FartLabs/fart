@@ -1,4 +1,4 @@
-import "./intrinsic-elements.ts";
+import "./intrinsic_elements.ts";
 
 export function jsx(
   tagNameOrComponent: any,
