@@ -1,6 +1,7 @@
 declare global {
   namespace JSX {
     interface IntrinsicElements {
+      // deno-lint-ignore no-explicit-any
       [key: string]: any;
     }
   }

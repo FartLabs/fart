@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import "./intrinsic_elements.ts";
 
 export function jsx(

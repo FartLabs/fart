@@ -4,7 +4,7 @@ export interface Component<
   TProps = any,
 > {
   type: TType;
-  properties: TProps;
+  properties?: TProps;
   children?: (Component | string)[];
 }
 

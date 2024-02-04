@@ -32,12 +32,12 @@ export type CodeBlockComponent = Component<
 
 export function indentCodeBlock(
   block: string,
-  options: CodeBlockProperties,
+  options?: CodeBlockProperties,
 ): string {
-  const newLine = options.newLine ?? "\n";
-  const indentNumberOfSpaces = options.indentNumberOfSpaces ?? 4;
-  const useTabs = options.useTabs ?? false;
-  const indentLevel = options.indentLevel ?? 0;
+  const newLine = options?.newLine ?? "\n";
+  const indentNumberOfSpaces = options?.indentNumberOfSpaces ?? 4;
+  const useTabs = options?.useTabs ?? false;
+  const indentLevel = options?.indentLevel ?? 0;
   const indent = useTabs
     ? "\t".repeat(indentLevel)
     : " ".repeat(indentLevel * indentNumberOfSpaces);
@@ -50,7 +50,7 @@ export function indentCodeBlock(
 export const generateCodeBlock: GenerateFn<CodeBlockComponent> = (
   component,
 ) => {
-  const indentLevel = component.properties.indentLevel ?? 0;
+  const indentLevel = component.properties?.indentLevel ?? 0;
   return component.children
     ?.map((child: string | CodeBlockComponent) => {
       if (typeof child === "string") {
@@ -63,9 +63,11 @@ export const generateCodeBlock: GenerateFn<CodeBlockComponent> = (
         properties: {
           ...component.properties,
           ...child.properties,
-          indentLevel: indentLevel + (child.properties.indentLevel ?? 0),
+          indentLevel: indentLevel + (child.properties?.indentLevel ?? 0),
         },
       });
     })
-    .join(component.properties.newLine ?? "\n") ?? "";
+    .join(
+      component.properties?.newLine ?? "\n",
+    ) ?? "";
 };

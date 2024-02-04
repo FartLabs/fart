@@ -1,5 +1,5 @@
 import { assertEquals } from "../developer_deps.ts";
-import { generateCodeBlock, indentCodeBlock } from "./code_block.ts";
+import { generateCodeBlock, indentCodeBlock } from "./generate_code_block.ts";
 
 Deno.test("indentCodeBlock", () => {
   assertEquals(

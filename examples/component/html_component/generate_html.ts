@@ -1,8 +1,12 @@
-import type { Component, GenerateFn } from "./component.ts";
+import type { Component, GenerateFn } from "../component.ts";
 
 export function generateHTMLAttributes(
-  attributes: Record<string, unknown>,
+  attributes?: Record<string, unknown>,
 ): string {
+  if (!attributes) {
+    return "";
+  }
+
   const keys = Object.keys(attributes);
   if (keys.length === 0) {
     return "";
