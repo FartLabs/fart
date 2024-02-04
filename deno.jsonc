@@ -4,6 +4,6 @@
     "jsxImportSource": "fart-jsx"
   },
   "imports": {
-    "fart-jsx/jsx-runtime": "./example/simple/jsx/runtime.ts"
+    "fart-jsx/jsx-runtime": "./examples/jsx/jsx_runtime.ts"
   }
 }
