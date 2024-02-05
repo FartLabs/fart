@@ -3,21 +3,6 @@ import { Eta } from "./developer_deps.ts";
 // deno run --allow-read examples/json_call/call.ts > examples/json_call/call_generated.ts
 // deno run examples/json_call/call_generated.ts
 if (import.meta.main) {
-  // Note: type-safety is sound.
-  // function generateGreet(id = "greet", defaultName = "world") {
-  //   return `function ${id}(name = "${defaultName}") {
-  // return \`Hello, \${name}!\`;
-  // }`;
-  // }
-  // const simpleGreetCall0: CallOf<
-  //   "generateGreet",
-  //   typeof generateGreet
-  // > = { id: "generateGreet", args: ["greet", "world"] };
-  // const simpleGreetCall1: CallOf<
-  //   "generateGreet",
-  //   typeof generateGreet
-  // > = { id: "generateGreet", args: ["greet", 0] };
-
   // Set up template engine.
   const templateEngine = new Eta();
   const executeGreetTemplate = templateEngine.compile(
@@ -47,12 +32,11 @@ if (import.meta.main) {
     ${id}();
   }`;
     },
-  };
+  } as const;
 
-  // TODO: fix type-safety.
   const result1 = call(
     fns,
-    { id: "generateGreet", args: ["greet", 0] },
+    { id: "generateGreet", args: ["greet", "world"] },
   );
 
   const result2 = call(
@@ -103,7 +87,7 @@ export type Calls<TID extends string> = {
 function call<
   TCalls extends Calls<TID>,
   TID extends string,
-  TArgs extends Args,
+  TArgs extends Parameters<TCalls[TID]>,
 >(
   calls: TCalls,
   c: Call<TID, TArgs>,
