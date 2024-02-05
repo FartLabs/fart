@@ -1,22 +1,14 @@
-import { Eta } from "./developer_deps.ts";
-
 // deno run --allow-read examples/json_call/call.ts > examples/json_call/call_generated.ts
 // deno run examples/json_call/call_generated.ts
 if (import.meta.main) {
-  // Set up template engine.
-  const templateEngine = new Eta();
-  const executeGreetTemplate = templateEngine.compile(
-    // `import.meta.resolve("./greet.ts.tmpl")` doesn't work.
-    Deno.readTextFileSync("./examples/json_call/greet.ts.tmpl"),
-  );
+  // `import.meta.resolve("./greet.ts")` doesn't work.
+  const greetTemplate = Deno.readTextFileSync("./examples/json_call/greet.ts");
 
   // Define functions.
   const fns = {
-    generateGreet(id = "greet", defaultName = "world") {
-      return templateEngine.render(
-        executeGreetTemplate,
-        { id, defaultName },
-      );
+    generateGreet(_id = "greet", _defaultName = "world") {
+      // TODO: Use ts-morph to edit the template code.
+      return greetTemplate;
     },
     generateAdd(id = "add") {
       return `function ${id}(a: number, b: number) {
