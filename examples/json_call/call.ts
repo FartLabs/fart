@@ -1,3 +1,5 @@
+import { Eta } from "./developer_deps.ts";
+
 /**
  * Call is JSON representation of a function call.
  */
@@ -9,14 +11,16 @@ export interface Call<TID extends string, TArgs extends Args> {
 // deno-lint-ignore no-explicit-any
 export type Args = any[];
 
-export type Fn = (...args: Args) => unknown;
+// deno-lint-ignore no-explicit-any
+export type Fn = (...args: Args) => any;
 
 /**
  * ArgsOf extracts the argument types of a function.
  */
 export type ArgsOf<TFn extends Fn> = TFn extends (
   ...args: infer TArgs
-) => unknown ? TArgs
+  // deno-lint-ignore no-explicit-any
+) => any ? TArgs
   : never;
 
 /**
@@ -53,31 +57,23 @@ function call<
   return fn(...(c.args || []));
 }
 
-// deno run examples/json_call/call.ts > examples/json_call/call_generated.ts
+// deno run --allow-read examples/json_call/call.ts > examples/json_call/call_generated.ts
 // deno run examples/json_call/call_generated.ts
 if (import.meta.main) {
-  // const simpleGreetCall: CallOf<
-  //   "generateGreet",
-  //   typeof generateGreet
-  // > = { id: "generateGreet", args: ["greet", "world"] };
+  // Set up template engine.
+  const templateEngine = new Eta();
+  const executeGreetTemplate = templateEngine.compile(
+    // I wish `import.meta.resolve("./greet.ts.tmpl")` worked, but it doesn't.
+    Deno.readTextFileSync("./examples/json_call/greet.ts.tmpl"),
+  );
 
-  // const simpleGreetCall: CallOf<
-  //   "generateGreet",
-  //   typeof generateGreet
-  // > = { id: "generateGreet", args: ["greet", 0] };
-
-  // main.ts
-  //deno:generate deno run greet_generator.ts
-
-  // import { greet } from "./greet.ts";
-  // console.log(greet("Ethan")); // See it is convenient to pair generated function "calls" with ts-morph because we can modify the function to fit our requirements such as exporting it so we can use it as a module.
-
-  // TODO: Show grabbing template snippets from a file via ts-morph.
+  // Define functions.
   const fns = {
     generateGreet(id = "greet", defaultName = "world") {
-      return `function ${id}(name = "${defaultName}") {
-return \`Hello, \${name}!\`;
-}`;
+      return templateEngine.render(
+        executeGreetTemplate,
+        { id, defaultName },
+      );
     },
     generateAdd(id = "add") {
       return `function ${id}(a: number, b: number) {
@@ -86,7 +82,7 @@ return a + b;
     },
     generateMain(id = "main") {
       return `function ${id}() {
-console.log(greet(add(60, 9).toString()));
+console.log(greet(add(9, 10).toString()));
 }
 
 if (import.meta.main) {
