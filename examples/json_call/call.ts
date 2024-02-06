@@ -1,3 +1,5 @@
+// import { Project } from "./developer_deps.ts";
+
 // deno run --allow-read examples/json_call/call.ts > examples/json_call/call_generated.ts
 // deno run examples/json_call/call_generated.ts
 if (import.meta.main) {
@@ -7,6 +9,9 @@ if (import.meta.main) {
   // Define functions.
   const fns = {
     generateGreet(_id = "greet", _defaultName = "world") {
+      // const project = new Project({useInMemoryFileSystem: true});
+      // const sourceFile = project.createSourceFile("greet.ts", greetTemplate);
+      // const greet = sourceFile.getFunction("greet");
       // TODO: Use ts-morph to edit the template code.
       return greetTemplate;
     },
