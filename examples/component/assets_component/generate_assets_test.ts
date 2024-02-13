@@ -1,7 +1,7 @@
 import { assertEquals } from "../developer_deps.ts";
 import { generateAssets } from "./generate_assets.ts";
 
-Deno.test("generateHTML", async () => {
+Deno.test("generateAssets", async () => {
   const assets = await generateAssets({
     type: "assets",
     properties: {
