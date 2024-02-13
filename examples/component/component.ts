@@ -8,6 +8,12 @@ export interface Component<
   children?: (Component | string)[];
 }
 
+// TODO: Rename GenFn to accurately convey its purpose as a function
+// that generates some data deterministically from a component.
+// Embed semantic metadata in source code.
+// This component requires a GitHub client with a repository reference and ability to fetch repository tree.
+// Pass ctx argument next to component argument for dependency injection.
+
 export interface GenerateFn<
   TComponent extends Component = Component,
   TOutput = string,

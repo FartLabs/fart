@@ -18,6 +18,8 @@ interface HTTPServerProps {
   router: Router<string>;
 }
 
+// TODO: Represent as CLI system.
+
 export function generateHTTPServer(props: HTTPServerProps): string {
   // return <CodeBlock>
   // What is the difference between importing
@@ -53,5 +55,5 @@ console.log(
         POST: "createUser",
       },
     }}
-  />
+  />,
 );
