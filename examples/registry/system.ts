@@ -1,23 +1,21 @@
 // deno run examples/registry/system.ts
 if (import.meta.main) {
-  // Define functions.
-  const result = call(
-    {
-      generateGreet(id = "greet", defaultName = "world") {
-        return `function ${id}(name = "${defaultName}") {
+  const fns = {
+    generateGreet(id = "greet", defaultName = "world") {
+      return `function ${id}(name = "${defaultName}") {
   return \`Hello, \${name}!\`;
 }`;
-      },
-      generateAdd(id = "add") {
-        return `function ${id}(a: number, b: number) {
+    },
+    generateAdd(id = "add") {
+      return `function ${id}(a: number, b: number) {
   return a + b;
 }`;
-      },
-      generateMain(id = "main") {
-        return `if (import.meta.main) {
+    },
+    generateMain(id = "main") {
+      return `if (import.meta.main) {
   ${id}();
 }
-  
+
 function ${id}() {
   console.log(greet(add(9, 10).toString()));
 }
@@ -25,10 +23,15 @@ function ${id}() {
 ${this.generateGreet("greet")}
 
 ${this.generateAdd("add")}`;
-      },
     },
-    { id: "generateGreet", args: ["greet", "world"] },
-    // { id: "generateMain", args: ["main"] },
+  } as const;
+
+  // TODO: Convert to RPC API.
+
+  // Define functions.
+  const result = call(
+    fns,
+    { id: "generateMain", args: ["main"] },
   );
 
   console.log(result);
@@ -67,8 +70,9 @@ export type Calls<TID extends string> = {
 };
 
 function call<
-  TCalls extends Calls<TID>,
-  TID extends string,
+  TIDs extends string,
+  TCalls extends Calls<TIDs>,
+  TID extends TIDs,
   TArgs extends Parameters<TCalls[TID]>,
 >(
   calls: TCalls,
