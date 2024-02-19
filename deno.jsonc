@@ -1,0 +1,13 @@
+{
+  "lock": false,
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "fart-jsx"
+  },
+  "imports": {
+    "fart-jsx/jsx-runtime": "./examples/jsx/jsx_runtime.ts"
+  },
+  "fmt": {
+    "exclude": ["**/*_generated.*"]
+  }
+}
