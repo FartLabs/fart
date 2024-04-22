@@ -1,5 +1,5 @@
 ---
-self_link: https://fart.tools/getting-started
+self_link: https://fart.fart.tools/getting-started
 ---
 
 # Getting Started
@@ -7,4 +7,4 @@ self_link: https://fart.tools/getting-started
 > TODO: Write the getting started docs!
 > Fart deserves better!
 
-> Curious reader, visit <https://fart.tools/getting-started/>.
+> Curious reader, visit <https://fart.fart.tools/getting-started/>.

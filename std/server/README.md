@@ -1,3 +1,3 @@
 # Server Architecture
 
-Please refer to <https://fart.tools/server-architecture/>.
+Please refer to <https://fart.fart.tools/server-architecture/>.

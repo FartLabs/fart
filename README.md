@@ -1,5 +1,5 @@
 ---
-self_link: https://fart.tools/
+self_link: https://fart.fart.tools/
 ---
 
 # Fart 🌫
@@ -17,7 +17,7 @@ To execute the Fart tests, simply run `deno test`. If you have not done so alrea
 ### Give it a Spin
 
 You can give Fart a spin on your machine in one command (assuming Deno is installed).
-Check out the example code on <https://fart.tools/pokemon-example/>.
+Check out the example code on <https://fart.fart.tools/pokemon-example/>.
 
 ```bash
 deno run --reload https://etok.codes/fart/raw/main/ex/pokemon/run.ts

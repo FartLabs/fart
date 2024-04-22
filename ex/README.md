@@ -1,3 +1,3 @@
 # Pokemon Fart Example
 
-Please refer to <https://fart.tools/pokemon-example/>.
+Please refer to <https://fart.fart.tools/pokemon-example/>.

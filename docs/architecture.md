@@ -1,5 +1,5 @@
 ---
-self_link: https://fart.tools/architecture
+self_link: https://fart.fart.tools/architecture
 ---
 
 # Architecture
