@@ -1,7 +1,7 @@
 import type {
   CompilerSettings,
   FartDepartment as fFartDepartment,
-} from "https://fart.tools/ts/EthanThatOneKid/fart/main/std/fart/fart.ts";
+} from "https://fart.fart.tools/ts/EthanThatOneKid/fart/main/std/fart/fart.ts";
 import { IODepartment as fIODepartment } from "https://fart.deno.dev/ts/EthanThatOneKid/fart/main/std/io/io.ts";
 
 import { compile } from "../../../lib/fart.ts";

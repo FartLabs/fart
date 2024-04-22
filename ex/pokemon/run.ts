@@ -3,7 +3,7 @@ import type {
   Bag,
   PC,
   Pokemon,
-} from "https://fart.tools/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
+} from "https://fart.fart.tools/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts";
 
 // Extended Pokeball class
 import { Pokeball } from "./pokeball.ts";

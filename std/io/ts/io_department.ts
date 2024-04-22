@@ -1,6 +1,6 @@
 import type {
   IODepartment as fIODepartment,
-} from "https://fart.tools/ts/EthanThatOneKid/fart/main/std/io/io.ts";
+} from "https://fart.fart.tools/ts/EthanThatOneKid/fart/main/std/io/io.ts";
 
 export class IODepartment implements fIODepartment {
   async fetchIfValidURL(path: string): Promise<string> {

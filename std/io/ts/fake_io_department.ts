@@ -1,7 +1,7 @@
 // deno-lint-ignore-file
 import type {
   IODepartment as fIODepartment,
-} from "https://fart.tools/ts/EthanThatOneKid/fart/main/std/io/io.ts";
+} from "https://fart.fart.tools/ts/EthanThatOneKid/fart/main/std/io/io.ts";
 
 export class FakeIODepartment implements fIODepartment {
   async readFile(path: string): Promise<string> {

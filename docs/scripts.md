@@ -1,5 +1,5 @@
 ---
-self_link: https://fart.tools/scripts
+self_link: https://fart.fart.tools/scripts
 ---
 
 # Project Scripts

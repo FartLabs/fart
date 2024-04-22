@@ -2,7 +2,7 @@ import type {
   GitHubDepartment as fGitHubDepartment,
   GitHubRepo,
   GitHubUser,
-} from "https://fart.tools/ts/EthanThatOneKid/fart/main/std/gh/gh.ts";
+} from "https://fart.fart.tools/ts/EthanThatOneKid/fart/main/std/gh/gh.ts";
 
 // Full Octokit docs: https://octokit.github.io/rest.js
 import { Octokit } from "../../../deps/third_party/octokit/rest.ts";

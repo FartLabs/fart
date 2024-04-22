@@ -1,12 +1,12 @@
 ---
-self_link: https://fart.tools/server-architecture
+self_link: https://fart.fart.tools/server-architecture
 ---
 
 # Fart Server 📡
 
 ## How to spin up a Fart Server
 
-You can spin up the Fart Serer on your machine in one command (assuming Deno is installed). 
+You can spin up the Fart Serer on your machine in one command (assuming Deno is installed).
 
 ```bash
 deno run --allow-net --allow-read --allow-env --unstable https://etok.codes/fart/raw/main/std/server/serve_http.ts
