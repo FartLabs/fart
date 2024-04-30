@@ -20,6 +20,7 @@ export enum Lexicon {
   StringMarker3,
   StringLiteral,
   Modifier,
+  Comment,
   EOF,
 }
 
@@ -43,5 +44,6 @@ export const LEXICON = {
   [Lexicon.StringMarker2]: "'",
   [Lexicon.StringMarker3]: '"',
   [Lexicon.Modifier]: "%",
+  [Lexicon.Comment]: "COMMENT",
   [Lexicon.EOF]: "",
 } as const;

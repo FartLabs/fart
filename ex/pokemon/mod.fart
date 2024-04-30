@@ -1,11 +1,13 @@
 type Pokeball {
   id*: string
-  odds*: number
+  odds*: number; hello1
+  ; world1
   used*: boolean
 
   throw*: fn % <string, async % boolean>
-}
+}; hello2 world2
 
+; hello3 world3
 type Pokemon {
   name*: string
   num*: number
@@ -14,6 +16,8 @@ type Pokemon {
   catch*: fn % <Pokeball, async % boolean>
 }
 
+; hello4 world4
+; hello5 world5
 type PC {
   mons*: array % Pokemon
 }

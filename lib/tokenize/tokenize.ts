@@ -4,9 +4,11 @@ import { Token } from "./token.ts";
 
 export function* tokenize(
   content: string,
+  omitComments = false,
 ): Generator<Token, Token, undefined> {
   let currentToken = "";
-  let commentMode = false;
+  let currentComment: string | undefined;
+  let currentCommentColumn = -1;
   let stringLiteralMode:
     | Lexicon.StringMarker
     | Lexicon.StringMarker2
@@ -14,6 +16,7 @@ export function* tokenize(
     | null = null;
   let lineCount = 1;
   let columnCount = 0;
+
   const makeToken = (
     raw: string,
     lineOffset = 0,
@@ -25,22 +28,11 @@ export function* tokenize(
       columnOffset;
     return new Token(raw, tokenLine, tokenColumn);
   };
-  const breakLine = (
-    breaker: (
-      | typeof LEXICON[Lexicon.LineBreaker]
-      | typeof LEXICON[Lexicon.LineBreaker2]
-    ),
-  ) => {
-    if (breaker === LEXICON[Lexicon.LineBreaker]) {
-      lineCount++;
-      columnCount = 0;
-      commentMode = false;
-    }
-  };
+
   const closeCurrentToken = (
     currentCharacter: string | null = null,
   ): Token | null => {
-    if (currentToken.length === 0 || commentMode) return null;
+    if (currentToken.length === 0 || currentComment !== undefined) return null;
     let nextToken: string | null = currentCharacter;
     switch (currentToken) {
       case LEXICON[Lexicon.Spacer]:
@@ -73,6 +65,22 @@ export function* tokenize(
     }
     return null;
   };
+
+  const checkForComment = (): Token | null => {
+    let commentToken: Token | null = null;
+    if (currentComment !== undefined && !omitComments) {
+      const cleanedComment = currentComment.trim();
+      commentToken = new Token(
+        cleanedComment,
+        lineCount,
+        currentCommentColumn,
+      );
+    }
+    currentComment = undefined;
+    currentCommentColumn = -1;
+    return commentToken;
+  };
+
   for (const character of content) {
     columnCount++;
     let nextToken: Token | null;
@@ -82,10 +90,17 @@ export function* tokenize(
     ) {
       nextToken = closeCurrentToken();
       if (nextToken !== null) yield nextToken;
-      breakLine(character);
+      const nextComment = checkForComment();
+      if (nextComment !== null) yield nextComment;
+      lineCount++;
+      columnCount = 0;
+    }
+    // Comment mode is activated when the variable `currentComment` is not undefined.
+    if (currentComment !== undefined) {
+      // console.log({ character });
+      currentComment += character;
       continue;
     }
-    if (commentMode) continue;
     if (stringLiteralMode !== null) {
       currentToken += character;
       if (character === LEXICON[stringLiteralMode]) {
@@ -99,7 +114,9 @@ export function* tokenize(
       case LEXICON[Lexicon.Commenter]: {
         nextToken = closeCurrentToken();
         if (nextToken !== null) yield nextToken;
-        commentMode = true;
+        // console.log("COMMENTER", { lineCount, columnCount, nextToken });
+        currentCommentColumn = columnCount;
+        currentComment = "";
         break;
       }
       case LEXICON[Lexicon.StringMarker]: {
@@ -160,10 +177,13 @@ export function* tokenize(
         break;
       }
       default: {
-        if (!commentMode) currentToken += character;
+        currentToken += character;
         break;
       }
     }
   }
+  // Check for any lingering comments.
+  const nextComment = checkForComment();
+  if (nextComment !== null) yield nextComment;
   return makeToken(LEXICON[Lexicon.EOF]);
 }
