@@ -40,7 +40,7 @@ export const upgradeDep = async (
 const getFlags = (args: string[]) => {
   const flags = parseArgs(args, {
     boolean: ["help", "y", "verbose"],
-    string: ["version", "v", "dependency", "dep"],
+    string: ["version", "dependency"],
     alias: {
       v: "version",
       dep: "dependency",
@@ -50,12 +50,12 @@ const getFlags = (args: string[]) => {
     console.log(`Help coming soon!`);
     Deno.exit();
   }
-  const version = flags.version ?? flags.v;
+  const version = flags.version;
   if (version === undefined) {
     alert('Please set a version (Ex. `--version="0.1.1"`).');
     Deno.exit();
   }
-  const dependency: string = flags.dependency ?? flags.dep ??
+  const dependency: string = flags.dependency ??
     "https://deno.land/std";
   const preconsented = Boolean(flags.y);
   const verboseLogging = Boolean(flags.verbose);
