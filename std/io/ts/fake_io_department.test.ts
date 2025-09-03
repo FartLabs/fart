@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../deps/std/testing.ts";
+import { assertEquals } from "@std/assert";
 import { FakeIODepartment } from "./fake_io_department.ts";
 
 const assertReturnsVoid = (value: unknown) => assertEquals(value, undefined);

@@ -5,7 +5,7 @@ import type {
 } from "https://fart.fart.tools/ts/EthanThatOneKid/fart/main/std/gh/gh.ts";
 
 // Full Octokit docs: https://octokit.github.io/rest.js
-import { Octokit } from "../../../deps/third_party/octokit/rest.ts";
+import { Octokit } from "@octokit/rest";
 
 /**
  * Library available via:
@@ -23,13 +23,13 @@ export class GitHubDepartment implements fGitHubDepartment {
     });
   }
 
-  async getUser(username: string): Promise<GitHubUser> {
+  getUser(username: string): Promise<GitHubUser> {
     console.log("USER", { username });
-    return {} as GitHubUser;
+    return Promise.resolve({} as GitHubUser);
   }
 
-  async getRepos(user: GitHubUser): Promise<GitHubRepo[]> {
+  getRepos(user: GitHubUser): Promise<GitHubRepo[]> {
     console.log("REPOS", { user });
-    return [] as GitHubRepo[];
+    return Promise.resolve([] as GitHubRepo[]);
   }
 }

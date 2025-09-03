@@ -1,10 +1,10 @@
-import { parse as parseFlags } from "../../deps/std/flags.ts";
+import { parseArgs } from "@std/cli/parse-args";
 import { compile } from "../../lib/fart.ts";
 import { getFlags } from "./common.ts";
 import cartridges from "../carts/mod.ts";
 
 export const cli = async (args: string[]) => {
-  const flags = parseFlags(args);
+  const flags = parseArgs(args);
   const { source, target, indentation, output, help } = getFlags(
     flags,
     cartridges,

@@ -1,6 +1,6 @@
 // Imports in this file must be manually upgraded since this operation is able
 // to overwrite this script's dependencies.
-import { parse as parseFlags } from "https://deno.land/std@0.106.0/flags/mod.ts";
+import { parseArgs } from "@std/cli/parse-args";
 import { expandGlob } from "https://deno.land/std@0.106.0/fs/mod.ts";
 
 export const upgradeDep = async (
@@ -38,7 +38,14 @@ export const upgradeDep = async (
 };
 
 const getFlags = (args: string[]) => {
-  const flags = parseFlags(args);
+  const flags = parseArgs(args, {
+    boolean: ["help", "y", "verbose"],
+    string: ["version", "v", "dependency", "dep"],
+    alias: {
+      v: "version",
+      dep: "dependency",
+    },
+  });
   if (flags.help) {
     console.log(`Help coming soon!`);
     Deno.exit();

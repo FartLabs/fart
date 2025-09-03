@@ -1,15 +1,15 @@
-import { CompilationSettings, compile } from "./compile.ts";
-import { assertEquals } from "../../deps/std/testing.ts";
+import { CompilationSettings, compile as _compile } from "./compile.ts";
+import { assertEquals as _assertEquals } from "@std/assert";
 // import { CartEventName } from "../gen/cart.ts";
 import { default as fakeTypeMap } from "../../std/typemaps/fake.ts";
 import {
   default as fakeCartridge,
-  RESULTS,
+  RESULTS as _RESULTS,
 } from "../../std/carts/fake.cart.ts";
 
-const TEST_INDENT = "  ";
-const NEW_LINE = "\n";
-const TEST_SETTINGS: CompilationSettings = {
+const _TEST_INDENT = "  ";
+const _NEW_LINE = "\n";
+const _TEST_SETTINGS: CompilationSettings = {
   cartridge: fakeCartridge,
   typemap: fakeTypeMap,
 };

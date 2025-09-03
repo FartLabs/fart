@@ -1,12 +1,7 @@
 import { getMimeType } from "../../common.ts";
 import { makeCacheLayer } from "../common.ts";
 import { Time } from "../../../lib/consts/time.ts";
-import {
-  dirname,
-  fromFileUrl,
-  join,
-  normalize,
-} from "../../../deps/std/path.ts";
+import { dirname, fromFileUrl, join, normalize } from "@std/path";
 
 const processPathname = (pathname: string): string => {
   // TODO: Do not check if --allow-env is unspecified.

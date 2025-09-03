@@ -1,4 +1,4 @@
-import { format as formatPath, parse as parsePath } from "../deps/std/path.ts";
+import { format as formatPath, parse as parsePath } from "@std/path";
 
 export const convertFilenameToTargetFilename = (
   filename: string,

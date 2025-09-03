@@ -1,4 +1,4 @@
-import { assertEquals } from "../../deps/std/testing.ts";
+import { assertEquals } from "@std/assert";
 import { CartEventName } from "../../lib/gen/cart.ts";
 import DenoCart from "./deno.cart.ts";
 

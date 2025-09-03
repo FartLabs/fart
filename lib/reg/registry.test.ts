@@ -1,5 +1,5 @@
 import { Registry } from "./registry.ts";
-import { assertEquals } from "../../deps/std/testing.ts";
+import { assertEquals } from "@std/assert";
 
 class Dummy {
   constructor(private id?: string) {}

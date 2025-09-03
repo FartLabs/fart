@@ -79,6 +79,11 @@ export type CartEvent =
   | StructOpenDetail
   | SetPropertyDetail;
 
+export interface MethodDetails {
+  inputType?: string;
+  outputType?: string;
+}
+
 /**
  * If a code generation function returns null, that means that the
  * target language omits the requested generated code. A null return

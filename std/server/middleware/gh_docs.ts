@@ -1,10 +1,5 @@
-import {
-  dirname,
-  fromFileUrl,
-  join,
-  normalize,
-} from "../../../deps/std/path.ts";
-import { marked as parse } from "../../../deps/third_party/marked.ts";
+import { dirname, fromFileUrl, join, normalize } from "@std/path";
+import { marked as parse } from "marked";
 import { Time } from "../../../lib/consts/time.ts";
 import { makeCacheLayer, removeFrontmatter } from "../common.ts";
 import { convertFilenameToTargetFilename } from "../../common.ts";

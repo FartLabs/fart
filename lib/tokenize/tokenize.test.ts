@@ -1,7 +1,7 @@
 import { Token } from "./token.ts";
 import { tokenize } from "./tokenize.ts";
 import { T } from "./alias.ts";
-import { assert, assertEquals } from "../../deps/std/testing.ts";
+import { assert, assertEquals } from "@std/assert";
 import { Lexicon } from "../consts/lexicon.ts";
 
 const assertTokensEqual = (

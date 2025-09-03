@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../deps/std/testing.ts";
+import { assertEquals } from "@std/assert";
 import { IODepartment } from "./io_department.ts";
 
 const TESTDATA_PATH = "std/io/testdata/pikachu.json";

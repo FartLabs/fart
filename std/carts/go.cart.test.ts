@@ -1,4 +1,4 @@
-// import { assertEquals } from "../../deps/std/testing.ts";
+// import { assertEquals } from "@std/assert";
 // import { CartEvent } from "../../lib/gen/cart.ts";
 // import GoCart from "./go.cart.ts";
 

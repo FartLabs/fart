@@ -1,4 +1,4 @@
-import { assertEquals } from "../../deps/std/testing.ts";
+import { assertEquals } from "@std/assert";
 
 // TODO: Write tests for `CodeDocument`.
 Deno.test("Empty input results in empty output", () => {

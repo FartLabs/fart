@@ -26,6 +26,7 @@ export default async (request: Request): Promise<Response> => {
       },
     );
   } catch (error) {
-    return makeError(error.message, 500);
+    const message = error instanceof Error ? error.message : String(error);
+    return makeError(message, 500);
   }
 };

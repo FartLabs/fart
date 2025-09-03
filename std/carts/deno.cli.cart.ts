@@ -15,7 +15,7 @@ denoCli.on(
     event.code.append(`${makeComment()}
 import { FartDepartment } from "https://github.com/EthanThatOneKid/fart/raw/main/std/fart/ts/fart_department.ts";
 import { IODepartment } from "https://github.com/EthanThatOneKid/fart/raw/main/std/io/ts/io_department.ts";
-import { parse } from "https://deno.land/std@0.112.0/flags/mod.ts";
+import { parseArgs } from "@std/cli/parse-args";
 
 const fart = new FartDepartment(new IODepartment());
 `);
@@ -34,7 +34,7 @@ denoCli.on(
 denoCli.on(
   CartEventName.FileEnd,
   (event) => {
-    event.code.append(`const FLAGS = parse(Deno.args);
+    event.code.append(`const FLAGS = parseArgs(Deno.args);
 const [subcommand] = FLAGS._;
 
 switch (subcommand) {
