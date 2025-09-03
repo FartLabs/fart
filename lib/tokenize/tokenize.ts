@@ -26,10 +26,9 @@ export function* tokenize(
     return new Token(raw, tokenLine, tokenColumn);
   };
   const breakLine = (
-    breaker: (
+    breaker:
       | typeof LEXICON[Lexicon.LineBreaker]
-      | typeof LEXICON[Lexicon.LineBreaker2]
-    ),
+      | typeof LEXICON[Lexicon.LineBreaker2],
   ) => {
     if (breaker === LEXICON[Lexicon.LineBreaker]) {
       lineCount++;

@@ -23,7 +23,7 @@ export default async (request: Request): Promise<Response> => {
       {
         status: 200,
         headers: { "Content-Type": mimetype },
-      }
+      },
     );
   } catch (error) {
     return makeError(error.message, 500);

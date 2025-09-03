@@ -10,7 +10,8 @@ Description: Github README style. Includes theme for Pygmentized code blocks.
 */
 #wrapper {
   color: #24292e;
-  font-family: Consolas, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+  font-family:
+    Consolas, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   margin: 0 auto;
   text-size-adjust: 100%;
@@ -184,12 +185,28 @@ Description: Github README style. Includes theme for Pygmentized code blocks.
 #wrapper select,
 #wrapper textarea,
 #wrapper button {
-  font: 14px/21px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font:
+    14px/21px -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
 }
 #wrapper body {
-  font: 14px/21px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font:
+    14px/21px -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
   color: #333;
   background-color: #fff;
 }
@@ -313,8 +330,16 @@ Description: Github README style. Includes theme for Pygmentized code blocks.
   border: solid 1px #dddddd !important;
   border-radius: 3px;
   color: #333;
-  font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
-    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font:
+    14px -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
   line-height: 1.6;
   padding: 3px;
 }
