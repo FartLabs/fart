@@ -22,7 +22,7 @@ const cache = makeCacheLayer(async () =>
 </head>
 <body>
   <main id="wrapper">
-    <a href="https://etok.codes/fart/blob/main/README.md#readme" style="float: right;">
+    <a href="https://github.com/EthanThatOneKid/fart/blob/main/README.md#readme" style="float: right;">
       <img src="fart-logo.png" alt="Fart Logo" style="width: 144px;" />
     </a>
     ${await fetchPageBody()}

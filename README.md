@@ -20,7 +20,7 @@ You can give Fart a spin on your machine in one command (assuming Deno is instal
 Check out the example code on <https://fart.fart.tools/pokemon-example/>.
 
 ```bash
-deno run --reload https://etok.codes/fart/raw/main/ex/pokemon/run.ts
+deno run --reload https://github.com/EthanThatOneKid/fart/raw/main/ex/pokemon/run.ts
 ```
 
 <details>
@@ -42,12 +42,12 @@ deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon.fart --reg=ts.de
 
 ### Fart Server 📡
 
-Please refer to [docs/server-architecture.md](https://etok.codes/fart/blob/main/docs/server-architecture.md#readme) to learn about how the server code is organized.
+Please refer to [docs/server-architecture.md](https://github.com/EthanThatOneKid/fart/blob/main/docs/server-architecture.md#readme) to learn about how the server code is organized.
 
 ## Architecture
 
-Please refer to [docs/architecture.md](https://etok.codes/fart/blob/main/docs/architecture.md#readme) to learn about the structure of this repository.
+Please refer to [docs/architecture.md](https://github.com/EthanThatOneKid/fart/blob/main/docs/architecture.md#readme) to learn about the structure of this repository.
 
 ---
 
-Created with 💖 by [**@EthanThatOneKid**](https://etok.codes/)
+Created with 💖 by [**@EthanThatOneKid**](https://github.com/EthanThatOneKid/)

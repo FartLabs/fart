@@ -32,7 +32,7 @@ const fetchDoc = async (pathname: string): Promise<string | undefined> => {
 };
 
 const processUrl = (pathname: string, hash = "#readme"): string => {
-  const BASE_URL = "https://etok.codes/fart/blob/main/docs/";
+  const BASE_URL = "https://github.com/EthanThatOneKid/fart/blob/main/docs/";
   const targetName = convertFilenameToTargetFilename(pathname, ".md");
   hash = hash !== undefined && hash.length > 0 ? hash : "#readme";
   return BASE_URL + targetName + hash;

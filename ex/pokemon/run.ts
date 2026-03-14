@@ -1,4 +1,4 @@
-// Source Fart: <https://etok.codes/fart/blob/main/ex/pokemon/mod.fart>
+// Source Fart: <https://github.com/EthanThatOneKid/fart/blob/main/ex/pokemon/mod.fart>
 import type {
   Bag,
   PC,

@@ -10,7 +10,7 @@ import { Octokit } from "../../../deps/third_party/octokit/rest.ts";
 /**
  * Library available via:
  * ```ts
- * import { GitHubDepartment } from "https://etok.codes/fart/raw/main/std/gh/mod.ts";
+ * import { GitHubDepartment } from "https://github.com/EthanThatOneKid/fart/raw/main/std/gh/mod.ts";
  * ```
  */
 export class GitHubDepartment implements fGitHubDepartment {
