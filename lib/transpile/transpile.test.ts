@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows, assert } from "@std/assert";
+import { assertEquals } from "@std/assert";
 import { TranspilationContext, transpile } from "./transpile.ts";
 import { Cartridge, CartridgeEvent } from "./cartridge/mod.ts";
 import type { CartridgeEventContext } from "./cartridge/mod.ts";

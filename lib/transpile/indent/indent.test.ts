@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows, assert } from "@std/assert";
+import { assertEquals } from "@std/assert";
 import { INDENT, Indent } from "./indent.ts";
 
 Deno.test("cache of Indent.Tab1 equals 1 tab", () => {

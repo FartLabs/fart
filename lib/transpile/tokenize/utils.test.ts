@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows, assert } from "@std/assert";
+import { assert, assertEquals } from "@std/assert";
 import {
   checkIsIdentifier,
   checkIsInlineComment,

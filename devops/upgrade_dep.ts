@@ -1,7 +1,7 @@
 // Imports in this file must be manually upgraded since this operation is able
 // to overwrite this script's dependencies.
-import { parse as parseFlags } from "https://deno.land/std@0.106.0/flags/mod.ts";
-import { expandGlob } from "https://deno.land/std@0.106.0/fs/mod.ts";
+import { parseArgs as parseFlags } from "@std/cli";
+import { expandGlob } from "@std/fs";
 
 export const upgradeDep = async (
   version: string,

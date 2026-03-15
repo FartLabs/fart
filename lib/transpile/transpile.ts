@@ -45,7 +45,7 @@ export class TranspilationContext {
     let mod = this.cartridge.getMod(initialToken?.value);
     while (mod !== undefined) {
       mods.push(mod);
-      const modSymbol = assertKind(this.nextToken(), Lexicon.Modifier);
+      const _modSymbol = assertKind(this.nextToken(), Lexicon.Modifier);
       const wildToken = this.nextToken();
 
       switch (wildToken?.kind) {
@@ -58,7 +58,7 @@ export class TranspilationContext {
         }
 
         case Lexicon.TupleOpener: {
-          const results = this.nextTuple();
+          const _results = this.nextTuple();
           break;
         }
       }

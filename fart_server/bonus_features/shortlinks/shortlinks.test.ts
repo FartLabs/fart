@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows, assert } from "@std/assert";
+import { assertEquals } from "@std/assert";
 import { redirectIfShortlink } from "./shortlinks.ts";
 import shortlinks from "./shortlinks.json" with { type: "json" };
 

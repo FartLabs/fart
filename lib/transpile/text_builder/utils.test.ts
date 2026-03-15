@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows, assert } from "@std/assert";
+import { assertEquals } from "@std/assert";
 import { T, Token } from "../tokenize/mod.ts";
 import { CodeBlock } from "../code_block/mod.ts";
 import {

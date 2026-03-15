@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows, assert } from "@std/assert";
+import { assert, assertEquals } from "@std/assert";
 import { Token } from "./token.ts";
 import { Lexicon } from "./lexicon.ts";
 
