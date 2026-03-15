@@ -1,6 +1,6 @@
-import { LEXICON, Lexicon, LexiconType } from "./lexicon.ts";
+import { LEXEME, Lexeme, LexemeType } from "./lexeme.ts";
 import { Token } from "./token.ts";
-import { findInLexicon } from "./utils.ts";
+import { findInLexeme } from "./utils.ts";
 
 /**
  * Object used to memoize the process of properly tokenizing
@@ -44,7 +44,7 @@ const INITIAL_TOKENIZATION_STATE: Readonly<TokenizationState> = Object.freeze({
 
 export function* tokenize(
   input: string,
-  lex: LexiconType = LEXICON,
+  lex: LexemeType = LEXEME,
 ): FartTokenGenerator {
   const memo = { ...INITIAL_TOKENIZATION_STATE };
 
@@ -59,27 +59,27 @@ export function* tokenize(
     const catchAllChars = memo.yieldingInlineComment ||
       memo.yieldingMultilineComment;
 
-    switch (findInLexicon(memo.char, lex)) {
+    switch (findInLexeme(memo.char, lex)) {
       // when a line break occurs, increment the line count, set column back to initial,
       // and the current substring should become a token.
-      case Lexicon.EOF: {
+      case Lexeme.EOF: {
         memo.breakingLine = true;
         memo.yieldingSubstr = true;
         break;
       }
-      case Lexicon.StructOpener:
-      case Lexicon.StructCloser:
-      case Lexicon.TupleOpener:
-      case Lexicon.TupleCloser:
-      case Lexicon.PropertyDefiner:
-      case Lexicon.Modifier:
-      case Lexicon.Separator: {
+      case Lexeme.StructOpener:
+      case Lexeme.StructCloser:
+      case Lexeme.TupleOpener:
+      case Lexeme.TupleCloser:
+      case Lexeme.PropertyDefiner:
+      case Lexeme.Modifier:
+      case Lexeme.Separator: {
         memo.yieldingChar = true;
         memo.yieldingSubstr = true;
         break;
       }
-      case Lexicon.PropertyOptionalMarker:
-      case Lexicon.Whitespace: {
+      case Lexeme.PropertyOptionalMarker:
+      case Lexeme.Whitespace: {
         memo.yieldingSubstr = true;
         break;
       }
@@ -101,8 +101,8 @@ export function* tokenize(
     if (memo.yieldingChar && memo.char !== null && !catchAllChars) {
       // if a '?' comes before a ':', then they are combined and yielded as a `?:`
       if (
-        findInLexicon(memo.prevChar, lex) === Lexicon.PropertyOptionalMarker &&
-        findInLexicon(memo.char, lex) === Lexicon.PropertyDefiner
+        findInLexeme(memo.prevChar, lex) === Lexeme.PropertyOptionalMarker &&
+        findInLexeme(memo.char, lex) === Lexeme.PropertyDefiner
       ) {
         yield new Token(memo.prevChar + memo.char, memo.line, memo.column - 1);
       } else {

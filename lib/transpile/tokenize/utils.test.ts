@@ -4,21 +4,21 @@ import {
   checkIsInlineComment,
   checkIsMultilineComment,
   checkIsTextLiteral,
-  findInLexicon,
+  findInLexeme,
 } from "./utils.ts";
-import { LEXICON, Lexicon } from "./lexicon.ts";
+import { LEXEME, Lexeme } from "./lexeme.ts";
 
-Deno.test("finds correct index in lexicon", () => {
-  const expectation = Lexicon.TypeDefiner;
-  const reality = findInLexicon("type", LEXICON);
+Deno.test("finds correct index in lexeme", () => {
+  const expectation = Lexeme.TypeDefiner;
+  const reality = findInLexeme("type", LEXEME);
   assertEquals(expectation, reality);
 });
 
-Deno.test("returns null when not found (or null) in lexicon", () => {
+Deno.test("returns null when not found (or null) in lexeme", () => {
   const expectation = null;
-  const reality = findInLexicon("not_in_LEXICON", LEXICON);
+  const reality = findInLexeme("not_in_LEXEME", LEXEME);
   assertEquals(expectation, reality);
-  assertEquals(expectation, findInLexicon(null, LEXICON));
+  assertEquals(expectation, findInLexeme(null, LEXEME));
 });
 
 Deno.test("correctly checks identifier", () => {

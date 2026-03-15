@@ -1,13 +1,13 @@
-import { Lexicon, Token } from "./tokenize/mod.ts";
+import { Lexeme, Token } from "../tokenize/mod.ts";
 
 /**
  * @todo write tests in utils.test.ts
  */
 export function assertKind(
   token?: Token,
-  ...validLex: Lexicon[]
+  ...validLex: Lexeme[]
 ): Token {
-  const isValidLexeme = validLex.includes(token?.kind ?? Lexicon.Unknown);
+  const isValidLexeme = validLex.includes(token?.kind ?? Lexeme.Unknown);
   if (token === undefined || !isValidLexeme) {
     throw new Error(
       `Expected token kind ${validLex.join(" or ")}, but got ${token}`,

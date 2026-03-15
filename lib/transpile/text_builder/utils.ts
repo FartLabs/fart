@@ -1,6 +1,6 @@
 import type { CodeBlock } from "../code_block/mod.ts";
 import type { Token } from "../tokenize/mod.ts";
-import { Lexicon } from "../tokenize/mod.ts";
+import { Lexeme } from "../tokenize/mod.ts";
 import {
   CartridgeEvent,
   CartridgeEventContext,
@@ -8,7 +8,7 @@ import {
 } from "../cartridge/mod.ts";
 
 /**
- * @param commentToken expects a comment token (Lexicon.InlineComment | Lexicon.MultilineComment)
+ * @param commentToken expects a comment token (Lexeme.InlineComment | Lexeme.MultilineComment)
  * @returns an array of strings, each string is a line of the comment; intended to be used in
  * conjunction with the `flatMap` method.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flatMap
@@ -16,7 +16,7 @@ import {
 export const cleanComment = (commentToken: Token): string[] => {
   const trimmedCommentLines: string[] = [];
   switch (commentToken.kind) {
-    case Lexicon.InlineComment: {
+    case Lexeme.InlineComment: {
       const rawComment = commentToken.value;
       const lineBreakIndex = rawComment.indexOf("\n");
       const inlineCommentContent = rawComment
@@ -25,7 +25,7 @@ export const cleanComment = (commentToken: Token): string[] => {
       trimmedCommentLines.push(inlineCommentContent);
       break;
     }
-    case Lexicon.MultilineComment: {
+    case Lexeme.MultilineComment: {
       const rawCommentLines = commentToken.value.split("\n");
       rawCommentLines.forEach((rawCommentLine) => {
         // TODO: push only if the line is not a blank edge

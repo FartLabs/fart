@@ -1,9 +1,9 @@
-import { Lexicon, LexiconType } from "./lexicon.ts";
+import { Lexeme, LexemeType } from "./lexeme.ts";
 
-export const findInLexicon = (
+export const findInLexeme = (
   raw: string | null,
-  lex: LexiconType,
-): Lexicon | null => {
+  lex: LexemeType,
+): Lexeme | null => {
   if (raw === null) return null;
   for (const [kind, value] of lex) {
     if (Array.isArray(value) && value.includes(raw) || (raw === value)) {

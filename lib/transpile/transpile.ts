@@ -1,8 +1,8 @@
-import { Lexicon, Token, tokenize } from "./tokenize/mod.ts";
+import { Lexeme, Token, tokenize } from "./tokenize/mod.ts";
 import { Cartridge, CartridgeEvent } from "./cartridge/mod.ts";
 import type { ModHandler, PropertyDefinition } from "./cartridge/mod.ts";
 import { TextBuilder } from "./text_builder/mod.ts";
-import { assertKind } from "./utils.ts";
+import { assertKind } from "./common/utils.ts";
 import type { FartTokenGenerator } from "./tokenize/mod.ts";
 
 /**
@@ -45,11 +45,11 @@ export class TranspilationContext {
     let mod = this.cartridge.getMod(initialToken?.value);
     while (mod !== undefined) {
       mods.push(mod);
-      const _modSymbol = assertKind(this.nextToken(), Lexicon.Modifier);
+      const _modSymbol = assertKind(this.nextToken(), Lexeme.Modifier);
       const wildToken = this.nextToken();
 
       switch (wildToken?.kind) {
-        case Lexicon.Identifier: {
+        case Lexeme.Identifier: {
           const result = mods.reduceRight(
             (result: string, modify: ModHandler) => modify(result),
             wildToken.value,
@@ -57,7 +57,7 @@ export class TranspilationContext {
           return result;
         }
 
-        case Lexicon.TupleOpener: {
+        case Lexeme.TupleOpener: {
           const _results = this.nextTuple();
           break;
         }
@@ -84,17 +84,17 @@ export class TranspilationContext {
     const wildToken = currentToken ?? this.nextToken();
 
     switch (wildToken?.kind) {
-      case Lexicon.StructOpener: {
+      case Lexeme.StructOpener: {
         def.struct = await this.nextStruct();
         break;
       }
 
-      case Lexicon.TupleOpener: {
+      case Lexeme.TupleOpener: {
         def.tuple = await this.nextTuple();
         break;
       }
 
-      case Lexicon.Identifier: {
+      case Lexeme.Identifier: {
         // const modifier = await this.nextModifier(wildToken);
         // if (modifier !== undefined) {
         // if ident is known modifier, await nextModifier();
@@ -104,7 +104,7 @@ export class TranspilationContext {
         break;
       }
 
-      case Lexicon.TextLiteral: {
+      case Lexeme.TextLiteral: {
         def.value = wildToken.value;
         break;
       }
@@ -129,19 +129,19 @@ export class TranspilationContext {
       // expects identifier or '}'
       const ident = assertKind(
         maybeIdent,
-        Lexicon.Identifier,
-        Lexicon.StructCloser,
+        Lexeme.Identifier,
+        Lexeme.StructCloser,
       );
 
-      if (ident.is(Lexicon.StructCloser)) {
+      if (ident.is(Lexeme.StructCloser)) {
         break;
       }
 
       // expects ':' or '?:'
       const propertyDefiner = assertKind(
         this.nextToken(),
-        Lexicon.PropertyDefiner,
-        Lexicon.PropertyOptionalDefiner,
+        Lexeme.PropertyDefiner,
+        Lexeme.PropertyOptionalDefiner,
       );
 
       // 1st token of right-hand expression (e.g. identifier, text literal, or
@@ -149,7 +149,7 @@ export class TranspilationContext {
       const wildToken = await this.nextToken();
 
       switch (wildToken?.kind) {
-        case Lexicon.StructOpener: {
+        case Lexeme.StructOpener: {
           await this.builder.append(
             CartridgeEvent.StructOpen,
             [ident, propertyDefiner, wildToken],
@@ -159,10 +159,10 @@ export class TranspilationContext {
           break;
         }
 
-        case Lexicon.Identifier:
-        case Lexicon.TextLiteral: {
+        case Lexeme.Identifier:
+        case Lexeme.TextLiteral: {
           result[ident.value] = await this.nextLiteral(wildToken);
-          result[ident.value].optional = propertyDefiner.is(Lexicon.PropertyOptionalDefiner);
+          result[ident.value].optional = propertyDefiner.is(Lexeme.PropertyOptionalDefiner);
           await this.builder.append(
             CartridgeEvent.SetProperty,
             [ident, propertyDefiner, wildToken],
@@ -195,15 +195,15 @@ export class TranspilationContext {
       
       if (!token) break;
 
-      if (token.kind === Lexicon.TupleCloser) {
+      if (token.kind === Lexeme.TupleCloser) {
         break;
       }
       
-      if (token.kind === Lexicon.Separator) {
+      if (token.kind === Lexeme.Separator) {
         continue;
       }
 
-      if (token.kind === Lexicon.Identifier) {
+      if (token.kind === Lexeme.Identifier) {
         const def = await this.nextLiteral(token);
         result.push({ value: def });
       } else {
@@ -241,8 +241,8 @@ export async function transpile(
 
   for (let token = ctx.nextToken(); !ctx.done; token = ctx.nextToken()) {
     switch (token?.kind) {
-      case Lexicon.InlineComment: {
-        const comment = assertKind(token, Lexicon.InlineComment);
+      case Lexeme.InlineComment: {
+        const comment = assertKind(token, Lexeme.InlineComment);
         await ctx.builder.append(
           CartridgeEvent.InlineComment,
           [comment],
@@ -251,8 +251,8 @@ export async function transpile(
         break;
       }
 
-      case Lexicon.MultilineComment: {
-        const comment = assertKind(token, Lexicon.MultilineComment);
+      case Lexeme.MultilineComment: {
+        const comment = assertKind(token, Lexeme.MultilineComment);
         await ctx.builder.append(
           CartridgeEvent.MultilineComment,
           [comment],
@@ -261,10 +261,10 @@ export async function transpile(
         break;
       }
 
-      case Lexicon.Load: {
-        const loader = assertKind(token, Lexicon.Load);
-        const source = assertKind(ctx.nextToken(), Lexicon.TextLiteral);
-        const opener = assertKind(ctx.nextToken(), Lexicon.TupleOpener);
+      case Lexeme.Load: {
+        const loader = assertKind(token, Lexeme.Load);
+        const source = assertKind(ctx.nextToken(), Lexeme.TextLiteral);
+        const opener = assertKind(ctx.nextToken(), Lexeme.TupleOpener);
         const tuple = await ctx.nextTuple();
         if (tuple === undefined) throw new Error("Expected tuple");
         const dependencies = tuple
@@ -281,10 +281,10 @@ export async function transpile(
         break;
       }
 
-      case Lexicon.TypeDefiner: {
-        const definer = assertKind(token, Lexicon.TypeDefiner);
-        const ident = assertKind(ctx.nextToken(), Lexicon.Identifier);
-        const opener = assertKind(ctx.nextToken(), Lexicon.StructOpener);
+      case Lexeme.TypeDefiner: {
+        const definer = assertKind(token, Lexeme.TypeDefiner);
+        const ident = assertKind(ctx.nextToken(), Lexeme.Identifier);
+        const opener = assertKind(ctx.nextToken(), Lexeme.StructOpener);
         await ctx.builder.append(
           CartridgeEvent.StructOpen,
           [definer, ident, opener],

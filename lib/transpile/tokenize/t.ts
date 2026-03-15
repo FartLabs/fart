@@ -3,13 +3,13 @@
 // functions for creating Token instances with fewer keystrokes;
 // used primarily for testing-purposes.
 
-import { LEXICON, Lexicon } from "./lexicon.ts";
+import { LEXEME, Lexeme } from "./lexeme.ts";
 import { Token } from "./token.ts";
 
 type SimpleTokenMaker = (line: number, col: number) => Token;
 type SpecialTokenMaker = (raw: string, line: number, col: number) => Token;
 
-export interface LexiconAliasLayer {
+export interface LexemeAliasLayer {
   /** `___` — identifier */
   id: SpecialTokenMaker;
   /** `load` — struct opener */
@@ -55,19 +55,19 @@ export interface LexiconAliasLayer {
 const makeSpecialToken: SpecialTokenMaker = (raw, line, col) =>
   new Token(raw, line, col);
 
-const LOAD = LEXICON.get(Lexicon.Load) as string;
-const NEST = LEXICON.get(Lexicon.StructOpener) as string;
-const DENEST = LEXICON.get(Lexicon.StructCloser) as string;
-const OPEN_TUPLE = LEXICON.get(Lexicon.TupleOpener) as string;
-const CLOSE_TUPLE = LEXICON.get(Lexicon.TupleCloser) as string;
-const [TYPE, SPEC] = LEXICON.get(Lexicon.TypeDefiner) as [string, string];
-const OPTIONAL = LEXICON.get(Lexicon.PropertyOptionalMarker) as string;
-const SETTER_1 = LEXICON.get(Lexicon.PropertyDefiner) as string;
-const SETTER_2 = LEXICON.get(Lexicon.PropertyOptionalDefiner) as string;
-const MODIFIER = LEXICON.get(Lexicon.Modifier) as string;
-const SEPARATOR = LEXICON.get(Lexicon.Separator) as string;
+const LOAD = LEXEME.get(Lexeme.Load) as string;
+const NEST = LEXEME.get(Lexeme.StructOpener) as string;
+const DENEST = LEXEME.get(Lexeme.StructCloser) as string;
+const OPEN_TUPLE = LEXEME.get(Lexeme.TupleOpener) as string;
+const CLOSE_TUPLE = LEXEME.get(Lexeme.TupleCloser) as string;
+const [TYPE, SPEC] = LEXEME.get(Lexeme.TypeDefiner) as [string, string];
+const OPTIONAL = LEXEME.get(Lexeme.PropertyOptionalMarker) as string;
+const SETTER_1 = LEXEME.get(Lexeme.PropertyDefiner) as string;
+const SETTER_2 = LEXEME.get(Lexeme.PropertyOptionalDefiner) as string;
+const MODIFIER = LEXEME.get(Lexeme.Modifier) as string;
+const SEPARATOR = LEXEME.get(Lexeme.Separator) as string;
 
-export const T: LexiconAliasLayer = {
+export const T: LexemeAliasLayer = {
   id: makeSpecialToken,
   load: (line, col) => new Token(LOAD, line, col),
   nest: (line, col) => new Token(NEST, line, col),

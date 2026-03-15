@@ -29,7 +29,7 @@ The transpiler takes this source and emits language-specific output via `Cartrid
 
 ## Core Concepts
 
-- **Tokenization**: The lexicon maps source syntax to a list of tokens.
+- **Tokenization**: The lexeme maps source syntax to a list of tokens.
 - **Transpilation**: The core AST event dispatcher that converts tokens into code strings.
 - **Cartridges**: Language targets that define how specific structures and keywords map to other languages.
 
