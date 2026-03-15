@@ -1,3 +1,7 @@
+---
+self_link: https://fart.fart.tools/getting-started
+---
+
 # Getting Started
 
 Welcome to Fart! This guide will help you get up and running with the Fart infrastructure.

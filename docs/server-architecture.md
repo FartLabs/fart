@@ -1,15 +1,15 @@
 ---
-self_link: https://fart.tools/server-architecture
+self_link: https://fart.fart.tools/server-architecture
 ---
 
 # Fart Server 📡
 
 ## How to spin up a Fart Server
 
-You can spin up the Fart Serer on your machine in one command (assuming Deno is installed). 
+You can spin up the Fart Serer on your machine in one command (assuming Deno is installed).
 
 ```bash
-deno run --allow-net --allow-read --allow-env --unstable https://etok.codes/fart/raw/main/std/server/serve_http.ts
+deno run --allow-net --allow-read --allow-env --unstable https://github.com/EthanThatOneKid/fart/raw/main/std/server/serve_http.ts
 ```
 
 <details>
@@ -39,25 +39,25 @@ deployctl run --watch std/server/worker.ts
 
 ### Homepage (`GET /`)
 
-> [/middleware/home.ts](https://etok.codes/fart/blob/main/std/server/middleware/gh_docs.ts)
+> [/middleware/home.ts](https://github.com/EthanThatOneKid/fart/blob/main/std/server/middleware/gh_docs.ts)
 
-This page renders and serves the README.md of <https://etok.codes/fart/>.
+This page renders and serves the README.md of <https://github.com/EthanThatOneKid/fart/>.
 
 ### Static Files (`GET /[...path].*`)
 
-> [/middleware/static.ts](https://etok.codes/fart/blob/main/std/server/middleware/static.ts)
+> [/middleware/static.ts](https://github.com/EthanThatOneKid/fart/blob/main/std/server/middleware/static.ts)
 
-This middleware serves static files located under [`/std/server/static/`](https://etok.codes/fart/blob/main/std/server/static/).
+This middleware serves static files located under [`/std/server/static/`](https://github.com/EthanThatOneKid/fart/blob/main/std/server/static/).
 
 ### GitHub Docs (`/[...path]`)
 
 > [/middleware/gh_docs.ts](https://github.com/EthanThatOneKid/fart/tree/main/std/server/middleware/gh_docs.ts)
 
-Any markdown files located under [`/docs`](https://etok.codes/fart/tree/main/docs/) are rendered and served.
+Any markdown files located under [`/docs`](https://github.com/EthanThatOneKid/fart/tree/main/docs/) are rendered and served.
 
 ### Compile Farts (`GET /[registry]/[...path].*`)
 
-> [/middleware/compile.ts](https://etok.codes/fart/blob/main/std/server/middleware/compile.ts)
+> [/middleware/compile.ts](https://github.com/EthanThatOneKid/fart/blob/main/std/server/middleware/compile.ts)
 
 This middleware serves the compiled result of any Fart source file publicly hosted on GitHub.
 
