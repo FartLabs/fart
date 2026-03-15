@@ -1,0 +1,80 @@
+{
+  "scriptId": "349",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/indent/utils.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2166,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getIndentOption",
+      "ranges": [
+        {
+          "startOffset": 53,
+          "endOffset": 675,
+          "count": 15
+        },
+        {
+          "startOffset": 143,
+          "endOffset": 221,
+          "count": 0
+        },
+        {
+          "startOffset": 226,
+          "endOffset": 304,
+          "count": 0
+        },
+        {
+          "startOffset": 309,
+          "endOffset": 391,
+          "count": 0
+        },
+        {
+          "startOffset": 483,
+          "endOffset": 565,
+          "count": 0
+        },
+        {
+          "startOffset": 570,
+          "endOffset": 652,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getCachedIndent",
+      "ranges": [
+        {
+          "startOffset": 683,
+          "endOffset": 840,
+          "count": 15
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getIndent",
+      "ranges": [
+        {
+          "startOffset": 1707,
+          "endOffset": 2165,
+          "count": 15
+        },
+        {
+          "startOffset": 2046,
+          "endOffset": 2164,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

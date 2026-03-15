@@ -1,0 +1,17 @@
+{
+  "scriptId": "349",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/indent/mod.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 120,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

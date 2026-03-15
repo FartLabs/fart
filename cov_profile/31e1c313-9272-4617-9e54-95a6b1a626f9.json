@@ -1,0 +1,105 @@
+{
+  "scriptId": "350",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/cartridge/cartridge.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1747,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 42,
+          "endOffset": 480,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 526,
+          "endOffset": 753,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 795,
+          "endOffset": 964,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 997,
+          "endOffset": 1336,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "removeEventListener",
+      "ranges": [
+        {
+          "startOffset": 1340,
+          "endOffset": 1403,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "dispatch",
+      "ranges": [
+        {
+          "startOffset": 1406,
+          "endOffset": 1641,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "getType",
+      "ranges": [
+        {
+          "startOffset": 1644,
+          "endOffset": 1694,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "getMod",
+      "ranges": [
+        {
+          "startOffset": 1697,
+          "endOffset": 1744,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

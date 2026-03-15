@@ -35,5 +35,3 @@ export const getSize = () => {
   return handlers.length;
 };
 
-// TODO(@ethanthatonekid): Write new functions to access the Fart Server's
-// configuration.

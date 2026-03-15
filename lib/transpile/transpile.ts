@@ -80,7 +80,7 @@ export class TranspilationContext {
    * Consumes the next struct, tuple, or value.
    */
   public async nextLiteral(currentToken?: Token): Promise<PropertyDefinition> {
-    const def: PropertyDefinition = {};
+    const def = {} as PropertyDefinition;
     const wildToken = currentToken ?? this.nextToken();
 
     switch (wildToken?.kind) {
@@ -123,9 +123,12 @@ export class TranspilationContext {
     const result: PropertyDefinition["struct"] = {};
 
     while (true) {
+      const maybeIdent = this.nextToken();
+      if (!maybeIdent) break;
+      
       // expects identifier or '}'
       const ident = assertKind(
-        this.nextToken(),
+        maybeIdent,
         Lexicon.Identifier,
         Lexicon.StructCloser,
       );
@@ -159,6 +162,14 @@ export class TranspilationContext {
         case Lexicon.Identifier:
         case Lexicon.TextLiteral: {
           result[ident.value] = await this.nextLiteral(wildToken);
+          result[ident.value].optional = propertyDefiner.is(Lexicon.PropertyOptionalDefiner);
+          await this.builder.append(
+            CartridgeEvent.SetProperty,
+            [ident, propertyDefiner, wildToken],
+            [],
+            result[ident.value],
+            ident.value,
+          );
           break;
         }
 
@@ -174,10 +185,33 @@ export class TranspilationContext {
   }
 
   /**
-   * @todo implement
+   * Consumes a tuple structure (a list of values inside parentheses).
    */
-  public nextTuple(): PropertyDefinition["tuple"] {
-    return [];
+  public async nextTuple(): Promise<PropertyDefinition["tuple"]> {
+    const result: PropertyDefinition["tuple"] = [];
+
+    while (true) {
+      const token = this.nextToken();
+      
+      if (!token) break;
+
+      if (token.kind === Lexicon.TupleCloser) {
+        break;
+      }
+      
+      if (token.kind === Lexicon.Separator) {
+        continue;
+      }
+
+      if (token.kind === Lexicon.Identifier) {
+        const def = await this.nextLiteral(token);
+        result.push({ value: def });
+      } else {
+        throw new Error(`Expected identifier or tuple closer, but got ${token.value}`);
+      }
+    }
+
+    return result;
   }
 }
 

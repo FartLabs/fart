@@ -1,4 +1,4 @@
-import { assertEquals } from "../deps/std/testing.ts";
+import { assertEquals, assertThrows, assert } from "@std/assert";
 import { clear, getSize, inject, register } from "./utils.ts";
 
 // Note: Make sure each test clears the handlers if changes were made.

@@ -1,0 +1,64 @@
+{
+  "scriptId": "313",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/fart_server/bonus_features/shortlinks/shortlinks.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 667,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 114,
+          "endOffset": 184,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "redirectIfShortlink",
+      "ranges": [
+        {
+          "startOffset": 233,
+          "endOffset": 665,
+          "count": 5
+        },
+        {
+          "startOffset": 345,
+          "endOffset": 648,
+          "count": 10
+        },
+        {
+          "startOffset": 387,
+          "endOffset": 644,
+          "count": 5
+        },
+        {
+          "startOffset": 491,
+          "endOffset": 525,
+          "count": 1
+        },
+        {
+          "startOffset": 525,
+          "endOffset": 588,
+          "count": 4
+        },
+        {
+          "startOffset": 648,
+          "endOffset": 664,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

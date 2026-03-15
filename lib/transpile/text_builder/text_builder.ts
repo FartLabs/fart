@@ -73,6 +73,8 @@ export class TextBuilder {
     event: CartridgeEvent.SetProperty,
     tokens: Token[],
     comments: Token[],
+    value: PropertyDefinition,
+    name: string,
   ): Promise<void>;
   public async append(
     event: CartridgeEvent.StructClose,

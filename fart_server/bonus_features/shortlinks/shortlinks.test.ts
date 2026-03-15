@@ -1,6 +1,6 @@
-import { assertEquals } from "../../../deps/std/testing.ts";
+import { assertEquals, assertThrows, assert } from "@std/assert";
 import { redirectIfShortlink } from "./shortlinks.ts";
-import shortlinks from "./shortlinks.json" assert { type: "json" };
+import shortlinks from "./shortlinks.json" with { type: "json" };
 
 Deno.test("shortlink redirects to GitHub repository", () => {
   const request = new Request("http://localhost:8080/github");

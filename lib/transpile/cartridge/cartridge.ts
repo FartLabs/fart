@@ -46,16 +46,14 @@ export type CartridgeEventReturnType = (
 // - example: fn % (cb: fn % (async % _), number); (cb: () => Promise<void>) => number
 //   ; data = { id: "example", value: { mods: [{ name: "fn" }] } }
 
-export interface PropertyDefinition {
+export type PropertyDefinition = {
   optional?: boolean;
-  modifier?: string;
-  struct?: Record<string, PropertyDefinition>;
-  tuple?: Array<{
-    label?: string;
-    value: PropertyDefinition;
-  }>;
-  value?: string;
-}
+} & (
+  | { value: string; modifier?: never; struct?: never; tuple?: never }
+  | { struct: Record<string, PropertyDefinition>; value?: never; modifier?: never; tuple?: never }
+  | { modifier: string; value?: string; struct?: never; tuple?: never }
+  | { tuple: Array<{ label?: string; value: PropertyDefinition }>; modifier?: string; value?: never; struct?: never }
+);
 
 export interface CartridgeEventContext<T extends CartridgeEvent> {
   type: T;

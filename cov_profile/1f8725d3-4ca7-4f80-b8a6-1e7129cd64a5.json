@@ -1,0 +1,193 @@
+{
+  "scriptId": "347",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/tokenize/t.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1941,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "makeSpecialToken",
+      "ranges": [
+        {
+          "startOffset": 315,
+          "endOffset": 358,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "load",
+      "ranges": [
+        {
+          "startOffset": 989,
+          "endOffset": 1028,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "nest",
+      "ranges": [
+        {
+          "startOffset": 1038,
+          "endOffset": 1077,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "denest",
+      "ranges": [
+        {
+          "startOffset": 1089,
+          "endOffset": 1130,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "open_tuple",
+      "ranges": [
+        {
+          "startOffset": 1146,
+          "endOffset": 1191,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "close_tuple",
+      "ranges": [
+        {
+          "startOffset": 1208,
+          "endOffset": 1254,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "type",
+      "ranges": [
+        {
+          "startOffset": 1264,
+          "endOffset": 1303,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "spec",
+      "ranges": [
+        {
+          "startOffset": 1313,
+          "endOffset": 1352,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "optional",
+      "ranges": [
+        {
+          "startOffset": 1366,
+          "endOffset": 1409,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "setter_1",
+      "ranges": [
+        {
+          "startOffset": 1423,
+          "endOffset": 1466,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "setter_2",
+      "ranges": [
+        {
+          "startOffset": 1480,
+          "endOffset": 1523,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "mod",
+      "ranges": [
+        {
+          "startOffset": 1532,
+          "endOffset": 1575,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "separator",
+      "ranges": [
+        {
+          "startOffset": 1590,
+          "endOffset": 1634,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "text_1",
+      "ranges": [
+        {
+          "startOffset": 1646,
+          "endOffset": 1696,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "text_2",
+      "ranges": [
+        {
+          "startOffset": 1708,
+          "endOffset": 1758,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "text_3",
+      "ranges": [
+        {
+          "startOffset": 1770,
+          "endOffset": 1822,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

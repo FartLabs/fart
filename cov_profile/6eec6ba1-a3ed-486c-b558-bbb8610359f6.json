@@ -1,0 +1,120 @@
+{
+  "scriptId": "314",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/code_block/code_block.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1283,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 122,
+          "endOffset": 658,
+          "count": 6
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "append",
+      "ranges": [
+        {
+          "startOffset": 262,
+          "endOffset": 412,
+          "count": 15
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 343,
+          "endOffset": 405,
+          "count": 15
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "export",
+      "ranges": [
+        {
+          "startOffset": 415,
+          "endOffset": 558,
+          "count": 6
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 473,
+          "endOffset": 541,
+          "count": 15
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "join",
+      "ranges": [
+        {
+          "startOffset": 669,
+          "endOffset": 1280,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1005,
+          "endOffset": 1028,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 1037,
+          "endOffset": 1270,
+          "count": 3
+        },
+        {
+          "startOffset": 1100,
+          "endOffset": 1134,
+          "count": 0
+        },
+        {
+          "startOffset": 1241,
+          "endOffset": 1245,
+          "count": 1
+        },
+        {
+          "startOffset": 1246,
+          "endOffset": 1262,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

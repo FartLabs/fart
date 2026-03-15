@@ -1,4 +1,4 @@
-import { assert, assertEquals } from "../../../deps/std/testing.ts";
+import { assertEquals, assertThrows, assert } from "@std/assert";
 import {
   checkIsIdentifier,
   checkIsInlineComment,

@@ -9,7 +9,7 @@
  * - Visualize cov: deno coverage cov_profile
  */
 
-import { source as parseFile } from "https://cdn.skypack.dev/lcov-parse";
+import { source as parseFile } from "lcov-parse";
 
 interface LineDetail {
   line: number;
@@ -44,10 +44,22 @@ parseFile(lcov, (errorMessage: string | null, results: LcovResult[]) => {
   if (errorMessage !== null) {
     return console.error(errorMessage);
   }
+
+  let totalLinesFound = 0;
+  let totalLinesHit = 0;
+
   for (const report of results) {
+    totalLinesFound += report.lines.found;
+    totalLinesHit += report.lines.hit;
+
+    const fileCoverage = report.lines.found === 0 
+      ? 100 
+      : Math.round((report.lines.hit / report.lines.found) * 100);
+
     const uncoveredFns = report.functions.details.filter((fn) => fn.hit === 0);
-    if (uncoveredFns.length > 0) {
-      console.log("\nFile:", report.file);
+    
+    if (uncoveredFns.length > 0 || fileCoverage < 100) {
+      console.log(`\nFile: ${report.file} (${fileCoverage}% covered)`);
       for (const fn of uncoveredFns) {
         console.log(
           "Uncovered function!",
@@ -56,4 +68,10 @@ parseFile(lcov, (errorMessage: string | null, results: LcovResult[]) => {
       }
     }
   }
+
+  const overallCoverage = totalLinesFound === 0 
+    ? 100 
+    : Math.round((totalLinesHit / totalLinesFound) * 100);
+  
+  console.log(`\nOverall Coverage: ${overallCoverage}% (${totalLinesHit}/${totalLinesFound} lines)`);
 });

@@ -1,4 +1,4 @@
-import { assertThrows } from "../../../deps/std/testing.ts";
+import { assertEquals, assertThrows, assert } from "@std/assert";
 
 import { LEXICON } from "./lexicon.ts";
 

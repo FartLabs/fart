@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../deps/std/testing.ts";
+import { assertEquals, assertThrows, assert } from "@std/assert";
 import { Cartridge, CartridgeEvent } from "./cartridge.ts";
 import { CodeBlock } from "../code_block/mod.ts";
 

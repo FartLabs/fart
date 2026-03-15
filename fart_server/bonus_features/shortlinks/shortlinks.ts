@@ -1,4 +1,4 @@
-import shortlinks from "./shortlinks.json" assert { type: "json" };
+import shortlinks from "./shortlinks.json" with { type: "json" };
 
 const map = Object.entries(shortlinks)
   .reduce((result, [key, value]) => {

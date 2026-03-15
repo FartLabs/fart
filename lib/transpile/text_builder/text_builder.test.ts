@@ -1,4 +1,4 @@
-import { assertEquals } from "../../../deps/std/testing.ts";
+import { assertEquals, assertThrows, assert } from "@std/assert";
 import { TextBuilder } from "./text_builder.ts";
 import { Cartridge, CartridgeEvent } from "../cartridge/mod.ts";
 import { T } from "../tokenize/mod.ts";
@@ -74,7 +74,7 @@ Deno.test("text builder appends set_property event", async () => {
   const cartridge = new Cartridge();
   cartridge.on(CartridgeEvent.SetProperty, () => "ABC");
   const builder = new TextBuilder(cartridge);
-  await builder.append(CartridgeEvent.SetProperty, [], []);
+  await builder.append(CartridgeEvent.SetProperty, [], [], {} as any, "");
   assertEquals(builder.export(), "ABC");
 });
 
