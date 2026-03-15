@@ -1,14 +1,14 @@
-import { parse } from "https://deno.land/x/protoc_parser/mod.ts";
+import { parse, Message, Service } from "protoc_parser/mod.ts";
 
 const file = await Deno.open("./lib/proto_parser/my-file.proto");
 try {
   const proto = await parse(file, {});
   proto.accept({
-    visitMessage(messageNode) {
+    visitMessage(messageNode: Message) {
       // Do stuff with message node
       console.log({ messageNode });
     },
-    visitService(serviceNode) {
+    visitService(serviceNode: Service) {
       // Do stuff with service node
       console.log({ serviceNode });
     },

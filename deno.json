@@ -1,5 +1,7 @@
 {
   "imports": {
+    "protoc_parser/": "./vendor/protoc_parser/",
+    "scanner/": "./vendor/scanner/",
     "@octokit/rest": "npm:@octokit/rest@^22.0.1",
     "@std/assert": "jsr:@std/assert@^1.0.19",
     "@std/cli": "jsr:@std/cli@^1.0.28",
@@ -9,5 +11,11 @@
     "@std/testing": "jsr:@std/testing@^1.0.17",
     "lcov-parse": "npm:lcov-parse@^1.0.0",
     "marked": "npm:marked@^17.0.4"
+  },
+  "lint": {
+    "exclude": ["vendor/"]
+  },
+  "fmt": {
+    "exclude": ["vendor/"]
   }
 }

@@ -29,27 +29,28 @@ export const setup = () => {
   register(...middleware);
 };
 
-export const handleRequest = async (event: Deno.RequestEvent) => {
+export const handleRequest = async (request: Request) => {
   setup();
-  event.respondWith(await inject(event.request));
+  return await inject(request);
 };
 
-export const serve = async () => {
+export const serve = () => {
   const port = parseInt(Deno.env.get("PORT") || "8080");
   console.info(`Access HTTP webserver at: http://localhost:${port}/`);
-  for await (const connection of Deno.listen({ port })) {
-    for await (const event of Deno.serveHttp(connection)) {
-      await handleRequest(event);
-    }
-    connection.close();
-  }
+  Deno.serve({ port }, async (request) => {
+    setup();
+    return await inject(request);
+  });
 };
 
 if (Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined) {
   // add the fetch listener if running on Deno Deploy
   addEventListener(
     "fetch",
-    handleRequest as unknown as EventListenerOrEventListenerObject,
+    (async (event: Event) => {
+      const e = event as unknown as { request: Request; respondWith: (r: Response | Promise<Response>) => void };
+      e.respondWith(await handleRequest(e.request));
+    }) as unknown as EventListenerOrEventListenerObject,
   );
 } else if (import.meta.main) {
   // serve the HTTP server if running locally
