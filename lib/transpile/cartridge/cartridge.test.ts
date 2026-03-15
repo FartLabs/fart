@@ -200,3 +200,18 @@ Deno.test("event 'file_end' makes a successful dispatch", async () => {
   });
   assertEquals(expectation, reality);
 });
+
+Deno.test("cartridge dispatch throws on unsupported event", async () => {
+  const cartridge = new Cartridge();
+  try {
+    await cartridge.dispatch("unsupported" as CartridgeEvent, {
+      type: "unsupported" as CartridgeEvent,
+      code: new CodeBlock(),
+      data: null,
+      tokens: [],
+    });
+    throw new Error("Should have thrown");
+  } catch (err: any) {
+    assertEquals(err.message.includes("does not support"), true);
+  }
+});

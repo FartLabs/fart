@@ -1,0 +1,127 @@
+{
+  "scriptId": "314",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/text_builder/text_builder.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 3177,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 475,
+          "endOffset": 525,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "TextBuilder",
+      "ranges": [
+        {
+          "startOffset": 529,
+          "endOffset": 677,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "stash",
+      "ranges": [
+        {
+          "startOffset": 790,
+          "endOffset": 940,
+          "count": 11
+        },
+        {
+          "startOffset": 843,
+          "endOffset": 936,
+          "count": 8
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "append",
+      "ranges": [
+        {
+          "startOffset": 943,
+          "endOffset": 3066,
+          "count": 8
+        },
+        {
+          "startOffset": 1048,
+          "endOffset": 1267,
+          "count": 1
+        },
+        {
+          "startOffset": 1274,
+          "endOffset": 1481,
+          "count": 1
+        },
+        {
+          "startOffset": 1488,
+          "endOffset": 1704,
+          "count": 1
+        },
+        {
+          "startOffset": 1711,
+          "endOffset": 1973,
+          "count": 1
+        },
+        {
+          "startOffset": 1980,
+          "endOffset": 2232,
+          "count": 1
+        },
+        {
+          "startOffset": 2165,
+          "endOffset": 2172,
+          "count": 0
+        },
+        {
+          "startOffset": 2239,
+          "endOffset": 2494,
+          "count": 1
+        },
+        {
+          "startOffset": 2501,
+          "endOffset": 2756,
+          "count": 1
+        },
+        {
+          "startOffset": 2584,
+          "endOffset": 2597,
+          "count": 0
+        },
+        {
+          "startOffset": 2763,
+          "endOffset": 2976,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "export",
+      "ranges": [
+        {
+          "startOffset": 3069,
+          "endOffset": 3174,
+          "count": 9
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

@@ -98,32 +98,107 @@ Deno.test("transpiles set_property event", async () => {
   );
   assertEquals(result, "ABC");
 });
-// StructClose = "struct_close",
-// Deno.test("transpiles struct_open event", async () => {
-//   const fakeCart = new Cartridge();
-//   fakeCart.on(
-//     CartridgeEvent.StructOpen,
-//     (event: CartridgeEventContext<CartridgeEvent.StructOpen>) => {
-//       assertEquals(event.data.name, "Example");
-//       assertEquals(event.data.comments, []);
-//       return "ABC";
-//     },
-//   );
-//   const result = await transpile(`type Example {`, fakeCart);
-//   assertEquals(result, "ABC");
-// });
-// FileEnd = "file_end",
 
-// Deno.test("transpiles struct_open event", async () => {
-//   const fakeCart = new Cartridge();
-//   fakeCart.on(
-//     CartridgeEvent.StructOpen,
-//     (event: CartridgeEventContext<CartridgeEvent.StructOpen>) => {
-//       assertEquals(event.data.name, "Example");
-//       assertEquals(event.data.comments, []);
-//       return "ABC";
-//     },
-//   );
-//   const result = await transpile(`type Example {`, fakeCart);
-//   assertEquals(result, "ABC");
-// });
+Deno.test("transpiles optional property event", async () => {
+  const fakeCart = new Cartridge();
+  fakeCart.on(
+    CartridgeEvent.SetProperty,
+    (event: CartridgeEventContext<CartridgeEvent.SetProperty>) => {
+      assertEquals(event.data.name, "example");
+      assertEquals(event.data.definition.optional, true);
+      assertEquals(event.data.comments, []);
+      return "ABC";
+    },
+  );
+  const result = await transpile(
+    `type Example { example?: string }`,
+    fakeCart,
+  );
+  assertEquals(result, "ABC");
+});
+
+Deno.test("transpiles tuple definitions", async () => {
+  const fakeCart = new Cartridge();
+  const result = await transpile(
+    `type Example { example: (string) }`,
+    fakeCart,
+  );
+  assertEquals(result, ""); // Cart doesn't emit text for this, but tests the branching logic.
+});
+
+Deno.test("transpiles text literal properties", async () => {
+  const fakeCart = new Cartridge();
+  const result = await transpile(
+    `type Example { example: 'some_literal_string' }`,
+    fakeCart,
+  );
+  assertEquals(result, "");
+});
+
+Deno.test("transpile throws on unexpected token", async () => {
+  const fakeCart = new Cartridge();
+  try {
+    await transpile("some_invalid_token", fakeCart);
+    throw new Error("Should have thrown");
+  } catch (err: any) {
+    assertEquals(err.message.includes("Unexpected token"), true);
+  }
+});
+
+Deno.test("transpile throws on unexpected EOF", async () => {
+  const fakeCart = new Cartridge();
+  try {
+    await transpile("type Example ", fakeCart);
+    throw new Error("Should have thrown");
+  } catch (err: any) {
+    assertEquals(err.message.includes("Unexpected EOF"), true);
+  }
+});
+
+Deno.test("transpile throws on invalid struct property configuration", async () => {
+  const fakeCart = new Cartridge();
+  try {
+    await transpile("type Example { example: , }", fakeCart);
+    throw new Error("Should have thrown");
+  } catch (err: any) {
+    assertEquals(err.message.includes("Expected struct opener"), true);
+  }
+});
+
+Deno.test("transpile throws on invalid tuple component", async () => {
+  const fakeCart = new Cartridge();
+  try {
+    await transpile("type Example { example: (,) }", fakeCart);
+    throw new Error("Should have thrown");
+  } catch (err: any) {
+    assertEquals(err.message.includes("Expected identifier"), true);
+  }
+});
+
+Deno.test("transpile gracefully ignores unmatched top-level identifiers", async () => {
+  const fakeCart = new Cartridge();
+  const result = await transpile("some_random_identifier", fakeCart);
+  assertEquals(result, "");
+});
+
+Deno.test("TranspilationContext nextMod handles modifier reduction", () => {
+  const typemap = {
+    "!": (val: string) => `${val}!`,
+    "?": (val: string) => `${val}?`,
+  } as any;
+  const fakeCart = new Cartridge(typemap);
+  const iterator = tokenize("! ? some_identifier");
+  const ctx = new TranspilationContext(iterator, fakeCart);
+  const result = ctx.nextMod();
+  assertEquals(result, "some_identifier?!");
+});
+
+Deno.test("TranspilationContext nextMod handles TupleOpener", () => {
+  const typemap = {
+    "!": (val: string) => `${val}!`,
+  } as any;
+  const fakeCart = new Cartridge(typemap);
+  const iterator = tokenize("! ( some_identifier )");
+  const ctx = new TranspilationContext(iterator, fakeCart);
+  ctx.nextMod(); // We just want to ensure it doesn't crash on TupleOpener branch
+});

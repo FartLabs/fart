@@ -1,0 +1,100 @@
+{
+  "scriptId": "314",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/indent/utils.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2166,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getIndentOption",
+      "ranges": [
+        {
+          "startOffset": 53,
+          "endOffset": 675,
+          "count": 6
+        },
+        {
+          "startOffset": 143,
+          "endOffset": 221,
+          "count": 0
+        },
+        {
+          "startOffset": 226,
+          "endOffset": 304,
+          "count": 0
+        },
+        {
+          "startOffset": 309,
+          "endOffset": 391,
+          "count": 1
+        },
+        {
+          "startOffset": 396,
+          "endOffset": 478,
+          "count": 0
+        },
+        {
+          "startOffset": 483,
+          "endOffset": 565,
+          "count": 0
+        },
+        {
+          "startOffset": 570,
+          "endOffset": 652,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getCachedIndent",
+      "ranges": [
+        {
+          "startOffset": 683,
+          "endOffset": 840,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getIndent",
+      "ranges": [
+        {
+          "startOffset": 1707,
+          "endOffset": 2165,
+          "count": 6
+        },
+        {
+          "startOffset": 1926,
+          "endOffset": 2046,
+          "count": 1
+        },
+        {
+          "startOffset": 2046,
+          "endOffset": 2087,
+          "count": 5
+        },
+        {
+          "startOffset": 2087,
+          "endOffset": 2150,
+          "count": 3
+        },
+        {
+          "startOffset": 2150,
+          "endOffset": 2164,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

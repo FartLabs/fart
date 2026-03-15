@@ -1,0 +1,108 @@
+{
+  "scriptId": "344",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/tokenize/token.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 1473,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "<instance_members_initializer>",
+      "ranges": [
+        {
+          "startOffset": 198,
+          "endOffset": 227,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "Token",
+      "ranges": [
+        {
+          "startOffset": 231,
+          "endOffset": 451,
+          "count": 2
+        },
+        {
+          "startOffset": 404,
+          "endOffset": 423,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "is",
+      "ranges": [
+        {
+          "startOffset": 454,
+          "endOffset": 499,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "toString",
+      "ranges": [
+        {
+          "startOffset": 502,
+          "endOffset": 541,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "get value",
+      "ranges": [
+        {
+          "startOffset": 544,
+          "endOffset": 1057,
+          "count": 1
+        },
+        {
+          "startOffset": 587,
+          "endOffset": 769,
+          "count": 0
+        },
+        {
+          "startOffset": 776,
+          "endOffset": 865,
+          "count": 0
+        },
+        {
+          "startOffset": 872,
+          "endOffset": 985,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "getKindOf",
+      "ranges": [
+        {
+          "startOffset": 1067,
+          "endOffset": 1470,
+          "count": 2
+        },
+        {
+          "startOffset": 1187,
+          "endOffset": 1469,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

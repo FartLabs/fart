@@ -1,0 +1,61 @@
+{
+  "scriptId": "347",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/tokenize/lexeme.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 2392,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 34,
+          "endOffset": 1107,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "LEXEME.set",
+      "ranges": [
+        {
+          "startOffset": 2117,
+          "endOffset": 2205,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "LEXEME.delete",
+      "ranges": [
+        {
+          "startOffset": 2223,
+          "endOffset": 2306,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    },
+    {
+      "functionName": "LEXEME.clear",
+      "ranges": [
+        {
+          "startOffset": 2323,
+          "endOffset": 2390,
+          "count": 0
+        }
+      ],
+      "isBlockCoverage": false
+    }
+  ]
+}

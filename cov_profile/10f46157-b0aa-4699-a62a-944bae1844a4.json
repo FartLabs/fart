@@ -1,0 +1,213 @@
+{
+  "scriptId": "314",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/tokenize/tokenize.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 5000,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "tokenize",
+      "ranges": [
+        {
+          "startOffset": 431,
+          "endOffset": 4999,
+          "count": 15
+        },
+        {
+          "startOffset": 554,
+          "endOffset": 4825,
+          "count": 983
+        },
+        {
+          "startOffset": 956,
+          "endOffset": 988,
+          "count": 755
+        },
+        {
+          "startOffset": 1185,
+          "endOffset": 1312,
+          "count": 42
+        },
+        {
+          "startOffset": 1319,
+          "endOffset": 1344,
+          "count": 13
+        },
+        {
+          "startOffset": 1351,
+          "endOffset": 1376,
+          "count": 26
+        },
+        {
+          "startOffset": 1383,
+          "endOffset": 1407,
+          "count": 34
+        },
+        {
+          "startOffset": 1414,
+          "endOffset": 1438,
+          "count": 42
+        },
+        {
+          "startOffset": 1445,
+          "endOffset": 1473,
+          "count": 59
+        },
+        {
+          "startOffset": 1480,
+          "endOffset": 1501,
+          "count": 69
+        },
+        {
+          "startOffset": 1508,
+          "endOffset": 1641,
+          "count": 76
+        },
+        {
+          "startOffset": 1648,
+          "endOffset": 1683,
+          "count": 1
+        },
+        {
+          "startOffset": 1690,
+          "endOffset": 1788,
+          "count": 168
+        },
+        {
+          "startOffset": 1795,
+          "endOffset": 1896,
+          "count": 697
+        },
+        {
+          "startOffset": 1844,
+          "endOffset": 1869,
+          "count": 455
+        },
+        {
+          "startOffset": 1994,
+          "endOffset": 2019,
+          "count": 286
+        },
+        {
+          "startOffset": 2020,
+          "endOffset": 2037,
+          "count": 142
+        },
+        {
+          "startOffset": 2039,
+          "endOffset": 2219,
+          "count": 73
+        },
+        {
+          "startOffset": 2344,
+          "endOffset": 2365,
+          "count": 76
+        },
+        {
+          "startOffset": 2366,
+          "endOffset": 2383,
+          "count": 76
+        },
+        {
+          "startOffset": 2385,
+          "endOffset": 2777,
+          "count": 76
+        },
+        {
+          "startOffset": 2547,
+          "endOffset": 2605,
+          "count": 1
+        },
+        {
+          "startOffset": 2607,
+          "endOffset": 2696,
+          "count": 1
+        },
+        {
+          "startOffset": 2696,
+          "endOffset": 2771,
+          "count": 75
+        },
+        {
+          "startOffset": 2872,
+          "endOffset": 2892,
+          "count": 5
+        },
+        {
+          "startOffset": 2894,
+          "endOffset": 3132,
+          "count": 2
+        },
+        {
+          "startOffset": 3132,
+          "endOffset": 3799,
+          "count": 981
+        },
+        {
+          "startOffset": 3172,
+          "endOffset": 3196,
+          "count": 83
+        },
+        {
+          "startOffset": 3197,
+          "endOffset": 3217,
+          "count": 8
+        },
+        {
+          "startOffset": 3219,
+          "endOffset": 3636,
+          "count": 2
+        },
+        {
+          "startOffset": 3393,
+          "endOffset": 3397,
+          "count": 0
+        },
+        {
+          "startOffset": 3636,
+          "endOffset": 3799,
+          "count": 979
+        },
+        {
+          "startOffset": 3665,
+          "endOffset": 3799,
+          "count": 6
+        },
+        {
+          "startOffset": 3943,
+          "endOffset": 4389,
+          "count": 42
+        },
+        {
+          "startOffset": 4073,
+          "endOffset": 4305,
+          "count": 6
+        },
+        {
+          "startOffset": 4562,
+          "endOffset": 4594,
+          "count": 755
+        },
+        {
+          "startOffset": 4596,
+          "endOffset": 4635,
+          "count": 311
+        },
+        {
+          "startOffset": 4903,
+          "endOffset": 4987,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

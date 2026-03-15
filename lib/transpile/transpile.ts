@@ -66,16 +66,6 @@ export class TranspilationContext {
     }
   }
 
-  // public computeMods(
-  //   tokens: Token[],
-  //   ...mods: ModHandler[]
-  // ): string | undefined {
-  //   return mods.reduceRight(
-  //     (result: string[], mod: ModHandler) => [mod(...result)],
-  //     tokens.map(({ value }) => this.cartridge.getType(value) ?? value),
-  //   ).pop();
-  // }
-
   /**
    * Consumes the next struct, tuple, or value.
    */
@@ -95,11 +85,6 @@ export class TranspilationContext {
       }
 
       case Lexeme.Identifier: {
-        // const modifier = await this.nextModifier(wildToken);
-        // if (modifier !== undefined) {
-        // if ident is known modifier, await nextModifier();
-        // }
-
         def.value = wildToken.value;
         break;
       }

@@ -1,31 +1,17 @@
-import { INDENT, Indent } from "./indent.ts";
-import { getCachedIndent } from "./utils.ts";
+import { assertEquals } from "@std/assert";
+import { getIndent } from "./utils.ts";
 
-const CACHE_BENCH_ID = "CACHE_TEST";
-const COMPUTED_BENCH_ID = "COMPUTED_TEST";
-
-Deno.bench({
-  name: CACHE_BENCH_ID,
-  fn: () => {
-    const store: string[] = [];
-    for (let i = 1; i <= 16; i++) store.push(getCachedIndent(Indent.Tab1, i));
-    for (let i = 1; i <= 16; i++) store.push(getCachedIndent(Indent.Tab2, i));
-    for (let i = 1; i <= 16; i++) store.push(getCachedIndent(Indent.Space1, i));
-    for (let i = 1; i <= 16; i++) store.push(getCachedIndent(Indent.Space2, i));
-    for (let i = 1; i <= 16; i++) store.push(getCachedIndent(Indent.Space3, i));
-    for (let i = 1; i <= 16; i++) store.push(getCachedIndent(Indent.Space4, i));
-  },
+Deno.test("getIndent with non-cached custom string indent", () => {
+  assertEquals(getIndent("#", 3), "###");
+  assertEquals(getIndent("_", 5), "_____");
 });
 
-Deno.bench({
-  name: COMPUTED_BENCH_ID,
-  fn: () => {
-    const store: string[] = [];
-    for (let i = 1; i <= 16; i++) store.push(INDENT[Indent.Tab1].repeat(i));
-    for (let i = 1; i <= 16; i++) store.push(INDENT[Indent.Tab2].repeat(i));
-    for (let i = 1; i <= 16; i++) store.push(INDENT[Indent.Space1].repeat(i));
-    for (let i = 1; i <= 16; i++) store.push(INDENT[Indent.Space2].repeat(i));
-    for (let i = 1; i <= 16; i++) store.push(INDENT[Indent.Space3].repeat(i));
-    for (let i = 1; i <= 16; i++) store.push(INDENT[Indent.Space4].repeat(i));
-  },
+Deno.test("getIndent with invalid negative levels defaults cleanly", () => {
+  assertEquals(getIndent(1, -5), "");
+  assertEquals(getIndent("#", -2), "");
+});
+
+Deno.test("getIndent with invalid indent options", () => {
+  assertEquals(getIndent(5 as any, 1), ""); // 5 is not an IndentOption
+  assertEquals(getIndent(999 as any, 1), ""); // 999 is not an IndentOption
 });

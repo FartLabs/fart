@@ -1,0 +1,127 @@
+{
+  "scriptId": "314",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/tokenize/utils.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 749,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "findInLexeme",
+      "ranges": [
+        {
+          "startOffset": 28,
+          "endOffset": 228,
+          "count": 3
+        },
+        {
+          "startOffset": 62,
+          "endOffset": 74,
+          "count": 1
+        },
+        {
+          "startOffset": 74,
+          "endOffset": 109,
+          "count": 2
+        },
+        {
+          "startOffset": 109,
+          "endOffset": 211,
+          "count": 26
+        },
+        {
+          "startOffset": 140,
+          "endOffset": 162,
+          "count": 3
+        },
+        {
+          "startOffset": 163,
+          "endOffset": 179,
+          "count": 25
+        },
+        {
+          "startOffset": 181,
+          "endOffset": 207,
+          "count": 1
+        },
+        {
+          "startOffset": 211,
+          "endOffset": 227,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "checkIsIdentifier",
+      "ranges": [
+        {
+          "startOffset": 263,
+          "endOffset": 322,
+          "count": 20
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "checkIsTextLiteral",
+      "ranges": [
+        {
+          "startOffset": 358,
+          "endOffset": 549,
+          "count": 5
+        },
+        {
+          "startOffset": 408,
+          "endOffset": 434,
+          "count": 1
+        },
+        {
+          "startOffset": 435,
+          "endOffset": 490,
+          "count": 4
+        },
+        {
+          "startOffset": 464,
+          "endOffset": 490,
+          "count": 1
+        },
+        {
+          "startOffset": 491,
+          "endOffset": 546,
+          "count": 3
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "checkIsInlineComment",
+      "ranges": [
+        {
+          "startOffset": 587,
+          "endOffset": 625,
+          "count": 2
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "checkIsMultilineComment",
+      "ranges": [
+        {
+          "startOffset": 666,
+          "endOffset": 747,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}

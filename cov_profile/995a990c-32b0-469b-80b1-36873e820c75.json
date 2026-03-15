@@ -1,0 +1,53 @@
+{
+  "scriptId": "356",
+  "url": "file:///C:/Users/ethan/Documents/GitHub/fart/lib/transpile/common/utils.ts",
+  "functions": [
+    {
+      "functionName": "",
+      "ranges": [
+        {
+          "startOffset": 0,
+          "endOffset": 372,
+          "count": 1
+        }
+      ],
+      "isBlockCoverage": true
+    },
+    {
+      "functionName": "assertKind",
+      "ranges": [
+        {
+          "startOffset": 100,
+          "endOffset": 371,
+          "count": 46
+        },
+        {
+          "startOffset": 189,
+          "endOffset": 195,
+          "count": 45
+        },
+        {
+          "startOffset": 196,
+          "endOffset": 213,
+          "count": 1
+        },
+        {
+          "startOffset": 242,
+          "endOffset": 259,
+          "count": 45
+        },
+        {
+          "startOffset": 261,
+          "endOffset": 353,
+          "count": 3
+        },
+        {
+          "startOffset": 353,
+          "endOffset": 370,
+          "count": 43
+        }
+      ],
+      "isBlockCoverage": true
+    }
+  ]
+}
