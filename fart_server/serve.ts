@@ -1,8 +1,10 @@
 import { redirectToDenoDeployPreviewUrl } from "./bonus_features/versions/mod.ts";
 import { redirectIfShortlink } from "./bonus_features/shortlinks/mod.ts";
+import { compileFartToTs } from "./bonus_features/compilation/compile.ts";
 import { clear, getSize, inject, register } from "./utils.ts";
 
 const middleware = [
+  compileFartToTs,
   // redirect to another server running a different version of the Fart library
   redirectToDenoDeployPreviewUrl,
   // redirect to an external URL

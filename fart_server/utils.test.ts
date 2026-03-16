@@ -22,13 +22,17 @@ Deno.test("size is reduced to 0 when clear is called", () => {
 });
 
 Deno.test("utils correctly parses URLs without an implementation file", () => {
-  const result = parseFartUrl("https://fart.tools/deno.cli/path/to/source.fart");
+  const result = parseFartUrl(
+    "https://fart.tools/deno.cli/path/to/source.fart",
+  );
   assertEquals(result.sourceUrl, "/deno.cli/path/to/source.fart");
   assertEquals(result.implUrl, undefined);
 });
 
 Deno.test("utils correctly parses URLs with an implementation file via ~", () => {
-  const result = parseFartUrl("https://fart.tools/deno.cli/path/to/source.fart~path/to/impl.ts");
+  const result = parseFartUrl(
+    "https://fart.tools/deno.cli/path/to/source.fart~path/to/impl.ts",
+  );
   assertEquals(result.sourceUrl, "/deno.cli/path/to/source.fart");
   assertEquals(result.implUrl, "path/to/impl.ts");
 });

@@ -7,3 +7,4 @@ export type {
   Modifier,
   PropertyDefinition,
 } from "./cartridge.ts";
+export { generateTypeScriptCartridge } from "./ts_cartridge.ts";

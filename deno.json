@@ -10,7 +10,8 @@
     "@std/path": "jsr:@std/path@^1.1.4",
     "@std/testing": "jsr:@std/testing@^1.0.17",
     "lcov-parse": "npm:lcov-parse@^1.0.0",
-    "marked": "npm:marked@^17.0.4"
+    "marked": "npm:marked@^17.0.4",
+    "ts-morph": "npm:ts-morph@^27.0.2"
   },
   "exclude": ["vendor/"]
 }

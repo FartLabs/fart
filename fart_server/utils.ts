@@ -39,11 +39,13 @@ export const getSize = () => {
  * Extracts the source URL and the optional implementation file URL
  * from a Fart server request URL.
  */
-export const parseFartUrl = (url: string | URL): { sourceUrl: string; implUrl?: string } => {
+export const parseFartUrl = (
+  url: string | URL,
+): { sourceUrl: string; implUrl?: string } => {
   const urlObj = typeof url === "string" ? new URL(url) : url;
   // Implementation files are specified after a tilde `~` in the URL pathname
   const delimiterIndex = urlObj.pathname.indexOf("~");
-  
+
   if (delimiterIndex === -1) {
     return { sourceUrl: urlObj.pathname };
   }
