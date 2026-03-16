@@ -55,6 +55,29 @@ Please refer to
 [docs/architecture.md](https://github.com/EthanThatOneKid/fart/blob/main/docs/architecture.md#readme)
 to learn about the structure of this repository.
 
+## Closed loop
+
+This project is built with the ambition of forming a closed-loop execution
+substrate for autonomous coding agents. Fart is designed as a structural
+foundation that perfectly complements [GEPA (Genetic-Pareto)](https://github.com/gepa-ai/gepa)'s
+unique strengths in reflective, evolutionary search.
+
+By combining dynamic HTTP-based transpilation with native remote module
+resolution (Deno's HTTP imports), Fart enables:
+
+- **JIT Epistemologies**: Agents are not bound by static schemas. Upon
+  encountering a novel domain, an agent can dynamically invent a new `.fart`
+  schema and immediately evaluate it via `await import("http://...",)`.
+- **Zero-Friction Evaluation**: Changing application logic traditionally
+  requires file I/O, build steps, and process restarts. Fart eliminates this,
+  providing sub-second code generation and evaluation for extremely fast
+  feedback loops.
+- **Type-Driven Reflection**: Instead of mutating raw code that often results in
+  syntax errors, frameworks like GEPA can mutate the highly-structured `.fart`
+  schema. If the schema is invalid, Deno throws native TypeScript compiler
+  errors _at import time_, which the optimization engine can ingest to
+  reflectively evolve and fix the structure.
+
 ---
 
 Created with 💖 by [**@EthanThatOneKid**](https://github.com/EthanThatOneKid/)
