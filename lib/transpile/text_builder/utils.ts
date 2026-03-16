@@ -27,9 +27,11 @@ export const cleanComment = (commentToken: Token): string[] => {
     }
     case Lexeme.MultilineComment: {
       const rawCommentLines = commentToken.value.split("\n");
-      rawCommentLines.forEach((rawCommentLine) => {
-        // TODO: push only if the line is not a blank edge
-        trimmedCommentLines.push(rawCommentLine.trim());
+      rawCommentLines.forEach((rawCommentLine, index) => {
+        const trimmed = rawCommentLine.trim();
+        const isEdge = index === 0 || index === rawCommentLines.length - 1;
+        if (isEdge && trimmed === "") return;
+        trimmedCommentLines.push(trimmed);
       });
       break;
     }

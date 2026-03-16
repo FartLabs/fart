@@ -5,15 +5,10 @@ import { TextBuilder } from "./text_builder/mod.ts";
 import { assertKind } from "./common/utils.ts";
 import type { FartTokenGenerator } from "./tokenize/mod.ts";
 
-/**
- * @todo rethink these options since the codeCart determines the
- * target language. The source language will be one of few supported
- * langs: Fart and Proto.
- */
 export interface FartOptions {
   targetLanguage: string; // "ts" | "go"
   sourceLanguage: string; // "fart" | "fart-pb" | "fart-go"
-  codeCartridge: Cartridge; // TODO: allow for user to pass Cartridge[]
+  codeCartridge: Cartridge;
   indentation: number;
   preserveComments: boolean;
 }
@@ -203,14 +198,6 @@ export class TranspilationContext {
   }
 }
 
-/**
- * @todo impl options
- * - targetLanguage: string; // "ts" | "go"
- * - sourceLanguage: string; // "fart" | "fart-pb" | "fart-go"
- * - codeCartridge: Cartridge; // TODO: allow for user to pass Cartridge[]
- * - indentation: number;
- * - preserveComments: boolean;
- */
 export async function transpile(
   code: string,
   options: Cartridge | FartOptions,

@@ -1,8 +1,5 @@
 import { Lexeme, Token } from "../tokenize/mod.ts";
 
-/**
- * @todo write tests in utils.test.ts
- */
 export function assertKind(
   token?: Token,
   ...validLex: Lexeme[]

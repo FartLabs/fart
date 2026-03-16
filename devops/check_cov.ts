@@ -38,8 +38,6 @@ interface LcovResult {
 
 const lcov = await Deno.readTextFile("./cov_profile.lcov");
 
-// TODO: Compute which files have uncovered code and its percentage.
-// TODO: Compute overall coverage percentage.
 parseFile(lcov, (errorMessage: string | null, results: LcovResult[]) => {
   if (errorMessage !== null) {
     return console.error(errorMessage);

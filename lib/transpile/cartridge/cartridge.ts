@@ -34,18 +34,6 @@ export type CartridgeEventReturnType = (
   | null
 );
 
-// TODO: Refactor PropertyDefinition interface to be more strict using the
-// list of possible definitions as a guide.
-// Possible Property Definitions
-// - example: string; data = { id: "example", optional: false, value: "string" }
-// - example?: string
-// - example: { abc?: string }; data = { id: "example", optional: false, value: { id: "abc", optional: true, value: "string" } }
-// - example: async % string; Promise<string>
-// - example: fn % async % string; () => Promise<string>
-// - example: fn % (a: string, async % string); (a: string) => Promise<string>
-// - example: fn % (cb: fn % (async % _), number); (cb: () => Promise<void>) => number
-//   ; data = { id: "example", value: { mods: [{ name: "fn" }] } }
-
 export type PropertyDefinition = {
   optional?: boolean;
 } & (
