@@ -34,4 +34,3 @@ export const clear = () => {
 export const getSize = () => {
   return handlers.length;
 };
-

@@ -26,22 +26,33 @@ export enum Modifier {
   Function = "fn", // Modifies length-2 tuples.
 }
 
-export type CartridgeEventReturnType = (
+export type CartridgeEventReturnType =
   | void
   | Promise<void>
   | string
   | Promise<string>
-  | null
-);
+  | null;
 
-export type PropertyDefinition = {
-  optional?: boolean;
-} & (
-  | { value: string; modifier?: never; struct?: never; tuple?: never }
-  | { struct: Record<string, PropertyDefinition>; value?: never; modifier?: never; tuple?: never }
-  | { modifier: string; value?: string; struct?: never; tuple?: never }
-  | { tuple: Array<{ label?: string; value: PropertyDefinition }>; modifier?: string; value?: never; struct?: never }
-);
+export type PropertyDefinition =
+  & {
+    optional?: boolean;
+  }
+  & (
+    | { value: string; modifier?: never; struct?: never; tuple?: never }
+    | {
+      struct: Record<string, PropertyDefinition>;
+      value?: never;
+      modifier?: never;
+      tuple?: never;
+    }
+    | { modifier: string; value?: string; struct?: never; tuple?: never }
+    | {
+      tuple: Array<{ label?: string; value: PropertyDefinition }>;
+      modifier?: string;
+      value?: never;
+      struct?: never;
+    }
+  );
 
 export interface CartridgeEventContext<T extends CartridgeEvent> {
   type: T;
@@ -54,10 +65,10 @@ export interface CartridgeEventContext<T extends CartridgeEvent> {
     : T extends CartridgeEvent.StructOpen
       ? { comments: string[]; name?: string } // undefined name implies anonymous struct
     : T extends CartridgeEvent.SetProperty ? ({
-      comments: string[];
-      name: string;
-      definition: PropertyDefinition;
-    })
+        comments: string[];
+        name: string;
+        definition: PropertyDefinition;
+      })
     : null;
 }
 

@@ -6,7 +6,8 @@ self_link: https://fart.fart.tools/server-architecture
 
 ## How to spin up a Fart Server
 
-You can spin up the Fart Serer on your machine in one command (assuming Deno is installed).
+You can spin up the Fart Serer on your machine in one command (assuming Deno is
+installed).
 
 ```bash
 deno run --allow-net --allow-read --allow-env --unstable https://github.com/EthanThatOneKid/fart/raw/main/std/server/serve_http.ts
@@ -23,7 +24,9 @@ deno run --allow-net --allow-read --allow-env --unstable std/server/serve_http.t
 
 ## Simulating a Deno Deploy Environment
 
-If you haven't already, [install `deployctl`](https://deno.com/deploy/docs/running-scripts-locally), a runtime that simulates [Deno Deploy](https://deno.com/deploy).
+If you haven't already,
+[install `deployctl`](https://deno.com/deploy/docs/running-scripts-locally), a
+runtime that simulates [Deno Deploy](https://deno.com/deploy).
 
 ```bash
 deno install --allow-read --allow-write --allow-env --allow-net --allow-run --no-check -f https://deno.land/x/deploy/deployctl.ts
@@ -41,32 +44,39 @@ deployctl run --watch std/server/worker.ts
 
 > [/middleware/home.ts](https://github.com/EthanThatOneKid/fart/blob/main/std/server/middleware/gh_docs.ts)
 
-This page renders and serves the README.md of <https://github.com/EthanThatOneKid/fart/>.
+This page renders and serves the README.md of
+<https://github.com/EthanThatOneKid/fart/>.
 
 ### Static Files (`GET /[...path].*`)
 
 > [/middleware/static.ts](https://github.com/EthanThatOneKid/fart/blob/main/std/server/middleware/static.ts)
 
-This middleware serves static files located under [`/std/server/static/`](https://github.com/EthanThatOneKid/fart/blob/main/std/server/static/).
+This middleware serves static files located under
+[`/std/server/static/`](https://github.com/EthanThatOneKid/fart/blob/main/std/server/static/).
 
 ### GitHub Docs (`/[...path]`)
 
 > [/middleware/gh_docs.ts](https://github.com/EthanThatOneKid/fart/tree/main/std/server/middleware/gh_docs.ts)
 
-Any markdown files located under [`/docs`](https://github.com/EthanThatOneKid/fart/tree/main/docs/) are rendered and served.
+Any markdown files located under
+[`/docs`](https://github.com/EthanThatOneKid/fart/tree/main/docs/) are rendered
+and served.
 
 ### Compile Farts (`GET /[registry]/[...path].*`)
 
 > [/middleware/compile.ts](https://github.com/EthanThatOneKid/fart/blob/main/std/server/middleware/compile.ts)
 
-This middleware serves the compiled result of any Fart source file publicly hosted on GitHub.
+This middleware serves the compiled result of any Fart source file publicly
+hosted on GitHub.
 
-If no matching public GitHub source Farts can be found, the request checks to see if there is any raw Fart code in the body.
-If so, the server will generate the code based on the source Fart from the request body.
+If no matching public GitHub source Farts can be found, the request checks to
+see if there is any raw Fart code in the body. If so, the server will generate
+the code based on the source Fart from the request body.
 
 #### URL Composition
 
-This is a more detailed diagram of the pattern that the compilation middlware snags on.
+This is a more detailed diagram of the pattern that the compilation middlware
+snags on.
 
 ```
 /[registry]/[owner]/[project_name]/[branch]/[...path].*

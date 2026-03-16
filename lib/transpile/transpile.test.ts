@@ -2,7 +2,7 @@ import { assertEquals } from "@std/assert";
 import { TranspilationContext, transpile } from "./transpile.ts";
 import { Cartridge, CartridgeEvent } from "./cartridge/mod.ts";
 import type { CartridgeEventContext } from "./cartridge/mod.ts";
-import { Modifier, type CartridgeTypeMap } from "./cartridge/cartridge.ts";
+import { type CartridgeTypeMap, Modifier } from "./cartridge/cartridge.ts";
 import { tokenize } from "./tokenize/mod.ts";
 
 Deno.test("create transpilation context without crashing", () => {

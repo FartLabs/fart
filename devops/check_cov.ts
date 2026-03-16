@@ -50,12 +50,12 @@ parseFile(lcov, (errorMessage: string | null, results: LcovResult[]) => {
     totalLinesFound += report.lines.found;
     totalLinesHit += report.lines.hit;
 
-    const fileCoverage = report.lines.found === 0 
-      ? 100 
+    const fileCoverage = report.lines.found === 0
+      ? 100
       : Math.round((report.lines.hit / report.lines.found) * 100);
 
     const uncoveredFns = report.functions.details.filter((fn) => fn.hit === 0);
-    
+
     if (uncoveredFns.length > 0 || fileCoverage < 100) {
       console.log(`\nFile: ${report.file} (${fileCoverage}% covered)`);
       for (const fn of uncoveredFns) {
@@ -67,9 +67,11 @@ parseFile(lcov, (errorMessage: string | null, results: LcovResult[]) => {
     }
   }
 
-  const overallCoverage = totalLinesFound === 0 
-    ? 100 
+  const overallCoverage = totalLinesFound === 0
+    ? 100
     : Math.round((totalLinesHit / totalLinesFound) * 100);
-  
-  console.log(`\nOverall Coverage: ${overallCoverage}% (${totalLinesHit}/${totalLinesFound} lines)`);
+
+  console.log(
+    `\nOverall Coverage: ${overallCoverage}% (${totalLinesHit}/${totalLinesFound} lines)`,
+  );
 });

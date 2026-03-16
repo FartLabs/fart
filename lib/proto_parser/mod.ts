@@ -1,4 +1,4 @@
-import { parse, Message, Service } from "protoc_parser/mod.ts";
+import { Message, parse, Service } from "protoc_parser/mod.ts";
 
 const file = await Deno.open("./lib/proto_parser/my-file.proto");
 try {

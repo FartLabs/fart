@@ -21,8 +21,10 @@ Deno.test("T alias generator methods create tokens matching all lexeme values", 
   assertEquals(T.text_2("hello", 1, 1).kind, Lexeme.TextLiteral);
   assertEquals(T.text_3("hello", 1, 1).kind, Lexeme.TextLiteral);
   assertEquals(T.comment("; hello", 1, 1).kind, Lexeme.InlineComment);
-  assertEquals(T.multiline_comment("/* hello */", 1, 1).kind, Lexeme.MultilineComment);
+  assertEquals(
+    T.multiline_comment("/* hello */", 1, 1).kind,
+    Lexeme.MultilineComment,
+  );
   assertEquals(T.separator(1, 1).kind, Lexeme.Separator);
   assertEquals(T.unknown("&", 1, 1).kind, Lexeme.Unknown);
 });
-

@@ -5,7 +5,10 @@ import { marked } from "marked";
  * @returns raw HTML of parsed documentation found on <https://etok.codes/fart/>
  */
 export const fetchGitHubDoc = async (url: string): Promise<string> => {
-  const rawUrl = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
+  const rawUrl = url.replace("github.com", "raw.githubusercontent.com").replace(
+    "/blob/",
+    "/",
+  );
   const response = await fetch(rawUrl);
   if (!response.ok) return "";
   const markdown = await response.text();

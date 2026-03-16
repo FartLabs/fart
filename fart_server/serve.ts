@@ -48,7 +48,10 @@ if (Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined) {
   addEventListener(
     "fetch",
     (async (event: Event) => {
-      const e = event as unknown as { request: Request; respondWith: (r: Response | Promise<Response>) => void };
+      const e = event as unknown as {
+        request: Request;
+        respondWith: (r: Response | Promise<Response>) => void;
+      };
       e.respondWith(await handleRequest(e.request));
     }) as unknown as EventListenerOrEventListenerObject,
   );

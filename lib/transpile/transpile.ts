@@ -107,7 +107,7 @@ export class TranspilationContext {
     while (true) {
       const maybeIdent = this.nextToken();
       if (!maybeIdent) break;
-      
+
       // expects identifier or '}'
       const ident = assertKind(
         maybeIdent,
@@ -145,7 +145,9 @@ export class TranspilationContext {
         case Lexeme.TextLiteral:
         case Lexeme.TupleOpener: {
           result[ident.value] = await this.nextLiteral(wildToken);
-          result[ident.value].optional = propertyDefiner.is(Lexeme.PropertyOptionalDefiner);
+          result[ident.value].optional = propertyDefiner.is(
+            Lexeme.PropertyOptionalDefiner,
+          );
           await this.builder.append(
             CartridgeEvent.SetProperty,
             [ident, propertyDefiner, wildToken],
@@ -175,13 +177,13 @@ export class TranspilationContext {
 
     while (true) {
       const token = this.nextToken();
-      
+
       if (!token) break;
 
       if (token.kind === Lexeme.TupleCloser) {
         break;
       }
-      
+
       if (token.kind === Lexeme.Separator) {
         continue;
       }
@@ -190,7 +192,9 @@ export class TranspilationContext {
         const def = await this.nextLiteral(token);
         result.push({ value: def });
       } else {
-        throw new Error(`Expected identifier or tuple closer, but got ${token.value}`);
+        throw new Error(
+          `Expected identifier or tuple closer, but got ${token.value}`,
+        );
       }
     }
 

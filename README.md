@@ -4,7 +4,8 @@ self_link: https://fart.fart.tools/
 
 # Fart 🌫
 
-Program that generates type definitions, libraries, and programs in multiple languages.
+Program that generates type definitions, libraries, and programs in multiple
+languages.
 
 > 🚧 **Beware of Project Status**: _Work-in-Progress_
 
@@ -12,12 +13,14 @@ Program that generates type definitions, libraries, and programs in multiple lan
 
 > ℹ **INFO**: `docs/contributing.md` coming soon!!
 
-To execute the Fart tests, simply run `deno test`. If you have not done so already, please [install Deno](https://github.com/denoland/deno_install).
+To execute the Fart tests, simply run `deno test`. If you have not done so
+already, please [install Deno](https://github.com/denoland/deno_install).
 
 ### Give it a Spin
 
-You can give Fart a spin on your machine in one command (assuming Deno is installed).
-Check out the example code on <https://fart.fart.tools/pokemon-example/>.
+You can give Fart a spin on your machine in one command (assuming Deno is
+installed). Check out the example code on
+<https://fart.fart.tools/pokemon-example/>.
 
 ```bash
 deno run --reload https://github.com/EthanThatOneKid/fart/raw/main/ex/pokemon/run.ts
@@ -42,11 +45,15 @@ deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon.fart --reg=ts.de
 
 ### Fart Server 📡
 
-Please refer to [docs/server-architecture.md](https://github.com/EthanThatOneKid/fart/blob/main/docs/server-architecture.md#readme) to learn about how the server code is organized.
+Please refer to
+[docs/server-architecture.md](https://github.com/EthanThatOneKid/fart/blob/main/docs/server-architecture.md#readme)
+to learn about how the server code is organized.
 
 ## Architecture
 
-Please refer to [docs/architecture.md](https://github.com/EthanThatOneKid/fart/blob/main/docs/architecture.md#readme) to learn about the structure of this repository.
+Please refer to
+[docs/architecture.md](https://github.com/EthanThatOneKid/fart/blob/main/docs/architecture.md#readme)
+to learn about the structure of this repository.
 
 ---
 
