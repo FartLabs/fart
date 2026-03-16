@@ -223,6 +223,11 @@ export async function transpile(
       case Lexeme.InlineComment: {
         const comment = assertKind(token, Lexeme.InlineComment);
         await ctx.builder.append(
+          CartridgeEvent.Comment,
+          [comment],
+          [comment],
+        );
+        await ctx.builder.append(
           CartridgeEvent.InlineComment,
           [comment],
           [comment],
@@ -232,6 +237,11 @@ export async function transpile(
 
       case Lexeme.MultilineComment: {
         const comment = assertKind(token, Lexeme.MultilineComment);
+        await ctx.builder.append(
+          CartridgeEvent.Comment,
+          [comment],
+          [comment],
+        );
         await ctx.builder.append(
           CartridgeEvent.MultilineComment,
           [comment],

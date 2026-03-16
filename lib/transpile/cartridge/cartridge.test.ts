@@ -19,6 +19,23 @@ Deno.test("event 'file_start' makes a successful dispatch", async () => {
   assertEquals(result, "ABC");
 });
 
+Deno.test("event 'comment' makes a successful dispatch", async () => {
+  const cartridge = new Cartridge();
+  cartridge.on(CartridgeEvent.Comment, (event) => {
+    assertEquals(event.type, CartridgeEvent.Comment, "matches event name");
+    assertEquals(event.data.comments.length, 1, "expects 1 comment");
+    return event.data.comments.map((comment) => `/* ${comment} */`).join("\n");
+  });
+  const expectation = "/* ABC */";
+  const reality = await cartridge.dispatch(CartridgeEvent.Comment, {
+    type: CartridgeEvent.Comment,
+    code: new CodeBlock(),
+    data: { comments: ["ABC"] },
+    tokens: [],
+  });
+  assertEquals(expectation, reality);
+});
+
 Deno.test("event 'inline_comment' makes a successful dispatch", async () => {
   const cartridge = new Cartridge();
   cartridge.on(

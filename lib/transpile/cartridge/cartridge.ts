@@ -2,6 +2,7 @@ import type { Token } from "../tokenize/mod.ts";
 
 export enum CartridgeEvent {
   FileStart = "file_start",
+  Comment = "comment",
   InlineComment = "inline_comment",
   MultilineComment = "multiline_comment",
   Load = "load",
@@ -58,7 +59,8 @@ export interface CartridgeEventContext<T extends CartridgeEvent> {
   type: T;
   code: { append: (code: string) => CartridgeEventReturnType };
   tokens: Token[];
-  data: T extends CartridgeEvent.InlineComment ? { comments: string[] }
+  data: T extends CartridgeEvent.Comment ? { comments: string[] }
+    : T extends CartridgeEvent.InlineComment ? { comments: string[] }
     : T extends CartridgeEvent.MultilineComment ? { comments: string[] }
     : T extends CartridgeEvent.Load
       ? { comments: string[]; dependencies: string[]; source: string }
@@ -83,6 +85,7 @@ export type CartridgeHandler<T extends CartridgeEvent> = (
 
 export interface CartridgeHandlerMap {
   [CartridgeEvent.FileStart]?: CartridgeHandler<CartridgeEvent.FileStart>;
+  [CartridgeEvent.Comment]?: CartridgeHandler<CartridgeEvent.Comment>;
   [CartridgeEvent.InlineComment]?: CartridgeHandler<
     CartridgeEvent.InlineComment
   >;
@@ -129,6 +132,10 @@ export class Cartridge {
   public addEventListener(
     name: CartridgeEvent.FileStart,
     handler: CartridgeHandler<CartridgeEvent.FileStart>,
+  ): void;
+  public addEventListener(
+    name: CartridgeEvent.Comment,
+    handler: CartridgeHandler<CartridgeEvent.Comment>,
   ): void;
   public addEventListener(
     name: CartridgeEvent.InlineComment,

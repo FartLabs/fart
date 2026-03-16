@@ -7,6 +7,7 @@ import {
 } from "../cartridge/mod.ts";
 import type { Token } from "../tokenize/mod.ts";
 import {
+  makeCommentEventContext,
   makeFileEndEventContext,
   makeFileStartEventContext,
   makeInlineCommentEventContext,
@@ -44,6 +45,11 @@ export class TextBuilder {
     event: CartridgeEvent.FileStart,
     tokens?: Token[],
     comments?: Token[],
+  ): Promise<void>;
+  public async append(
+    event: CartridgeEvent.Comment,
+    tokens: [Token],
+    comments: Token[],
   ): Promise<void>;
   public async append(
     event: CartridgeEvent.InlineComment,
@@ -102,6 +108,14 @@ export class TextBuilder {
           makeFileStartEventContext(this.currentBlock, tokens),
         );
         this.stash();
+        break;
+      }
+
+      case CartridgeEvent.Comment: {
+        code = await this.cartridge.dispatch(
+          CartridgeEvent.Comment,
+          makeCommentEventContext(this.currentBlock, tokens),
+        );
         break;
       }
 
