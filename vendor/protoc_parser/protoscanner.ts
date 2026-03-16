@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { defaultTokens, scanComments, Scanner } from "./deps.ts";
 
 const keywords = new Set(

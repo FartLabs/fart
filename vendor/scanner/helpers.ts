@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Scanner, Token } from "./scanner.ts";
 
 export function longPosition(scanner: Scanner) {

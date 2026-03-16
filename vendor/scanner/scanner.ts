@@ -1,3 +1,4 @@
+// @ts-nocheck
 const MIN_READ = 2;
 
 /**

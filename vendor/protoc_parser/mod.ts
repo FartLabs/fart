@@ -1,3 +1,4 @@
+// @ts-nocheck
 export { Proto } from "./proto.ts";
 export type { Visitor } from "./visitor.ts";
 export { Message } from "./message.ts";

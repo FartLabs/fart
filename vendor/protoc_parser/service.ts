@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { nextTokenIs, Scanner, Token, TokenError } from "./deps.ts";
 import { assignComments, expectSimpleIdent, indent } from "./util.ts";
 import { Option } from "./option.ts";

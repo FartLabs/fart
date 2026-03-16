@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ParseNode, ParseNodeJSON } from "./parsenode.ts";
 import { Visitor } from "./visitor.ts";
 import { nextTokenIs, Scanner, Token, TokenError } from "./deps.ts";

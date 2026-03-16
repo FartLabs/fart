@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ParseNode } from "./parsenode.ts";
 import { Visitor } from "./visitor.ts";
 import { Type } from "./type.ts";

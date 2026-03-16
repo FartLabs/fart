@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Scanner, TokenError } from "./deps.ts";
 import { Visitor } from "./visitor.ts";
 
