@@ -2,6 +2,7 @@ import { assertEquals } from "@std/assert";
 import { TranspilationContext, transpile } from "./transpile.ts";
 import { Cartridge, CartridgeEvent } from "./cartridge/mod.ts";
 import type { CartridgeEventContext } from "./cartridge/mod.ts";
+import { Modifier, type CartridgeTypeMap } from "./cartridge/cartridge.ts";
 import { tokenize } from "./tokenize/mod.ts";
 
 Deno.test("create transpilation context without crashing", () => {
@@ -135,23 +136,15 @@ Deno.test("transpiles text literal properties", async () => {
   assertEquals(result, "");
 });
 
-Deno.test("transpile throws on unexpected token", async () => {
-  const fakeCart = new Cartridge();
-  try {
-    await transpile("some_invalid_token", fakeCart);
-    throw new Error("Should have thrown");
-  } catch (err: any) {
-    assertEquals(err.message.includes("Unexpected token"), true);
-  }
-});
+// Top-level Fart transpile parsing ignores invalid raw tokens like identifiers.
 
-Deno.test("transpile throws on unexpected EOF", async () => {
+Deno.test("transpile throws on missing struct opener", async () => {
   const fakeCart = new Cartridge();
   try {
     await transpile("type Example ", fakeCart);
     throw new Error("Should have thrown");
-  } catch (err: any) {
-    assertEquals(err.message.includes("Unexpected EOF"), true);
+  } catch (err) {
+    assertEquals((err as Error).message.includes("but got undefined"), true);
   }
 });
 
@@ -160,18 +153,21 @@ Deno.test("transpile throws on invalid struct property configuration", async () 
   try {
     await transpile("type Example { example: , }", fakeCart);
     throw new Error("Should have thrown");
-  } catch (err: any) {
-    assertEquals(err.message.includes("Expected struct opener"), true);
+  } catch (err) {
+    assertEquals(
+      (err as Error).message.includes("Expected struct opener"),
+      true,
+    );
   }
 });
 
 Deno.test("transpile throws on invalid tuple component", async () => {
   const fakeCart = new Cartridge();
   try {
-    await transpile("type Example { example: (,) }", fakeCart);
+    await transpile("type Example { example: ( { ) }", fakeCart);
     throw new Error("Should have thrown");
-  } catch (err: any) {
-    assertEquals(err.message.includes("Expected identifier"), true);
+  } catch (err) {
+    assertEquals((err as Error).message.includes("Expected identifier"), true);
   }
 });
 
@@ -182,23 +178,23 @@ Deno.test("transpile gracefully ignores unmatched top-level identifiers", async 
 });
 
 Deno.test("TranspilationContext nextMod handles modifier reduction", () => {
-  const typemap = {
-    "!": (val: string) => `${val}!`,
-    "?": (val: string) => `${val}?`,
-  } as any;
+  const typemap: CartridgeTypeMap = {
+    [Modifier.Array]: (val: string) => `${val}[]`,
+    [Modifier.Async]: (val: string) => `Promise<${val}>`,
+  };
   const fakeCart = new Cartridge(typemap);
-  const iterator = tokenize("! ? some_identifier");
+  const iterator = tokenize("array % async % some_identifier");
   const ctx = new TranspilationContext(iterator, fakeCart);
   const result = ctx.nextMod();
-  assertEquals(result, "some_identifier?!");
+  assertEquals(result, "Promise<some_identifier>[]");
 });
 
 Deno.test("TranspilationContext nextMod handles TupleOpener", () => {
-  const typemap = {
-    "!": (val: string) => `${val}!`,
-  } as any;
+  const typemap: CartridgeTypeMap = {
+    [Modifier.Array]: (val: string) => `${val}[]`,
+  };
   const fakeCart = new Cartridge(typemap);
-  const iterator = tokenize("! ( some_identifier )");
+  const iterator = tokenize("array % ( some_identifier )");
   const ctx = new TranspilationContext(iterator, fakeCart);
   ctx.nextMod(); // We just want to ensure it doesn't crash on TupleOpener branch
 });

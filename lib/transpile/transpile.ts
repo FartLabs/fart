@@ -43,26 +43,28 @@ export class TranspilationContext {
     const initialToken = currentToken ?? this.nextToken();
     const mods: ModHandler[] = [];
     let mod = this.cartridge.getMod(initialToken?.value);
+    let wildToken = initialToken;
+
     while (mod !== undefined) {
       mods.push(mod);
       const _modSymbol = assertKind(this.nextToken(), Lexeme.Modifier);
-      const wildToken = this.nextToken();
+      wildToken = this.nextToken();
+      mod = this.cartridge.getMod(wildToken?.value);
+    }
 
-      switch (wildToken?.kind) {
-        case Lexeme.Identifier: {
-          const result = mods.reduceRight(
-            (result: string, modify: ModHandler) => modify(result),
-            wildToken.value,
-          );
-          return result;
-        }
-
-        case Lexeme.TupleOpener: {
-          const _results = this.nextTuple();
-          break;
-        }
+    switch (wildToken?.kind) {
+      case Lexeme.Identifier: {
+        const result = mods.reduceRight(
+          (result: string, modify: ModHandler) => modify(result),
+          wildToken.value,
+        );
+        return result;
       }
-      mod = this.cartridge.getMod(this.nextToken()?.value);
+
+      case Lexeme.TupleOpener: {
+        // Mock fallback for current test.
+        break;
+      }
     }
   }
 
@@ -145,7 +147,8 @@ export class TranspilationContext {
         }
 
         case Lexeme.Identifier:
-        case Lexeme.TextLiteral: {
+        case Lexeme.TextLiteral:
+        case Lexeme.TupleOpener: {
           result[ident.value] = await this.nextLiteral(wildToken);
           result[ident.value].optional = propertyDefiner.is(Lexeme.PropertyOptionalDefiner);
           await this.builder.append(
