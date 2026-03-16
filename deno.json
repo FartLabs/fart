@@ -12,10 +12,5 @@
     "lcov-parse": "npm:lcov-parse@^1.0.0",
     "marked": "npm:marked@^17.0.4"
   },
-  "lint": {
-    "exclude": ["vendor/"]
-  },
-  "fmt": {
-    "exclude": ["vendor/"]
-  }
+  "exclude": ["vendor/"]
 }
