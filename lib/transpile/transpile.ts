@@ -11,6 +11,7 @@ export interface FartOptions {
   codeCartridge: Cartridge;
   indentation: number;
   preserveComments: boolean;
+  implFile?: string;
 }
 
 export class TranspilationContext {
