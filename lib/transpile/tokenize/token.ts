@@ -11,7 +11,7 @@ export class Token {
   public kind: Lexeme | null = null;
 
   constructor(
-    private raw: string,
+    public readonly raw: string,
     public line = -1,
     public column = -1,
     noCheck = false,

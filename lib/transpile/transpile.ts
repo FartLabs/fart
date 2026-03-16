@@ -117,6 +117,11 @@ export class TranspilationContext {
       );
 
       if (ident.is(Lexeme.StructCloser)) {
+        await this.builder.append(
+          CartridgeEvent.StructClose,
+          [ident] as [Token],
+          [],
+        );
         break;
       }
 
