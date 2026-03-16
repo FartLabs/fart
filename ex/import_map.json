@@ -1,5 +1,0 @@
-{
-  "imports": {
-    "fart/": "https://fart.deno.dev/ts/"
-  }
-}
