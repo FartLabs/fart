@@ -58,9 +58,10 @@ to learn about the structure of this repository.
 ## Closed loop
 
 This project is built with the ambition of forming a closed-loop execution
-substrate for autonomous coding agents. Fart is designed as a structural
-foundation that perfectly complements [GEPA (Genetic-Pareto)](https://github.com/gepa-ai/gepa)'s
-unique strengths in reflective, evolutionary search.
+substrate for autonomous coding agents, enabling recursive, self-referential
+spontaneous software. Fart is designed as a structural foundation that perfectly
+complements [GEPA (Genetic-Pareto)](https://github.com/gepa-ai/gepa)'s unique
+strengths in reflective, evolutionary search.
 
 By combining dynamic HTTP-based transpilation with native remote module
 resolution (Deno's HTTP imports), Fart enables:

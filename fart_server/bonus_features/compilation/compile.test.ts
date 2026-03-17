@@ -22,9 +22,11 @@ async function runWithTestServer(testFn: (serverUrl: string) => Promise<void>) {
         if (
           fetchUrl.includes("raw.githubusercontent.com/test_local/source.fart")
         ) {
-          return Promise.resolve(new Response(`type TestStruct { name: string }`, {
-            status: 200,
-          }));
+          return Promise.resolve(
+            new Response(`type TestStruct { name: string }`, {
+              status: 200,
+            }),
+          );
         }
         return originalFetch(input, init);
       };
