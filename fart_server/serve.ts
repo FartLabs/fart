@@ -45,19 +45,11 @@ export const serve = () => {
   });
 };
 
-if (Deno.env.get("DENO_DEPLOYMENT_ID") !== undefined) {
-  // add the fetch listener if running on Deno Deploy
-  addEventListener(
-    "fetch",
-    (async (event: Event) => {
-      const e = event as unknown as {
-        request: Request;
-        respondWith: (r: Response | Promise<Response>) => void;
-      };
-      e.respondWith(await handleRequest(e.request));
-    }) as unknown as EventListenerOrEventListenerObject,
-  );
-} else if (import.meta.main) {
+export default {
+  fetch: (request: Request) => handleRequest(request),
+} satisfies Deno.ServeDefaultExport;
+
+if (import.meta.main) {
   // serve the HTTP server if running locally
   await serve();
 }
