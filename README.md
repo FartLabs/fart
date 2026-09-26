@@ -18,41 +18,45 @@ already, please [install Deno](https://github.com/denoland/deno_install).
 
 ### Give it a Spin
 
-You can give Fart a spin on your machine in one command (assuming Deno is
-installed). Check out the example code on
-<https://fart.fart.tools/pokemon-example/>.
+`transpile` turns Fart source into generated code for a target language. Try it
+after cloning the repository:
 
-```bash
-deno run --reload https://github.com/EthanThatOneKid/fart/raw/main/ex/pokemon/run.ts
+```ts
+import { transpile } from "./lib/transpile/mod.ts";
+import { generateTypeScriptCartridge } from "./lib/transpile/cartridge/ts_cartridge.ts";
+
+const typescript = await transpile(
+  `type User {
+  id: string
+  name: string
+  age?: number
+}`,
+  { codeCartridge: generateTypeScriptCartridge() },
+);
 ```
 
-<details>
-  <summary>Local Variation</summary>
-
-```bash
-deno run --reload ex/pokemon/run.ts
-```
-
-</details>
-
-### Fart CLI
-
-Try running the command below after cloning the repository.
-
-```bash
-deno run --allow-read --allow-write std/cli/run.ts ./ex/pokemon.fart --reg=ts.deno --output=./ex/pokemon.ts
-```
+See
+[docs/getting-started.md](https://github.com/FartLabs/fart/blob/main/docs/getting-started.md)
+for a fuller walkthrough.
 
 ### Fart Server 📡
 
+The server renders the docs in
+[`docs/`](https://github.com/FartLabs/fart/tree/main/docs) and exposes the
+transpiler over HTTP. Run it locally with:
+
+```bash
+deno run --allow-all fart_server/serve.ts
+```
+
 Please refer to
-[docs/server-architecture.md](https://github.com/EthanThatOneKid/fart/blob/main/docs/server-architecture.md#readme)
-to learn about how the server code is organized.
+[docs/server-architecture.md](https://github.com/FartLabs/fart/blob/main/docs/server-architecture.md)
+to learn about how the server code is organized and which routes it serves.
 
 ## Architecture
 
 Please refer to
-[docs/architecture.md](https://github.com/EthanThatOneKid/fart/blob/main/docs/architecture.md#readme)
+[docs/architecture.md](https://github.com/FartLabs/fart/blob/main/docs/architecture.md)
 to learn about the structure of this repository.
 
 ## Closed loop

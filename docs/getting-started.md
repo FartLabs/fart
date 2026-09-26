@@ -4,42 +4,70 @@ self_link: https://fart.fart.tools/getting-started
 
 # Getting Started
 
-Welcome to Fart! This guide will help you get up and running with the Fart
-infrastructure.
+Welcome to Fart! This guide will get the Fart infrastructure running on your
+machine.
 
 ## Prerequisites
 
-Before using Fart, ensure you have Deno installed. We recommend using the latest
-version of Deno to ensure compatibility with our transpiler options and server
-configurations.
+Fart runs on
+[Deno](https://docs.deno.com/runtime/manual/getting_started/installation).
+Install the latest version and make sure `deno` is on your `PATH`.
 
-- [Install Deno](https://docs.deno.com/runtime/manual/getting_started/installation)
+## Using the library
 
-## Basic Usage
+`transpile` takes Fart source and a code cartridge describing the target
+language, and returns the generated code.
 
-You can write Fart code using `.fart` source files. By default, Fart tokenizes
-and transpiles the syntax into usable JavaScript/TypeScript types.
+```ts
+import { transpile } from "./lib/transpile/mod.ts";
+import { generateTypeScriptCartridge } from "./lib/transpile/cartridge/ts_cartridge.ts";
 
-A simple type definition in Fart looks like this:
-
-```fart
-type User {
+const typescript = await transpile(
+  `type User {
   id: string
   name: string
   age?: number
-}
+}`,
+  { codeCartridge: generateTypeScriptCartridge() },
+);
 ```
 
-The transpiler takes this source and emits language-specific output via
-`Cartridge` plugins.
+Each language target is a _cartridge_: an object that defines how Fart's
+structures and keywords map onto that language. Passing a cartridge is how you
+choose an output language.
 
-## Core Concepts
+## Core concepts
 
-- **Tokenization**: The lexeme maps source syntax to a list of tokens.
-- **Transpilation**: The core AST event dispatcher that converts tokens into
-  code strings.
-- **Cartridges**: Language targets that define how specific structures and
-  keywords map to other languages.
+- **Tokenization** maps source syntax onto a list of tokens.
+- **Transpilation** walks those tokens and dispatches events that a cartridge
+  turns into code.
+- **Cartridges** are the language targets, and they own the actual output
+  formatting.
 
-We plan to expand this guide with specific toolchain examples and more advanced
-Fart syntax in the future!
+## Running the server
+
+The Fart Server renders these docs and exposes the transpiler over HTTP:
+
+```bash
+deno run --allow-all fart_server/serve.ts
+```
+
+Then open <http://localhost:8080/>. See
+[the server architecture](https://fart.fart.tools/server-architecture) for the
+full route list.
+
+To compile Fart source hosted in a public GitHub repository, request the `/ts/`
+route with the repository path:
+
+```bash
+curl https://fart.fart.tools/ts/{owner}/{repo}/{branch}/path/to/source.fart
+```
+
+## Running the tests
+
+```bash
+deno test --allow-all
+```
+
+The server tests spin up a local server and run a real `deno run` against it,
+which is why they need `--allow-all`.

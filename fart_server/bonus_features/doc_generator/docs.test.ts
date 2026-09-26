@@ -19,11 +19,11 @@ Deno.test("serveReadme renders the README at the site root", async () => {
 });
 
 Deno.test("serveReadme ignores non-root paths", async () => {
-  assertEquals(await serveReadme(get("/pokemon-example")), null);
+  assertEquals(await serveReadme(get("/type-example")), null);
 });
 
 Deno.test("serveDoc renders a document from docs/", async () => {
-  const response = await serveDoc(get("/pokemon-example"));
+  const response = await serveDoc(get("/type-example"));
 
   assertEquals(response?.status, 200);
   assertEquals(
@@ -31,13 +31,13 @@ Deno.test("serveDoc renders a document from docs/", async () => {
     "text/html; charset=utf-8",
   );
   const html = await response!.text();
-  assertStringIncludes(html, "<title>Pokémon Fart Example</title>");
+  assertStringIncludes(html, "<title>Type Example</title>");
   assertStringIncludes(html, "Pokeball");
 });
 
 Deno.test("serveDoc accepts trailing slashes and mixed case slugs", async () => {
-  const trailing = await serveDoc(get("/pokemon-example/"));
-  const mixed = await serveDoc(get("/Pokemon-Example"));
+  const trailing = await serveDoc(get("/type-example/"));
+  const mixed = await serveDoc(get("/Type-Example"));
 
   assertEquals(trailing?.status, 200);
   assertEquals(mixed?.status, 200);
@@ -49,7 +49,7 @@ Deno.test("serveDoc returns null for unknown documents", async () => {
 
 Deno.test("serveDoc only matches single-segment doc slugs", async () => {
   // Multi-segment paths belong to the compilation middleware, not docs.
-  assertEquals(await serveDoc(get("/docs/pokemon-example")), null);
+  assertEquals(await serveDoc(get("/docs/type-example")), null);
   assertEquals(await serveDoc(get("/ts/EthanThatOneKid/fart/main/ex")), null);
 });
 
