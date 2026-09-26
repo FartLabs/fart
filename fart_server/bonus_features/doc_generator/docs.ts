@@ -1,4 +1,5 @@
 import { marked } from "marked";
+import { rewriteLinks, stripFrontMatter } from "./links.ts";
 
 /**
  * Restores the docs routes that existed on Fart Server before the #34 rework.
@@ -98,7 +99,11 @@ export const serveReadme = async (
   const readme = await readRepoFile("README.md");
   if (readme === undefined) return null;
 
-  return await page(deriveTitle(readme, "Fart"), marked(readme));
+  const markdown = stripFrontMatter(readme);
+  return await page(
+    deriveTitle(markdown, "Fart"),
+    rewriteLinks(await marked(markdown)),
+  );
 };
 
 /**
@@ -115,5 +120,9 @@ export const serveDoc = async (
   const doc = await readRepoFile(`docs/${slug[1]}.md`);
   if (doc === undefined) return null;
 
-  return await page(deriveTitle(doc, slug[1]), marked(doc));
+  const markdown = stripFrontMatter(doc);
+  return await page(
+    deriveTitle(markdown, slug[1]),
+    rewriteLinks(await marked(markdown)),
+  );
 };
