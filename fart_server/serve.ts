@@ -1,3 +1,4 @@
+import { serveDoc, serveReadme } from "./bonus_features/doc_generator/mod.ts";
 import { redirectToDenoDeployPreviewUrl } from "./bonus_features/versions/mod.ts";
 import { redirectIfShortlink } from "./bonus_features/shortlinks/mod.ts";
 import { compileFartToTs } from "./bonus_features/compilation/compile.ts";
@@ -23,6 +24,9 @@ const middleware = [
     }
     return null;
   },
+  // restore the pre-rework docs routes: README at / and docs/*.md at /{slug}
+  serveReadme,
+  serveDoc,
 ];
 
 export const setup = () => {
