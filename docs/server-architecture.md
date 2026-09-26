@@ -4,88 +4,146 @@ self_link: https://fart.fart.tools/server-architecture
 
 # Fart Server 📡
 
-## How to spin up a Fart Server
+The Fart Server turns the Fart repository into a website. It renders the docs in
+this directory, serves the compilation routes, and answers a few shortlinks.
 
-You can spin up the Fart Serer on your machine in one command (assuming Deno is
-installed).
-
-```bash
-deno run --allow-net --allow-read --allow-env --unstable https://github.com/EthanThatOneKid/fart/raw/main/std/server/serve_http.ts
-```
-
-<details>
-  <summary>Local Variation</summary>
+## Running it locally
 
 ```bash
-deno run --allow-net --allow-read --allow-env --unstable std/server/serve_http.ts
+deno run --allow-all fart_server/serve.ts
 ```
 
-</details>
+Then open <http://localhost:8080/>. The port can be overridden with the `PORT`
+environment variable.
 
-## Simulating a Deno Deploy Environment
+The server has no build step and no dependencies beyond the ones declared in
+`deno.json`.
 
-If you haven't already,
-[install `deployctl`](https://deno.com/deploy/docs/running-scripts-locally), a
-runtime that simulates [Deno Deploy](https://deno.com/deploy).
+## Request handling
+
+Requests flow through an ordered list of middleware in
+[`fart_server/serve.ts`](https://github.com/FartLabs/fart/blob/main/fart_server/serve.ts).
+Each middleware receives the `Request` and returns a `Response` or `null` to
+decline and let the next one try. The first non-`null` response wins; if every
+middleware declines, the server answers `404`.
+
+The chain is registered once by `setup()` and stored in memory, so the order
+below is the real precedence:
+
+| # | Middleware                     | Source                                    |
+| - | ------------------------------ | ----------------------------------------- |
+| 1 | Compile Fart source            | `bonus_features/compilation/compile.ts`   |
+| 2 | Shortlink redirects            | `bonus_features/shortlinks/shortlinks.ts` |
+| 3 | `GET /debug/size`              | `serve.ts`                                |
+| 4 | `GET /debug/deployment`        | `serve.ts`                                |
+| 5 | Render the README at `/`       | `bonus_features/doc_generator/docs.ts`    |
+| 6 | Render a document at `/{slug}` | `bonus_features/doc_generator/docs.ts`    |
+
+Because the docs routes are last and only claim a path when a matching file
+exists, they never shadow the compilation or shortlink routes.
+
+## Routes
+
+### Documentation
+
+| Route          | Serves                      |
+| -------------- | --------------------------- |
+| `GET /`        | `README.md`, rendered       |
+| `GET /{slug}`  | `docs/{slug}.md`, rendered  |
+| `GET /{slug}/` | same, with a trailing slash |
+
+Slugs are single path segments matching `[a-z0-9][a-z0-9-]*`, so the current
+documents are reachable at `/architecture`, `/getting-started`, `/type-example`,
+and `/server-architecture`. Any other path is left for the later middleware.
+
+Documents are read from the deployment bundle relative to `import.meta.url`, so
+the same code works from a checkout and from a Deno Deploy deployment.
+
+### Rendering
+
+`marked` turns the Markdown into HTML, wrapped in a small page shell. Before
+rendering, two transformations run — see
+[`doc_generator/links.ts`](https://github.com/FartLabs/fart/blob/main/fart_server/bonus_features/doc_generator/links.ts):
+
+- **Front matter is stripped.** The `---` block at the top of each document
+  holds `self_link` metadata for the old server, which would otherwise render as
+  visible text.
+- **Links are rewritten.** Links to this repository's own `README.md` and
+  `docs/*.md` become server routes, so a document that links to another document
+  stays on the server. Both `FartLabs/fart` and the legacy
+  `EthanThatOneKid/fart` count as this repository, because the moved
+  repository's URLs still redirect. `?raw=true` blob URLs are promoted to
+  `raw.githubusercontent.com`. Links to files with no server route, foreign
+  repositories, non-default branches, anchors, and already-relative links are
+  left exactly as authored.
+
+### Compilation
+
+| Route                                                | Returns                        |
+| ---------------------------------------------------- | ------------------------------ |
+| `GET /ts/{owner}/{repo}/{branch}/{path}`             | generated TypeScript           |
+| `GET /deno.cli/{owner}/{repo}/{branch}/{path}`       | same, for Deno CLI             |
+| `GET /html.syntax.gh/{owner}/{repo}/{branch}/{path}` | GitHub-style HTML highlighting |
+
+The path after the prefix is a `raw.githubusercontent.com` path, so the server
+compiles Fart source hosted in any public GitHub repository, not just this one.
+
+An implementation file can be mapped onto a Fart source by appending it after a
+`~`:
+
+```
+/ts/{owner}/{repo}/{branch}/path/to/source.fart~path/to/impl.ts
+```
+
+Responses carry `Access-Control-Allow-Origin: *` so Deno's remote module loader
+can import them directly.
+
+> ⚠️ **Note:** no `.fart` files are currently committed to this repository, so
+> these routes only produce output for Fart source hosted elsewhere.
+
+### Shortlinks
+
+Defined in
+[`shortlinks.json`](https://github.com/FartLabs/fart/blob/main/fart_server/bonus_features/shortlinks/shortlinks.json)
+and matched as path prefixes, with the remainder of the path and the query
+string appended to the destination:
+
+| Path      | Redirects to             |
+| --------- | ------------------------ |
+| `/github` | the repository on GitHub |
+| `/design` | the design document      |
+| `/author` | the author's site        |
+
+### Debug
+
+| Route                   | Returns                                      |
+| ----------------------- | -------------------------------------------- |
+| `GET /debug/size`       | the number of registered middleware handlers |
+| `GET /debug/deployment` | the current Deno deployment ID, if any       |
+
+## Deploying
+
+The server exports a `Deno.ServeDefaultExport` (`export default { fetch }`), so
+it deploys to [Deno Deploy](https://deno.com/deploy) with `fart_server/serve.ts`
+as the entrypoint. `import.meta.main` guards the local `Deno.serve` path, so the
+same file works in both places.
+
+The server requires **no environment variables**. The `DENO_DEPLOY_PROJECT_NAME`
+and `DENO_DEPLOY_ACCESS_TOKEN` variables that configured the removed Deno Deploy
+Classic version redirects are gone; see
+[#45](https://github.com/FartLabs/fart/pull/45).
+
+> ⚠️ `fart.fart.tools` is still pointed at the retired Deno Deploy Classic
+> infrastructure. The migration is tracked in
+> [#39](https://github.com/FartLabs/fart/issues/39) and needs DNS changes that
+> must be made by hand.
+
+## Tests
 
 ```bash
-deno install --allow-read --allow-write --allow-env --allow-net --allow-run --no-check -f https://deno.land/x/deploy/deployctl.ts
+deno test --allow-all fart_server
 ```
 
-To run the development server, enter the below command into your terminal.
-
-```bash
-deployctl run --watch std/server/worker.ts
-```
-
-## Features
-
-### Homepage (`GET /`)
-
-> [/middleware/home.ts](https://github.com/EthanThatOneKid/fart/blob/main/std/server/middleware/gh_docs.ts)
-
-This page renders and serves the README.md of
-<https://github.com/EthanThatOneKid/fart/>.
-
-### Static Files (`GET /[...path].*`)
-
-> [/middleware/static.ts](https://github.com/EthanThatOneKid/fart/blob/main/std/server/middleware/static.ts)
-
-This middleware serves static files located under
-[`/std/server/static/`](https://github.com/EthanThatOneKid/fart/blob/main/std/server/static/).
-
-### GitHub Docs (`/[...path]`)
-
-> [/middleware/gh_docs.ts](https://github.com/EthanThatOneKid/fart/tree/main/std/server/middleware/gh_docs.ts)
-
-Any markdown files located under
-[`/docs`](https://github.com/EthanThatOneKid/fart/tree/main/docs/) are rendered
-and served.
-
-### Compile Farts (`GET /[registry]/[...path].*`)
-
-> [/middleware/compile.ts](https://github.com/EthanThatOneKid/fart/blob/main/std/server/middleware/compile.ts)
-
-This middleware serves the compiled result of any Fart source file publicly
-hosted on GitHub.
-
-If no matching public GitHub source Farts can be found, the request checks to
-see if there is any raw Fart code in the body. If so, the server will generate
-the code based on the source Fart from the request body.
-
-#### URL Composition
-
-This is a more detailed diagram of the pattern that the compilation middlware
-snags on.
-
-```
-/[registry]/[owner]/[project_name]/[branch]/[...path].*
-```
-
-#### Compilation Endpoint Examples
-
-- `/go/EthanThatOneKid/fart/main/ex/pokemon/mod.go`
-- `/ts/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
-- `/ts.deno/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
-- `/ts.deno.api/EthanThatOneKid/fart/main/ex/pokemon/mod.ts`
-- `/html.highlight/EthanThatOneKid/fart/main/ex/pokemon/mod.html`
+The compilation tests spin up a local server and run a real `deno run` against
+it, which is why they need `--allow-all`. The doc and link tests are pure and
+need no network access.
