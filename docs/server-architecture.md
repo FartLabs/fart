@@ -56,8 +56,10 @@ Slugs are single path segments matching `[a-z0-9][a-z0-9-]*`, so the current
 documents are reachable at `/architecture`, `/getting-started`, `/type-example`,
 and `/server-architecture`. Any other path is left for the later middleware.
 
-Documents are read from the deployment bundle relative to `import.meta.url`, so
-the same code works from a checkout and from a Deno Deploy deployment.
+Documents are read from the checkout relative to `import.meta.url`. Cloudflare
+Workers have no file system, so the Worker ships `README.md` and `docs/` as
+static assets and reads them through the `ASSETS` binding (see
+`setRepoFileReader`).
 
 ### Rendering
 
@@ -123,20 +125,19 @@ string appended to the destination:
 
 ## Deploying
 
-The server exports a `Deno.ServeDefaultExport` (`export default { fetch }`), so
-it deploys to [Deno Deploy](https://deno.com/deploy) with `fart_server/serve.ts`
-as the entrypoint. `import.meta.main` guards the local `Deno.serve` path, so the
-same file works in both places.
+`fart.fart.tools` runs as the `fart-fart-tools` Cloudflare Worker. Deno Deploy
+Classic, which hosted it before, has shut down.
 
-The server requires **no environment variables**. The `DENO_DEPLOY_PROJECT_NAME`
-and `DENO_DEPLOY_ACCESS_TOKEN` variables that configured the removed Deno Deploy
-Classic version redirects are gone; see
-[#45](https://github.com/FartLabs/fart/pull/45).
+```bash
+deno task build:worker # bundles fart_server/worker.ts, copies README.md and docs/
+npx wrangler deploy    # uploads the Worker and attaches fart.fart.tools
+```
 
-> ⚠️ `fart.fart.tools` is still pointed at the retired Deno Deploy Classic
-> infrastructure. The migration is tracked in
-> [#39](https://github.com/FartLabs/fart/issues/39) and needs DNS changes that
-> must be made by hand.
+`fart_server/worker.ts` is the Workers entrypoint. `fart_server/serve.ts` still
+exports a `Deno.ServeDefaultExport` and runs locally with
+`deno run --allow-env --allow-net fart_server/serve.ts`.
+
+The server requires **no environment variables**.
 
 ## Tests
 

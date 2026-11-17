@@ -14,10 +14,13 @@ const middleware = [
     }
     return null;
   },
-  // show deployment ID if running on Deno Deploy
+  // show deployment ID if running on Deno Deploy (unset elsewhere, such as
+  // Cloudflare Workers, where there is no `Deno` global)
   (request: Request) => {
     if (new URL(request.url).pathname === "/debug/deployment") {
-      return new Response(String(Deno.env.get("DENO_DEPLOYMENT_ID")));
+      return new Response(
+        String(globalThis.Deno?.env.get("DENO_DEPLOYMENT_ID")),
+      );
     }
     return null;
   },

@@ -13,9 +13,9 @@ const docSlugPattern = /^\/([a-z0-9][a-z0-9-]*)\/?$/i;
 
 /**
  * Resolves the repository root relative to this module so docs can be read
- * both from a checkout and from a Deno Deploy deployment bundle.
+ * from a checkout.
  */
-const repositoryRoot = new URL("../../..", import.meta.url);
+const repositoryRoot = (): URL => new URL("../../..", import.meta.url);
 
 const textDecoder = new TextDecoder("utf-8");
 
@@ -23,14 +23,29 @@ const textDecoder = new TextDecoder("utf-8");
  * Reads a UTF-8 file relative to the repository root, returning `undefined`
  * when it does not exist so the request can fall through to other middleware.
  */
-const readRepoFile = async (
+export type RepoFileReader = (
   relativePath: string,
-): Promise<string | undefined> => {
+) => Promise<string | undefined>;
+
+/** Reads docs from disk. This is the default outside of a Cloudflare Worker. */
+const readFromDisk: RepoFileReader = async (relativePath) => {
   try {
-    const contents = await Deno.readFile(new URL(relativePath, repositoryRoot));
+    const contents = await Deno.readFile(
+      new URL(relativePath, repositoryRoot()),
+    );
     return textDecoder.decode(contents);
     // deno-lint-ignore no-empty
   } catch {}
+};
+
+let readRepoFile: RepoFileReader = readFromDisk;
+
+/**
+ * Replaces how docs are read. The Cloudflare Worker has no file system, so it
+ * reads the docs it ships as static assets instead.
+ */
+export const setRepoFileReader = (reader: RepoFileReader): void => {
+  readRepoFile = reader;
 };
 
 const escapeHtml = (value: string): string =>

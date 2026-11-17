@@ -1,4 +1,7 @@
 {
+  "tasks": {
+    "build:worker": "deno run -A devops/build_worker.ts"
+  },
   "imports": {
     "protoc_parser/": "./vendor/protoc_parser/",
     "scanner/": "./vendor/scanner/",
