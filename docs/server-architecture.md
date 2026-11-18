@@ -128,6 +128,11 @@ string appended to the destination:
 `fart.fart.tools` runs as the `fart-fart-tools` Cloudflare Worker. Deno Deploy
 Classic, which hosted it before, has shut down.
 
+Every push to `main` deploys through Cloudflare Workers Builds. The build image
+has no Deno, so the build command is
+`npm i -g deno@2.9.6 && deno task build:worker`, followed by
+`npx wrangler deploy`. To deploy by hand:
+
 ```bash
 deno task build:worker # bundles fart_server/worker.ts, copies README.md and docs/
 npx wrangler deploy    # uploads the Worker and attaches fart.fart.tools
